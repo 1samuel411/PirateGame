@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using PirateGame;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 namespace PirateGame
 {
     public class Base : MonoBehaviour
     {
-
         private Transform _transform;
         [HideInInspector]
         public new Transform transform

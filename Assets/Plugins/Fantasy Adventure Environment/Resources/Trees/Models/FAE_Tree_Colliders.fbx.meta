@@ -1,0 +1,183 @@
+fileFormatVersion: 2
+guid: 17a294945dfc75146ad57af6da761800
+timeCreated: 1495829164
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: FAE_Birch1_Collider
+    100002: FAE_Birch2_Collider
+    100004: FAE_Birch3_Collider
+    100006: FAE_Spruce1_Collider
+    100008: FAE_Spruce2_Collider
+    100010: FAE_Spruce3_Collider
+    100012: FAE_Tree1_Collider
+    100014: FAE_Tree2_Collider
+    100016: FAE_Tree3_Collider
+    100018: //RootNode
+    100020: FAE_Birch_A_Collider
+    100022: FAE_Birch_B_Collider
+    100024: FAE_Birch_C_Collider
+    100026: FAE_Spruce_A_Collider
+    100028: FAE_Spruce_B_Collider
+    100030: FAE_Spruce_C_Collider
+    100032: FAE_Tree_A_Collider
+    100034: FAE_Tree_B_Collider
+    100036: FAE_Tree_C_Collider
+    100038: FAE_Pine_A_Collider
+    100040: FAE_Palm_A_Collider
+    100042: FAE_Palm_B_Collider
+    100044: FAE_Palm_C_Collider
+    400000: FAE_Birch1_Collider
+    400002: FAE_Birch2_Collider
+    400004: FAE_Birch3_Collider
+    400006: FAE_Spruce1_Collider
+    400008: FAE_Spruce2_Collider
+    400010: FAE_Spruce3_Collider
+    400012: FAE_Tree1_Collider
+    400014: FAE_Tree2_Collider
+    400016: FAE_Tree3_Collider
+    400018: //RootNode
+    400020: FAE_Birch_A_Collider
+    400022: FAE_Birch_B_Collider
+    400024: FAE_Birch_C_Collider
+    400026: FAE_Spruce_A_Collider
+    400028: FAE_Spruce_B_Collider
+    400030: FAE_Spruce_C_Collider
+    400032: FAE_Tree_A_Collider
+    400034: FAE_Tree_B_Collider
+    400036: FAE_Tree_C_Collider
+    400038: FAE_Pine_A_Collider
+    400040: FAE_Palm_A_Collider
+    400042: FAE_Palm_B_Collider
+    400044: FAE_Palm_C_Collider
+    2300000: FAE_Birch1_Collider
+    2300002: FAE_Birch2_Collider
+    2300004: FAE_Birch3_Collider
+    2300006: FAE_Spruce1_Collider
+    2300008: FAE_Spruce2_Collider
+    2300010: FAE_Spruce3_Collider
+    2300012: FAE_Tree1_Collider
+    2300014: FAE_Tree2_Collider
+    2300016: FAE_Tree3_Collider
+    2300018: FAE_Birch_A_Collider
+    2300020: FAE_Birch_B_Collider
+    2300022: FAE_Birch_C_Collider
+    2300024: FAE_Spruce_A_Collider
+    2300026: FAE_Spruce_B_Collider
+    2300028: FAE_Spruce_C_Collider
+    2300030: FAE_Tree_A_Collider
+    2300032: FAE_Tree_B_Collider
+    2300034: FAE_Tree_C_Collider
+    2300036: FAE_Pine_A_Collider
+    2300038: FAE_Palm_A_Collider
+    2300040: FAE_Palm_B_Collider
+    2300042: FAE_Palm_C_Collider
+    3300000: FAE_Birch1_Collider
+    3300002: FAE_Birch2_Collider
+    3300004: FAE_Birch3_Collider
+    3300006: FAE_Spruce1_Collider
+    3300008: FAE_Spruce2_Collider
+    3300010: FAE_Spruce3_Collider
+    3300012: FAE_Tree1_Collider
+    3300014: FAE_Tree2_Collider
+    3300016: FAE_Tree3_Collider
+    3300018: FAE_Birch_A_Collider
+    3300020: FAE_Birch_B_Collider
+    3300022: FAE_Birch_C_Collider
+    3300024: FAE_Spruce_A_Collider
+    3300026: FAE_Spruce_B_Collider
+    3300028: FAE_Spruce_C_Collider
+    3300030: FAE_Tree_A_Collider
+    3300032: FAE_Tree_B_Collider
+    3300034: FAE_Tree_C_Collider
+    3300036: FAE_Pine_A_Collider
+    3300038: FAE_Palm_A_Collider
+    3300040: FAE_Palm_B_Collider
+    3300042: FAE_Palm_C_Collider
+    4300000: FAE_Spruce2_Collider
+    4300002: FAE_Spruce1_Collider
+    4300004: FAE_Spruce3_Collider
+    4300006: FAE_Birch3_Collider
+    4300008: FAE_Birch2_Collider
+    4300010: FAE_Birch1_Collider
+    4300012: FAE_Tree1_Collider
+    4300014: FAE_Tree2_Collider
+    4300016: FAE_Tree3_Collider
+    4300018: FAE_Birch_A_Collider
+    4300020: FAE_Birch_B_Collider
+    4300022: FAE_Birch_C_Collider
+    4300024: FAE_Spruce_A_Collider
+    4300026: FAE_Spruce_B_Collider
+    4300028: FAE_Spruce_C_Collider
+    4300030: FAE_Tree_A_Collider
+    4300032: FAE_Tree_B_Collider
+    4300034: FAE_Tree_C_Collider
+    4300036: FAE_Pine_A_Collider
+    4300038: FAE_Palm_A_Collider
+    4300040: FAE_Palm_B_Collider
+    4300042: FAE_Palm_C_Collider
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
