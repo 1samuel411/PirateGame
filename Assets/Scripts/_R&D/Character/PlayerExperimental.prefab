@@ -1330,7 +1330,7 @@ MonoBehaviour:
   WalkTurnDamping: 0.3
   JogSpeed: 6
   JogDamping: 0.2
-  JogTurnDamping: 0.2
+  JogTurnDamping: 0.1
   JumpHeight: 2
   JumpInputTimer: 0.1
   InAirSpeed: 2
