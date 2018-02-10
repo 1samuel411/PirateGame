@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: 253b60540ae3e4fcaaa08209d422e0f8
+labels:
+- buoyancy
+- toolkit
+- float
+- floating
+- ocean
+- sea
+- water
+- fluid
+- lift
+- force
+- water3
+- android
+timeCreated: 18446744011573954816
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_UnderwaterShader: {fileID: 4800000, guid: 1741c99b544d74e4fae12a025970db5b,
+      type: 3}
+  - m_Water: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
