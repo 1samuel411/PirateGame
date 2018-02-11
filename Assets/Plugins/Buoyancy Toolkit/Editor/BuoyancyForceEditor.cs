@@ -32,7 +32,7 @@ public class BuoyancyForceEditor : Editor
 		if (source.UseWeighting)
 		{
 			EditorGUILayout.BeginHorizontal();
-			source.WeightFactor = EditorGUILayout.Slider(new GUIContent("Weight Factor", "A weight factor of 1 results in enough force to counteract gravity and the rigidbody will stay in equilibrium within the fluid. A weight factor of 2 results in a net force equal to gravity but in the opposite direction (making the rigidbody float in the fluid) and so on."), source.WeightFactor, 0.0f, 10.0f);
+			source.WeightFactor = EditorGUILayout.Slider(new GUIContent("Weight Factor", "A weight factor of 1 results in enough force to counteract gravity and the rigidbody will stay in equilibrium within the fluid. A weight factor of 2 results in a net force equal to gravity but in the opposite direction (making the rigidbody float in the fluid) and so on."), source.WeightFactor, 0.0f, 20.0f);
 			EditorGUILayout.EndHorizontal();
 		}
 		

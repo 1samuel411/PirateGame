@@ -8,7 +8,7 @@ public enum BuoyancyQuality : int
 	Low, Medium, High, Custom
 }
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public class BuoyancyForce : MonoBehaviour
 {
     private static float boundsExtentBias = 0.01f;
@@ -52,14 +52,34 @@ public class BuoyancyForce : MonoBehaviour
 	
 	private float inverseVolume;
 	private ICollection<FluidVolume> fluidVolumes = new LinkedList<FluidVolume>();
-	
-	/// <summary>
-	/// Gets or sets the buoyancy collider, the collider that will be used to calculate the buoyancy properties of the rigidbody. The collider should be convex for stability reasons.
-	/// </summary>
-	/// <value>
-	/// The buoyancy collider.
-	/// </value>
-	public Collider BuoyancyCollider
+
+    public Rigidbody Rigidbody;
+
+    protected void OnValidate()
+    {
+        if  (Rigidbody == null)
+        {
+            Rigidbody = GetComponent<Rigidbody>();
+
+            if (Rigidbody == null)
+            {
+                Rigidbody = GetComponentInParent<Rigidbody>();
+            }
+        }
+
+        if (buoyancyCollider == null)
+        {
+            buoyancyCollider = GetComponent<Collider>();
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the buoyancy collider, the collider that will be used to calculate the buoyancy properties of the rigidbody. The collider should be convex for stability reasons.
+    /// </summary>
+    /// <value>
+    /// The buoyancy collider.
+    /// </value>
+    public Collider BuoyancyCollider
 	{
 		get { return buoyancyCollider; }
 		
@@ -236,7 +256,7 @@ public class BuoyancyForce : MonoBehaviour
 		
 		if (useWeighting)
 		{
-			impulse *= (weightFactor + weightFactorBias) * GetComponent<Rigidbody>().mass * inverseVolume;
+			impulse *= (weightFactor + weightFactorBias) * Rigidbody.mass * inverseVolume;
 		}
 		else
 		{
@@ -275,7 +295,7 @@ public class BuoyancyForce : MonoBehaviour
 			float sampleBoxHeight = height - fluidBoxHeight;
 			float sampleVolume = sampleBoxHeight * width * depth;
 			
-			GetComponent<Rigidbody>().AddForceAtPosition(Vector3.up * (sampleVolume * impulse), lowerHit.point, ForceMode.Impulse);
+			Rigidbody.AddForceAtPosition(Vector3.up * (sampleVolume * impulse), lowerHit.point, ForceMode.Impulse);
 		}
 	}
 	
@@ -329,8 +349,8 @@ public class BuoyancyForce : MonoBehaviour
 			}
 		}
 		
-		GetComponent<Rigidbody>().drag = totalDrag;
-		GetComponent<Rigidbody>().angularDrag = totalAngularDrag;
+		Rigidbody.drag = totalDrag;
+		Rigidbody.angularDrag = totalAngularDrag;
 	}
 	
 	/// <summary>
@@ -366,8 +386,8 @@ public class BuoyancyForce : MonoBehaviour
 	public void Awake()
 	{
 		// Set initial nonfluid drag
-		nonfluidDrag = GetComponent<Rigidbody>().drag;
-		nonfluidAngularDrag = GetComponent<Rigidbody>().angularDrag;
+		nonfluidDrag = Rigidbody.drag;
+		nonfluidAngularDrag = Rigidbody.angularDrag;
 	}
 
 	public void Start()
@@ -377,7 +397,7 @@ public class BuoyancyForce : MonoBehaviour
 	
 	public void FixedUpdate()
 	{
-		if (buoyancyCollider != null && !GetComponent<Rigidbody>().IsSleeping())
+		if (buoyancyCollider != null && !Rigidbody.IsSleeping())
 		{
 			// Simulate buoyancy
 			foreach (FluidVolume fluidVolume in fluidVolumes)
