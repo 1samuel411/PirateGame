@@ -44,10 +44,18 @@ namespace PirateGame
         [Header("Other")]
         public LayerMask Mask;
 
+        // EXPERIMENTAL
+        public Transform Boat;
+
+        private Vector3 lastPosition;
+        private Vector3 localBoatPointA;
+        private Vector3 localBoatPointB;
+        //
+
         private bool jumpInput
         {
-            set { JumpInputTimer = (value ? Time.time + JumpInputTimer : -1); }
-            get { return Time.time < JumpInputTimer; }
+            set { jumpInputTimer = (value ? Time.time + jumpInputTimer : -1); }
+            get { return Time.time < jumpInputTimer; }
         }
 
         private float jumpInputTimer;
@@ -91,6 +99,14 @@ namespace PirateGame
             velocity = smoothDampVelocity = Vector3.zero;
             lookAngle = desiredLookAngle = transform.localEulerAngles.y;
             angularSmoothDampVelocity = 0;
+
+            lastPosition = transform.position;
+
+            if (Boat != null)
+            {
+                localBoatPointA = Boat.InverseTransformPoint(transform.position);
+                localBoatPointB = Boat.InverseTransformPoint(transform.position + transform.forward);
+            }
         }
 
         private void GetInput()
@@ -243,7 +259,7 @@ namespace PirateGame
             float y = velocity.y;
             velocity.y = 0;
             velocity = Vector3.SmoothDamp(velocity, input * JogSpeed, ref smoothDampVelocity, JogDamping);
-            velocity.y = (isGrounded ? -10f : (y - Time.deltaTime * Gravity));
+            velocity.y = (isGrounded ? -1f : (y - Time.deltaTime * Gravity));
 
             Quaternion lookRotation = Quaternion.LookRotation(velocity.magnitude > 0.2f ? velocity : transform.forward);
             float desiredAngle = lookRotation.eulerAngles.y;
@@ -334,7 +350,27 @@ namespace PirateGame
                     break;
             }
 
-            Controller.Move(velocity * Time.deltaTime);
+            Vector3 move = Vector3.zero;
+
+            // EXPERIMENTAL
+            if (Boat != null)
+            {
+                Vector3 newWorldPoint = Boat.TransformPoint(localBoatPointA);
+                
+                move += newWorldPoint - lastPosition;
+            }
+            //
+
+            move += velocity * Time.deltaTime;
+
+            Controller.Move(move);
+
+            lastPosition = transform.position;
+
+            if (Boat != null)
+            {
+                localBoatPointA = Boat.InverseTransformPoint(transform.position);
+            }
         }
 
         private void Raycasts()
