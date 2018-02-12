@@ -13,5 +13,17 @@ namespace PirateGame.Entity
             Ray,
             Rays
         }
+        
+	    public enum HumanoidState
+	    {
+	    	Idle,
+	    	Walking,
+	    	Sprinting,
+	    	Crouching,
+	    	Jumping,
+	    	CrouchWalk,
+	    	Falling,
+            Landing
+	    }
     }
 }

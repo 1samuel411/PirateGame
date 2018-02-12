@@ -10,36 +10,64 @@ namespace PirateGame.Entity
     /// 
     /// </summary>
     public class EntityPlayer : EntityHumanoid
-    {
-        public Transform camera;
+	{
+        [Header("Player")]
+        public float inputSpeed;
+    	
+		private Transform fakeCamera;
 
+    	
         public new void Awake()
         {
             base.Awake();
             
+	        fakeCamera = new GameObject().transform;
+	        fakeCamera.name = "Fake Camera: " + gameObject.name;
+	        fakeCamera.SetParent(null);
         }
 
         public new void Start()
         {
-            base.Start();
+	        base.Start();
+            
+	        forwardTransform = fakeCamera;
         }
 
         public new void Update()
         {
             base.Update();
 
-            CheckInput();
+	        CheckInput();
+            
+	        SetFakeCamera();
         }
+        
+		void SetFakeCamera()
+		{
+			if(!grounded)
+				return;
+				
+			fakeCamera.position = CameraManager.instance.cameraObject.position;	
+			fakeCamera.rotation = CameraManager.instance.cameraObject.rotation;
+		}
 
         void CheckInput()
         {
-            inputVelocity = InputManager.instance.player.GetAxis2D("Horizontal", "Vertical");
+	        //angularVelocity.y = InputManager.instance.player.GetAxis("Horizontal");
+	        inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
+	        inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
 
-            if (inputVelocity.y != 0)
+            if (InputManager.instance.player.GetButtonDown("Jump"))
             {
-                // Rotate towards camera's direction
-                transform.eulerAngles = new Vector3(0, camera.eulerAngles.y, 0);
+                Jump();
             }
+
+	        sprinting = (InputManager.instance.player.GetButton("Sprint"));
         }
+        
+		public override void SetForwardRotation()
+		{
+			LookAtMovement(forwardTransform.TransformDirection(new Vector3(inputVelocity.x, 0, inputVelocity.z)));
+		}
     }
 }

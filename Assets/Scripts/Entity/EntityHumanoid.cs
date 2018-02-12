@@ -15,147 +15,335 @@ namespace PirateGame.Entity
     /// 
     /// </summary>
 	public class EntityHumanoid : Entity
-	{
+    {
 
-        #region Public Variables
+        [Header("Movement")]
+        public Transform forwardTransform;
 
-	    [FoldoutGroup("Humanoid Public Variables")]
-	    public Vector2 inputVelocity;
+        public float jumpHeight;
 
-	    [FoldoutGroup("Humanoid Public Variables")]
-	    public float jumpForce;
+        public float speedWalk;
+        public float speedSprint;
+        public float speedCrouch;
 
-        [FoldoutGroup("Humanoid Public Variables")]
-	    public float accelerationSpeed;
+        public float speedRotate;
 
-        [FoldoutGroup("Humanoid Public Variables")]
-	    public bool slopeDetection;
+        public float speedRotateForward;
 
-	    [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    public bool slopeDebug = true;
+        [Header("Step Offset")]
+		public bool enableStepOffset;
+		[ShowIf("enableStepOffset", true)]
+		public Color stepOffsetDebugColor = Color.white;
+		[ShowIf("enableStepOffset", true)]
+        public float stepOffsetWidth;
+		[ShowIf("enableStepOffset", true)]
+        public float stepYOffsetMin;
+		[ShowIf("enableStepOffset", true)]
+        public float stepYOffsetMax;
+		[ShowIf("enableStepOffset", true)]
+        public float stepOffsetForce;
+		[ShowIf("enableStepOffset", true)]
+        public float stepCheckDistance;
 
-	    [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    [ShowIf("slopeDebug")]
+        [Header("Slope")]
+        public bool slopeDetection;
+        [ShowIf("slopeDetection")]
+        public bool slopeDebug = true;
+        [ShowIf("slopeDetection")]
+        [ShowIf("slopeDebug")]
         public Color slopeDebugColor = Color.white;
+        [ShowIf("slopeDetection")]
+        public bool slopeOnlyGrounded;
+        [ShowIf("slopeDetection")]
+        public LayerMask slopeLayerMask;
+        [ShowIf("slopeDetection")]
+        public Vector3 slopeRayOriginOffset;
+        [ShowIf("slopeDetection")]
+        public float slopeRayLength;
+        [ShowIf("slopeDetection")]
+        public BaseEnums.Direction3d slopeRayDirection;
 
-	    [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    public bool slopeOnlyGrounded;
+        [Header("Debug Humanoid Variables")]
+        public EntityEnums.HumanoidState state;
 
-	    [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    public LayerMask slopeLayerMask;
+        public Vector3 inputVelocity;
+        public Vector3 inputVelocityAtJump;
+        public float angularVelocity;
 
-        [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    public Vector3 slopeRayOriginOffset;
+        public float curSpeed
+        {
+            get
+            {
+                if (sprinting)
+                    return speedSprint;
+                if (crouching)
+                    return speedCrouch;
 
-        [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    public float slopeRayLength;
+                return speedWalk;
+            }
+        }
+        public bool sprinting;
+        public bool crouching;
 
-	    [FoldoutGroup("Humanoid Public Variables/Slope Detection")]
-	    [ShowIf("slopeDetection")]
-	    public BaseEnums.Direction3d slopeRayDirection;
+        [ShowIf("slopeDetection")]
+        public float slope;
 
-        #endregion
+        public bool jumping;
 
-        #region Automatic Variables
+        public float forwardRotation;
 
-	    [FoldoutGroup("Humanoid Automatic Variables")]
-	    [ShowIf("slopeDetection")]
-	    public float slope;
+        public Action<bool> LandAction;
+        public Action<bool> UnGroundAction;
 
-	    [FoldoutGroup("Humanoid Automatic Variables")]
-	    public bool jumping;
+        public Action SprintBeginAction;
+        public Action CrouchBeginAction;
+        public Action IdleBeginAction;
+        public Action WalkBeginAction;
 
-        #endregion
+        public Action SprintEndAction;
+        public Action CrouchEndAction;
+        public Action IdleEndAction;
+        public Action WalkEndAction;
 
-        #region Events
-        
-        public Action JumpAction;
-
-        #endregion
-
+        public Action<EntityEnums.HumanoidState> StateChangeAction;
 
         public new void Awake()
-	    {
-	        base.Awake();
-	    }
+        {
+            base.Awake();
+        }
 
         public new void Start()
-	    {
-	        base.Start();
-	    }
-	
-	    public new void Update()
-	    {
-	        base.Update();
+        {
+            base.Start();
+        }
+
+        public new void Update()
+        {
+            base.Update();
 
             SlopeCheck();
 
-	    }
+            CheckJumping();
+
+            CheckMovement();
+
+            CheckState();
+        }
 
         public new void LateUpdate()
-	    {
-	        base.LateUpdate();
-	    }
+        {
+            base.LateUpdate();
+        }
 
-	    public new void FixedUpdate()
-	    {
-	        base.FixedUpdate();
+        public new void FixedUpdate()
+        {
+            base.FixedUpdate();
 
             ApplyVelocity();
-	    }
+
+            SetForwardRotation();
+
+            CheckStepOffset();
+        }
+
+        public virtual void SetForwardRotation()
+        {
+            LookAtMovement(velocityVector);
+
+        }
+
+
+        #region StepOffset
+
+        void CheckStepOffset()
+        {
+			
+        }
+
+        #endregion
 
         #region Velocity
 
-	    void ApplyVelocity()
-	    {
-	        AddForwardForce(new Vector3(inputVelocity.x, 0, inputVelocity.y), accelerationSpeed);
-	    }
+        void ApplyVelocity()
+        {
+            Vector3 dir = new Vector3(0, rigidbody.velocity.y, Mathf.Clamp(Mathf.Abs(inputVelocity.z) + Mathf.Abs(inputVelocity.x), 0, 1));
+
+            dir.z *= curSpeed;
+            dir = transform.TransformDirection(dir);
+
+            SetVelocity(dir);
+
+            SetAngularVelocity(new Vector3(0, angularVelocity, 0) * speedRotate);
+        }
+
+        public void LookAtMovement(Vector3 direction)
+        {
+            Vector3 currentRotation = transform.localEulerAngles;
+
+            if (direction.magnitude > 0.1f)
+                transform.rotation = Quaternion.LookRotation(direction);
+            //newRot.y = currentRotation.y;
+            currentRotation.y = Mathf.LerpAngle(currentRotation.y, transform.localEulerAngles.y, speedRotateForward * Time.deltaTime);
+
+            transform.localEulerAngles = currentRotation;
+        }
 
         #endregion
 
         #region Slope Detection
 
         void SlopeCheck()
-	    {
-	        slope = 0;
+        {
+            slope = 0;
 
-	        if (!slopeDetection)
-	            return;
+            if (!slopeDetection)
+                return;
 
-	        if (slopeOnlyGrounded && !grounded)
-	            return;
+            if (slopeOnlyGrounded && !grounded)
+                return;
 
-	        RaycastHit hit;
-	        Vector3 origin = transform.position;
-	        origin += slopeRayOriginOffset;
-	        if (Physics.Raycast(origin, GetDirectionVector3d(slopeRayDirection), out hit, slopeRayLength, slopeLayerMask))
-	        {
-	            slope = Vector3.Angle(Vector3.up, hit.normal);
-	        }
+            RaycastHit hit;
+            Vector3 origin = transform.position;
+            origin += slopeRayOriginOffset;
+            if (Physics.Raycast(origin, GetDirectionVector3d(slopeRayDirection), out hit, slopeRayLength, slopeLayerMask))
+            {
+                slope = Vector3.Angle(Vector3.up, hit.normal);
+            }
         }
         #endregion
 
-        #region Public Methods
+        private float jumpTime;
+        public void Jump()
+        {
+            if (jumping || !grounded)
+                return;
 
-	    public void Jump()
-	    {
-	        if (jumping)
-	            return;
+            jumping = true;
 
-	        jumping = true;
+            jumpTime = Time.time + 0.3f;
 
-            AddForce(Vector3.up, jumpForce, ForceMode.Impulse);
+            inputVelocityAtJump = inputVelocity;
 
-	        JumpAction.Invoke();
-	    }
+            float velocityInitial = Mathf.Sqrt(2 * -Physics.gravity.y * jumpHeight);
+            AddForce(Vector3.up, velocityInitial, ForceMode.Impulse);
 
-        #endregion
+            if (UnGroundAction != null)
+                UnGroundAction.Invoke(true);
+
+            DebugLog("Jumped");
+        }
+
+        private bool lastGrounded;
+        void CheckJumping()
+        {
+            if (lastGrounded != grounded || jumping)
+            {
+                if (jumping && Time.time < jumpTime)
+                    return;
+                if (grounded)
+                {
+                    if (LandAction != null)
+                        LandAction(jumping);
+
+                    DebugLog("Landed. Jumping = " + jumping);
+
+                    jumping = false;
+                }
+                else
+                {
+                    if (UnGroundAction != null && !jumping)
+                    {
+                        UnGroundAction.Invoke(false);
+                    }
+                }
+            }
+            lastGrounded = grounded;
+        }
+
+        private bool lastCrouching, lastSprinting, lastMoving;
+        private EntityEnums.HumanoidState lastState;
+        void CheckMovement()
+        {
+            bool moving = inputVelocity.magnitude > 0.1f;
+            if (lastMoving != moving)
+            {
+                if (!moving && IdleBeginAction != null)
+                    IdleBeginAction.Invoke();
+
+                if (moving && IdleEndAction != null)
+                    IdleEndAction.Invoke();
+
+                lastMoving = moving;
+            }
+
+            if (lastSprinting != sprinting)
+            {
+                if (sprinting && SprintBeginAction != null)
+                    SprintBeginAction.Invoke();
+
+                if (!sprinting && SprintEndAction != null)
+                {
+                    SprintEndAction.Invoke();
+                }
+
+                lastSprinting = sprinting;
+            }
+
+            if (lastCrouching != crouching)
+            {
+                if (crouching && CrouchBeginAction != null)
+                    CrouchBeginAction.Invoke();
+
+                if (!crouching && CrouchEndAction != null)
+                    CrouchEndAction.Invoke();
+
+                lastCrouching = crouching;
+            }
+
+            if (lastState != state)
+            {
+                if (StateChangeAction != null)
+                    StateChangeAction.Invoke(state);
+                lastState = state;
+            }
+        }
+
+        private float landTime;
+        void CheckState()
+        {
+            if (grounded && (state == EntityEnums.HumanoidState.Jumping || state == EntityEnums.HumanoidState.Falling))
+            {
+                landTime = Time.time + 0.6f;
+                state = EntityEnums.HumanoidState.Landing;
+            }
+
+            if (Time.time > landTime)
+            {
+                if (!crouching && velocityMagnitude > 0.2f)
+                {
+                    if (sprinting)
+                        state = EntityEnums.HumanoidState.Sprinting;
+                    else
+                        state = EntityEnums.HumanoidState.Walking;
+                }
+                if (crouching)
+                {
+                    if (velocityMagnitude > 0.2f)
+                        state = EntityEnums.HumanoidState.CrouchWalk;
+                    else
+                        state = EntityEnums.HumanoidState.Crouching;
+                }
+
+                if (jumping)
+                    state = EntityEnums.HumanoidState.Jumping;
+
+                if (!grounded && !jumping)
+                    state = EntityEnums.HumanoidState.Falling;
+
+                if (grounded && !crouching && (velocityMagnitude <= 0.2f))
+                    state = EntityEnums.HumanoidState.Idle;
+            }
+        }
 
         /*****************************************************
          * Debug
@@ -163,18 +351,27 @@ namespace PirateGame.Entity
 
         #region Debug Ground Collision Check
         public new void OnDrawGizmos()
-	    {
+        {
             base.OnDrawGizmos();
 
-	        if (!slopeDebug)
-	            return;
+			if(enableStepOffset)
+			{
+				Gizmos.color = stepOffsetDebugColor;
+				
+				Debug.DrawRay(transform.position + (transform.up * stepYOffsetMin) , transform.forward * stepCheckDistance, stepOffsetDebugColor);
+				Debug.DrawRay(transform.position + (transform.up * stepYOffsetMax) , transform.forward * stepCheckDistance, stepOffsetDebugColor);
+				Gizmos.DrawWireCube(transform.position + (transform.up * (stepYOffsetMin/2)) + (transform.up * (stepYOffsetMax/2)) + (transform.forward * (stepCheckDistance/2)), new Vector3(stepOffsetWidth/2, stepYOffsetMax-stepYOffsetMin, stepCheckDistance));
+			}
 
-	        Gizmos.color = slopeDebugColor;
+            if (!slopeDebug)
+                return;
 
-	        Vector3 origin = transform.position;
-	        origin += slopeRayOriginOffset;
-	        Debug.DrawRay(origin, GetDirectionVector3d(slopeRayDirection) * slopeRayLength, slopeDebugColor);
-	    }
-	    #endregion
+            Gizmos.color = slopeDebugColor;
+
+            Vector3 origin = transform.position;
+            origin += slopeRayOriginOffset;
+            Debug.DrawRay(origin, GetDirectionVector3d(slopeRayDirection) * slopeRayLength, slopeDebugColor);
+        }
+        #endregion
     }
 }

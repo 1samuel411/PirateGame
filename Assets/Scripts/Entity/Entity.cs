@@ -21,79 +21,59 @@ namespace PirateGame.Entity
     public class Entity : Base
 	{
 
-        #region Public Variables
-	    [FoldoutGroup("Public Variables")]
+        [Header("Entity")]
+	    public float drag;
         public bool hasMaxSpeed;
         [ShowIf("hasMaxSpeed")]
-	    [FoldoutGroup("Public Variables")]
         public float maxSpeed;
-        [FoldoutGroup("Public Variables")]
         public ForceMode forceMode;
 
-        #region Grounded Collision
-        [FoldoutGroup("Public Variables/Collision")]
+        [Header("Collision")]
 	    public bool showDebugCollision = true;
-
-	    [FoldoutGroup("Public Variables/Collision")]
 	    [ShowIf("showDebugCollision", true)]
         public Color debugCollisionColor  = Color.white;
-
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+		public bool checkGrounded;
+	    [ShowIf("checkGrounded", true)]
 	    public EntityEnums.GroundedCollisionDetection gCollisionDetection;
-
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
         public LayerMask gCollisionLayerMask;
-
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    public bool gCustomOrigin;
-        
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    [ShowIf("gCustomOrigin", true)]
 	    public Transform gOrigin;
-
-	    [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Box)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Sphere)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Capsule)]
 	    public Vector3 gDirectionVector;
-
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    public Vector3 gOffset;
-
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Box)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Rays)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Rays)]
         public float gRadius;
-
-	    [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Box)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Sphere)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Ray)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Rays)]
         public float gHeight;
-
-	    [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Capsule)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Sphere)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Ray)]
 	    [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Rays)]
         public Vector3 gBoxSize;
-
-        [FoldoutGroup("Public Variables/Collision/Grounded")]
+	    [ShowIf("checkGrounded", true)]
         [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Capsule)]
         [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Sphere)]
         [HideIf("gCollisionDetection", EntityEnums.GroundedCollisionDetection.Box)]
         public float gMaxDistance;
 
-        #endregion
-
-        #endregion
-
-        #region Automatic Variables
-
-        #region Collision
-        [FoldoutGroup("Automatic Variables/Collision")]
+        [Header("Debug Entity Variables")]
+        public List<Collider> collisions = new List<Collider>();
         public bool inCollision
 		{
 			get
@@ -101,11 +81,8 @@ namespace PirateGame.Entity
 				return collisions.Count > 0;
 			}
 		}
-        [FoldoutGroup("Automatic Variables/Collision")]
-        public List<Collider> collisions = new List<Collider>();
 		
-		
-		[FoldoutGroup("Automatic Variables/Collision")]
+		public List<Collider> triggers = new List<Collider>();
 		public bool inTrigger
         {
 			get
@@ -113,30 +90,24 @@ namespace PirateGame.Entity
 				return triggers.Count > 0;
 			}
 		}
-		[FoldoutGroup("Automatic Variables/Collision")]
-		public List<Collider> triggers = new List<Collider>();
-        #endregion
 
-	    [FoldoutGroup("Automatic Variables")]
-	    public float velocityMagnitude;
-
-	    [FoldoutGroup("Automatic Variables")]
+        public float velocityPlanarMagnitude;
+        public float velocityMagnitude;
 	    public Vector3 velocityVector;
-
-	    [FoldoutGroup("Automatic Variables")]
 	    public Vector3 velocityVectorDirection;
-
-	    [FoldoutGroup("Automatic Variables")]
 	    public Vector3 velocityVectorDirectionInverse;
 
-        [FoldoutGroup("Automatic Variables")]
+	    [ShowIf("checkGrounded", true)]
 	    public bool grounded
 	    {
 	        get { return groundedColliders != null && groundedColliders.Length > 0; }
 	    }
+	    [ShowIf("checkGrounded", true)]
+		public Collider[] groundedColliders;
 
-	    [FoldoutGroup("Automatic Variables")]
-        Collider[] groundedColliders;
+        #region Private Variables
+
+	    private Vector3 fakeAngularVelocity;
 
         #endregion
 
@@ -156,20 +127,22 @@ namespace PirateGame.Entity
 	    {
 	        CheckGroundedCollision();
 
-	        UpdateSpeedVariables();
+	        ApplyDrag();
+
+            UpdateSpeedVariables();
 
 	        LockSpeed();
 	    }
 
 	    public void LateUpdate()
 	    {
-	        
-	    }
 
-	    public void FixedUpdate()
+        }
+
+        public void FixedUpdate()
 	    {
-	        
-	    }
+	        ApplyFakeAngularVelocity();
+        }
 
         #endregion
 
@@ -254,7 +227,7 @@ namespace PirateGame.Entity
 
 	    public void AddForce(Vector3 direction, float amount, ForceMode forceMode)
 	    {
-            rigidbody.AddForce(direction, forceMode);
+            rigidbody.AddForce(direction * amount, forceMode);
 	    }
 
 	    public void AddForce(Vector3 direction, float amount)
@@ -278,6 +251,28 @@ namespace PirateGame.Entity
 	        transform.eulerAngles = dir;
 	    }
 
+	    public void SetVelocity(Vector3 velocity)
+	    {
+	        rigidbody.velocity = velocity;
+	    }
+
+	    public void SetVelocityForward(Vector3 velocity)
+	    {
+	        SetVelocity(transform.TransformDirection(velocity));
+	    }
+
+	    public void SetAngularVelocity(Vector3 angularVelocity)
+	    {
+	        if (rigidbody.constraints == RigidbodyConstraints.FreezeRotationY || rigidbody.constraints == RigidbodyConstraints.FreezeRotation || rigidbody.constraints == RigidbodyConstraints.FreezeAll)
+	        {
+                // use fake angular velocity
+	            fakeAngularVelocity = angularVelocity;
+
+	            return;
+	        }
+	        rigidbody.angularVelocity = angularVelocity;
+	    }
+
         #endregion
 
         // Lock speed if the velocity exceeds the max speed
@@ -297,14 +292,35 @@ namespace PirateGame.Entity
 	    {
 	        velocityMagnitude = rigidbody.velocity.magnitude;
             velocityVector = rigidbody.velocity;
+	        velocityPlanarMagnitude = new Vector3(velocityVector.x, 0, velocityVector.z).magnitude;
             velocityVectorDirection = transform.TransformDirection(rigidbody.velocity);
             velocityVectorDirectionInverse = transform.InverseTransformDirection(rigidbody.velocity);
         }
 
+        // Add drag
+	    void ApplyDrag()
+	    {
+	        Vector3 velocity = rigidbody.velocity;
+	        velocity = Vector3.Lerp(velocity, Vector3.zero, drag * Time.deltaTime);
+	        velocity.y = rigidbody.velocity.y;
+	        rigidbody.velocity = velocity;
+	    }
+
+        // Add fake angular velocity
+	    void ApplyFakeAngularVelocity()
+	    {
+	        transform.eulerAngles += fakeAngularVelocity * Time.deltaTime;
+	    }
+
         /*****************************************************
          * Debug
          *****************************************************/
-        
+
+	    public virtual void DebugLog(string message)
+	    {
+	        Debug.Log("[" + this.GetType().Name + " (" + gameObject.name + ")] " + message, gameObject);
+	    }
+
         #region Debug Ground Collision Check
         public void OnDrawGizmos()
 	    {
@@ -313,7 +329,10 @@ namespace PirateGame.Entity
 
             Gizmos.color = debugCollisionColor;
 
-            if (gCollisionDetection == EntityEnums.GroundedCollisionDetection.Capsule)
+			if(!checkGrounded)
+				return;
+				
+			if (gCollisionDetection == EntityEnums.GroundedCollisionDetection.Capsule)
 	        {
 	            Vector3 originP1 = (gCustomOrigin ? gOrigin.position : transform.position);
 	            originP1 += gOffset;

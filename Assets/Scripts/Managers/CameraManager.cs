@@ -4,17 +4,16 @@ using UnityEngine;
 
 namespace PirateGame
 {
-    public class InputManager : MonoBehaviour
+    public class CameraManager : MonoBehaviour
     {
-        public static InputManager instance;
 
-        public Rewired.Player player;
+        public static CameraManager instance;
+
+        public Transform cameraObject;
 
         void Awake()
         {
             instance = this;
-
-            player = Rewired.ReInput.players.GetPlayer(0);
         }
 
         void Update()
