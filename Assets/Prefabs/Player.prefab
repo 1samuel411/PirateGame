@@ -1373,13 +1373,17 @@ MonoBehaviour:
   speedCrouch: 1.8
   speedRotate: 50
   speedRotateForward: 9
-  enableStepOffset: 0
-  stepOffsetDebugColor: {r: 1, g: 1, b: 1, a: 1}
-  stepOffsetWidth: 0
-  stepYOffsetMin: 0
-  stepYOffsetMax: 0
-  stepOffsetForce: 0
-  stepCheckDistance: 0
+  enableStepOffset: 1
+  stepOffsetDebugColor: {r: 0, g: 0.21379304, b: 1, a: 1}
+  stepOffsetWidth: 1
+  stepYOffsetMin: 0.09
+  stepYOffsetMax: 0.66
+  stepBodyHeight: 2.38
+  stepOffsetForce: 0.35
+  stepCheckDistance: 0.49
+  stepLayermask:
+    serializedVersion: 2
+    m_Bits: 1536
   slopeDetection: 1
   slopeDebug: 1
   slopeDebugColor: {r: 0, g: 1, b: 0.006896496, a: 1}
