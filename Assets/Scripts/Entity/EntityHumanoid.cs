@@ -38,12 +38,16 @@ namespace PirateGame.Entity
         public float stepOffsetWidth;
 		[ShowIf("enableStepOffset", true)]
         public float stepYOffsetMin;
-		[ShowIf("enableStepOffset", true)]
-        public float stepYOffsetMax;
+	    [ShowIf("enableStepOffset", true)]
+	    public float stepYOffsetMax;
+	    [ShowIf("enableStepOffset", true)]
+	    public float stepBodyHeight;
 		[ShowIf("enableStepOffset", true)]
         public float stepOffsetForce;
-		[ShowIf("enableStepOffset", true)]
-        public float stepCheckDistance;
+	    [ShowIf("enableStepOffset", true)]
+	    public float stepCheckDistance;
+	    [ShowIf("enableStepOffset", true)]
+	    public LayerMask stepLayermask;
 
         [Header("Slope")]
         public bool slopeDetection;
@@ -156,8 +160,27 @@ namespace PirateGame.Entity
         #region StepOffset
 
         void CheckStepOffset()
-        {
-			
+	    {	
+	    	Collider[] hit = Physics.OverlapBox
+		    (
+			    transform.position + (transform.up * (stepYOffsetMin/2)) + (transform.up * (stepYOffsetMax/2)) + (transform.forward * (stepCheckDistance/2)),
+			    new Vector3(stepOffsetWidth/2, (stepYOffsetMax-stepYOffsetMin)/2, stepCheckDistance/2),
+		    	Quaternion.identity,
+		    	stepLayermask
+		    );
+		    
+		    Collider[] hitBody = Physics.OverlapBox(
+			    transform.position + (transform.up * (stepYOffsetMax + (stepBodyHeight/2))) + (transform.forward * (stepCheckDistance/2)), 
+			    new Vector3(stepOffsetWidth/2, stepBodyHeight/2, stepCheckDistance/2),
+			    Quaternion.identity,
+			    stepLayermask
+		    );
+
+		    
+		    if(hit.Length > 0 && hitBody.Length <= 0 && velocityPlanarMagnitude > 0)
+		    {
+		    	AddForce(Vector3.up, stepOffsetForce, ForceMode.Impulse);
+		    }
         }
 
         #endregion
@@ -171,7 +194,7 @@ namespace PirateGame.Entity
             dir.z *= curSpeed;
             dir = transform.TransformDirection(dir);
 
-            SetVelocity(dir);
+	        SetVelocity(dir);
 
             SetAngularVelocity(new Vector3(0, angularVelocity, 0) * speedRotate);
         }
@@ -361,6 +384,8 @@ namespace PirateGame.Entity
 				Debug.DrawRay(transform.position + (transform.up * stepYOffsetMin) , transform.forward * stepCheckDistance, stepOffsetDebugColor);
 				Debug.DrawRay(transform.position + (transform.up * stepYOffsetMax) , transform.forward * stepCheckDistance, stepOffsetDebugColor);
 				Gizmos.DrawWireCube(transform.position + (transform.up * (stepYOffsetMin/2)) + (transform.up * (stepYOffsetMax/2)) + (transform.forward * (stepCheckDistance/2)), new Vector3(stepOffsetWidth/2, stepYOffsetMax-stepYOffsetMin, stepCheckDistance));
+				Gizmos.color = Color.gray;
+				Gizmos.DrawWireCube(transform.position + (transform.up * (stepYOffsetMax + (stepBodyHeight/2))) + (transform.forward * (stepCheckDistance/2)), new Vector3(stepOffsetWidth/2, stepBodyHeight, stepCheckDistance));
 			}
 
             if (!slopeDebug)
