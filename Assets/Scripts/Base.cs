@@ -49,6 +49,21 @@ namespace PirateGame
             }
         }
 
+        private CharacterController __characterController;
+        [HideInInspector]
+        public CharacterController characterController
+        {
+            get
+            {
+                if (__characterController == null)
+                {
+                    __characterController = GetComponent<CharacterController>();
+                }
+
+                return __characterController;
+            }
+        }
+
         public static Vector3 GetDirectionVector3d(BaseEnums.Direction3d dir)
         {
             switch (dir)

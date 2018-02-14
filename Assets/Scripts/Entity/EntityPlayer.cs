@@ -53,7 +53,6 @@ namespace PirateGame.Entity
 
         void CheckInput()
         {
-	        //angularVelocity.y = InputManager.instance.player.GetAxis("Horizontal");
 	        inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
 	        inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
 
