@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4792471599889126}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34,7 +34,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4278354049950342}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: group1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4146624017761400}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: pasted__pCube2 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,7 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4879927607147970}
   - component: {fileID: 95649430776667540}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4768640286467226}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: transform1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4062839494303734}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: pasted__pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4651987837609514}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: group2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 33060940336910106}
   - component: {fileID: 23951944488550924}
   - component: {fileID: 64344044490283826}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: pasted__pCube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4015881550146434}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: transform2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -154,7 +154,9 @@ namespace PirateGame.Entity
 
 	        ApplyDrag();
 
-            ApplyGravity();
+		    ApplyGravity();
+            
+		    MoveWithGround();
 	    }
 
         #endregion
@@ -296,6 +298,26 @@ namespace PirateGame.Entity
 	            return;
 	        }
 	        rigidbody.angularVelocity = angularVelocity;
+	    }
+	    
+	    private Vector3 _lastPositions;
+	    void MoveWithGround()
+	    {
+	    	if(grounded)
+	    	{
+	    		Vector3 totalMovement = Vector3.zero;
+	    		for(int i = 0; i < groundedColliders.Length; i++)
+	    		{
+		    		totalMovement += groundedColliders[i].transform.position;
+	    		}
+	    		totalMovement /= groundedColliders.Length;
+	    		Vector3 difference = _lastPositions - totalMovement;
+	    		_lastPositions = totalMovement;
+	    		
+	    		transform.position += difference;
+	    	}
+	    	else
+	    		_lastPositions = transform.position;
 	    }
 
         #endregion
