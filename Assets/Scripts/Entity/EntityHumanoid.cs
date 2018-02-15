@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 namespace PirateGame.Entity
@@ -30,25 +31,6 @@ namespace PirateGame.Entity
 
         public float speedRotateForward;
 
-        [Header("Step Offset")]
-		public bool enableStepOffset;
-		[ShowIf("enableStepOffset", true)]
-		public Color stepOffsetDebugColor = Color.white;
-		[ShowIf("enableStepOffset", true)]
-        public float stepOffsetWidth;
-		[ShowIf("enableStepOffset", true)]
-        public float stepYOffsetMin;
-	    [ShowIf("enableStepOffset", true)]
-	    public float stepYOffsetMax;
-	    [ShowIf("enableStepOffset", true)]
-	    public float stepBodyHeight;
-		[ShowIf("enableStepOffset", true)]
-        public float stepOffsetForce;
-	    [ShowIf("enableStepOffset", true)]
-	    public float stepCheckDistance;
-	    [ShowIf("enableStepOffset", true)]
-	    public LayerMask stepLayermask;
-
         [Header("Slope")]
         public bool slopeDetection;
         [ShowIf("slopeDetection")]
@@ -74,6 +56,7 @@ namespace PirateGame.Entity
         public Vector3 inputVelocityAtJump;
         public float angularVelocity;
 
+        [OdinSerialize]
         public float curSpeed
         {
             get
@@ -146,8 +129,6 @@ namespace PirateGame.Entity
             ApplyVelocity();
 
             SetForwardRotation();
-
-            CheckStepOffset();
         }
 
         public virtual void SetForwardRotation()
@@ -156,45 +137,17 @@ namespace PirateGame.Entity
 
         }
 
-
-        #region StepOffset
-
-        void CheckStepOffset()
-	    {	
-	    	Collider[] hit = Physics.OverlapBox
-		    (
-			    transform.position + (transform.up * (stepYOffsetMin/2)) + (transform.up * (stepYOffsetMax/2)) + (transform.forward * (stepCheckDistance/2)),
-			    new Vector3(stepOffsetWidth/2, (stepYOffsetMax-stepYOffsetMin)/2, stepCheckDistance/2),
-		    	Quaternion.identity,
-		    	stepLayermask
-		    );
-		    
-		    Collider[] hitBody = Physics.OverlapBox(
-			    transform.position + (transform.up * (stepYOffsetMax + (stepBodyHeight/2))) + (transform.forward * (stepCheckDistance/2)), 
-			    new Vector3(stepOffsetWidth/2, stepBodyHeight/2, stepCheckDistance/2),
-			    Quaternion.identity,
-			    stepLayermask
-		    );
-
-		    
-		    if(hit.Length > 0 && hitBody.Length <= 0 && velocityPlanarMagnitude > 0)
-		    {
-		    	AddForce(Vector3.up, stepOffsetForce, ForceMode.Impulse);
-		    }
-        }
-
-        #endregion
-
         #region Velocity
 
         void ApplyVelocity()
         {
-            Vector3 dir = new Vector3(0, rigidbody.velocity.y, Mathf.Clamp(Mathf.Abs(inputVelocity.z) + Mathf.Abs(inputVelocity.x), 0, 1));
+            Vector3 dir = new Vector3(0, 0, Mathf.Clamp(Mathf.Abs(inputVelocity.z) + Mathf.Abs(inputVelocity.x), 0, 1));
 
             dir.z *= curSpeed;
             dir = transform.TransformDirection(dir);
+            dir.y = verticalSpeed;
 
-	        SetVelocity(dir);
+            characterController.Move(dir * Time.deltaTime);
 
             SetAngularVelocity(new Vector3(0, angularVelocity, 0) * speedRotate);
         }
@@ -205,7 +158,7 @@ namespace PirateGame.Entity
 
             if (direction.magnitude > 0.1f)
                 transform.rotation = Quaternion.LookRotation(direction);
-            //newRot.y = currentRotation.y;
+
             currentRotation.y = Mathf.LerpAngle(currentRotation.y, transform.localEulerAngles.y, speedRotateForward * Time.deltaTime);
 
             transform.localEulerAngles = currentRotation;
@@ -247,9 +200,7 @@ namespace PirateGame.Entity
 
             inputVelocityAtJump = inputVelocity;
 
-            float velocityInitial = Mathf.Sqrt(2 * -Physics.gravity.y * jumpHeight);
-            AddForce(Vector3.up, velocityInitial, ForceMode.Impulse);
-
+            verticalSpeed = Mathf.Sqrt(2 * gravity * jumpHeight);
             if (UnGroundAction != null)
                 UnGroundAction.Invoke(true);
 
@@ -262,7 +213,9 @@ namespace PirateGame.Entity
             if (lastGrounded != grounded || jumping)
             {
                 if (jumping && Time.time < jumpTime)
+                {
                     return;
+                }
                 if (grounded)
                 {
                     if (LandAction != null)
@@ -281,6 +234,19 @@ namespace PirateGame.Entity
                 }
             }
             lastGrounded = grounded;
+        }
+
+        public override void ApplyGravity()
+        {
+            if (hasCustomGravity)
+            {
+                if (grounded && !jumping)
+                {
+                    verticalSpeed = 0;
+                }
+
+                verticalSpeed -= gravity * Time.deltaTime;
+            }
         }
 
         private bool lastCrouching, lastSprinting, lastMoving;
@@ -376,17 +342,6 @@ namespace PirateGame.Entity
         public new void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-
-			if(enableStepOffset)
-			{
-				Gizmos.color = stepOffsetDebugColor;
-				
-				Debug.DrawRay(transform.position + (transform.up * stepYOffsetMin) , transform.forward * stepCheckDistance, stepOffsetDebugColor);
-				Debug.DrawRay(transform.position + (transform.up * stepYOffsetMax) , transform.forward * stepCheckDistance, stepOffsetDebugColor);
-				Gizmos.DrawWireCube(transform.position + (transform.up * (stepYOffsetMin/2)) + (transform.up * (stepYOffsetMax/2)) + (transform.forward * (stepCheckDistance/2)), new Vector3(stepOffsetWidth/2, stepYOffsetMax-stepYOffsetMin, stepCheckDistance));
-				Gizmos.color = Color.gray;
-				Gizmos.DrawWireCube(transform.position + (transform.up * (stepYOffsetMax + (stepBodyHeight/2))) + (transform.forward * (stepCheckDistance/2)), new Vector3(stepOffsetWidth/2, stepBodyHeight, stepCheckDistance));
-			}
 
             if (!slopeDebug)
                 return;

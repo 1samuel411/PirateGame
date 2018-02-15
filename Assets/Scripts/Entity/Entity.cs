@@ -16,16 +16,21 @@ namespace PirateGame.Entity
     /// - Collision and trigger detection
     /// - (Needs) Collision sounds
     /// </summary>
-	[RequireComponent(typeof(Rigidbody))]
+
 	[RequireComponent(typeof(Collider))]
     public class Entity : Base
-	{
+    {
 
         [Header("Entity")]
 	    public float drag;
+
+        public bool hasCustomGravity;
+        [ShowIf("hasCustomGravity")]
+        public float gravity;
         public bool hasMaxSpeed;
         [ShowIf("hasMaxSpeed")]
         public float maxSpeed;
+
         public ForceMode forceMode;
 
         [Header("Collision")]
@@ -91,6 +96,8 @@ namespace PirateGame.Entity
 			}
 		}
 
+        public float verticalSpeed;
+
         public float velocityPlanarMagnitude;
         public float velocityMagnitude;
 	    public Vector3 velocityVector;
@@ -107,16 +114,19 @@ namespace PirateGame.Entity
 
         #region Private Variables
 
-	    private Vector3 fakeAngularVelocity;
+	    private Vector3 _fakeAngularVelocity;
+
+        private bool _characterController;
+
 
         #endregion
 
         #region Unity Methods
 
         public void Awake()
-	    {
-
-	    }
+        {
+            _characterController = characterController != null;
+        }
 
         public void Start()
 	    {
@@ -127,7 +137,6 @@ namespace PirateGame.Entity
 	    {
 	        CheckGroundedCollision();
 
-	        ApplyDrag();
 
             UpdateSpeedVariables();
 
@@ -142,7 +151,11 @@ namespace PirateGame.Entity
         public void FixedUpdate()
 	    {
 	        ApplyFakeAngularVelocity();
-        }
+
+	        ApplyDrag();
+
+            ApplyGravity();
+	    }
 
         #endregion
 
@@ -172,6 +185,7 @@ namespace PirateGame.Entity
 
 	    void CheckGroundedCollision()
 	    {
+	        groundedColliders = null;
             if (gCollisionDetection == EntityEnums.GroundedCollisionDetection.Capsule)
 	        {
 	            Vector3 originP1 = (gCustomOrigin ? gOrigin.position : transform.position);
@@ -227,6 +241,10 @@ namespace PirateGame.Entity
 
 	    public void AddForce(Vector3 direction, float amount, ForceMode forceMode)
 	    {
+	        if (_characterController)
+	        {
+	            return;
+	        }
             rigidbody.AddForce(direction * amount, forceMode);
 	    }
 
@@ -253,7 +271,12 @@ namespace PirateGame.Entity
 
 	    public void SetVelocity(Vector3 velocity)
 	    {
-	        rigidbody.velocity = velocity;
+	        if (_characterController)
+	        {
+	            return;
+	        }
+
+            rigidbody.velocity = velocity;
 	    }
 
 	    public void SetVelocityForward(Vector3 velocity)
@@ -263,10 +286,12 @@ namespace PirateGame.Entity
 
 	    public void SetAngularVelocity(Vector3 angularVelocity)
 	    {
-	        if (rigidbody.constraints == RigidbodyConstraints.FreezeRotationY || rigidbody.constraints == RigidbodyConstraints.FreezeRotation || rigidbody.constraints == RigidbodyConstraints.FreezeAll)
+            _fakeAngularVelocity = Vector3.zero;
+
+	        if (_characterController || (rigidbody.constraints == RigidbodyConstraints.FreezeRotationY || rigidbody.constraints == RigidbodyConstraints.FreezeRotation || rigidbody.constraints == RigidbodyConstraints.FreezeAll))
 	        {
                 // use fake angular velocity
-	            fakeAngularVelocity = angularVelocity;
+	            _fakeAngularVelocity = angularVelocity;
 
 	            return;
 	        }
@@ -283,6 +308,10 @@ namespace PirateGame.Entity
 
 	        if (velocityMagnitude > maxSpeed)
 	        {
+	            if (characterController)
+	            {
+	                return;
+	            }
 	            rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
 	        }
 	    }
@@ -290,26 +319,51 @@ namespace PirateGame.Entity
         // Update the automatic variables
 	    void UpdateSpeedVariables()
 	    {
-	        velocityMagnitude = rigidbody.velocity.magnitude;
-            velocityVector = rigidbody.velocity;
+	        velocityMagnitude = (_characterController ? characterController.velocity.magnitude: rigidbody.velocity.magnitude);
+            velocityVector = (_characterController ? characterController.velocity : rigidbody.velocity);
 	        velocityPlanarMagnitude = new Vector3(velocityVector.x, 0, velocityVector.z).magnitude;
-            velocityVectorDirection = transform.TransformDirection(rigidbody.velocity);
-            velocityVectorDirectionInverse = transform.InverseTransformDirection(rigidbody.velocity);
+            velocityVectorDirection = transform.TransformDirection(velocityVector);
+            velocityVectorDirectionInverse = transform.InverseTransformDirection(velocityVector);
         }
 
         // Add drag
 	    void ApplyDrag()
 	    {
-	        Vector3 velocity = rigidbody.velocity;
+	        if (_characterController)
+	            return;
+
+            Vector3 velocity = velocityVector;
 	        velocity = Vector3.Lerp(velocity, Vector3.zero, drag * Time.deltaTime);
-	        velocity.y = rigidbody.velocity.y;
+	        velocity.y = velocityVector.y;
 	        rigidbody.velocity = velocity;
 	    }
 
+        // Apply gravity
+        public virtual void ApplyGravity()
+        {
+            if (hasCustomGravity)
+            {
+                if (_characterController)
+                {
+                    if (grounded)
+                    {
+                        verticalSpeed = 0;
+                    }
+
+                    verticalSpeed -= gravity * Time.deltaTime;
+                }
+                else
+                {
+                    rigidbody.useGravity = false;
+                    rigidbody.velocity = new Vector3(rigidbody.velocity.x, -gravity, rigidbody.velocity.z);
+                }
+            }
+        }
+
         // Add fake angular velocity
-	    void ApplyFakeAngularVelocity()
+        void ApplyFakeAngularVelocity()
 	    {
-	        transform.eulerAngles += fakeAngularVelocity * Time.deltaTime;
+	        transform.eulerAngles += _fakeAngularVelocity * Time.deltaTime;
 	    }
 
         /*****************************************************
