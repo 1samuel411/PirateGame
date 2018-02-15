@@ -3855,8 +3855,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1553447139664640}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.24}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 23.68, y: 1, z: -178.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4503569489573686}
@@ -5591,7 +5591,7 @@ MonoBehaviour:
   gCustomOrigin: 0
   gOrigin: {fileID: 0}
   gDirectionVector: {x: 0, y: 0, z: 0}
-  gOffset: {x: 0, y: 0.4, z: 0}
+  gOffset: {x: 0, y: 0.3, z: 0}
   gRadius: 0.35
   gHeight: 0
   gBoxSize: {x: 0, y: 0, z: 0}
@@ -5669,9 +5669,9 @@ MonoBehaviour:
   solver:
     layers:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 1536
     maxStep: 0.5
-    heightOffset: 0
+    heightOffset: -0.08
     footSpeed: 2.5
     footRadius: 0.15
     prediction: 0.05
