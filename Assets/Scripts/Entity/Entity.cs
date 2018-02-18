@@ -300,24 +300,34 @@ namespace PirateGame.Entity
 	        rigidbody.angularVelocity = angularVelocity;
 	    }
 	    
-	    private Vector3 _lastPositions;
+	    private Vector3 lastPosition;
+	    private GameObject lastObject;
 	    void MoveWithGround()
 	    {
 	    	if(grounded)
 	    	{
-	    		Vector3 totalMovement = Vector3.zero;
-	    		for(int i = 0; i < groundedColliders.Length; i++)
+	    		if(groundedColliders[0].gameObject != lastObject)
 	    		{
-		    		totalMovement += groundedColliders[i].transform.position;
+	    			lastObject = groundedColliders[0].gameObject;
+	    			lastPosition = lastObject.transform.position;
+	    			return;
 	    		}
-	    		totalMovement /= groundedColliders.Length;
-	    		Vector3 difference = _lastPositions - totalMovement;
-	    		_lastPositions = totalMovement;
+	    		
+	    		Vector3 difference = Vector3.zero;
+	    		if(lastPosition != Vector3.zero)
+	    		{
+	    			difference = groundedColliders[0].transform.position - lastPosition;
+	    		}
 	    		
 	    		transform.position += difference;
+	    		
+	    		lastPosition = groundedColliders[0].transform.position;
 	    	}
 	    	else
-	    		_lastPositions = transform.position;
+	    	{
+	    		lastPosition = Vector3.zero;
+	    		lastObject = null;
+	    	}
 	    }
 
         #endregion
