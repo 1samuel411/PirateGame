@@ -3855,8 +3855,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1553447139664640}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 23.68, y: 1, z: -178.02}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4503569489573686}
@@ -5622,6 +5622,14 @@ MonoBehaviour:
   slopeRayOriginOffset: {x: 0, y: 0.5, z: 0}
   slopeRayLength: 3
   slopeRayDirection: 1
+  interactionDebugColor: {r: 0, g: 1, b: 0.83448267, a: 1}
+  interactionOffset: {x: 0, y: 0, z: 0}
+  interactionRadius: 0.25
+  interactionMaxDist: 20
+  interactionLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  interactionColliders: []
   state: 0
   inputVelocity: {x: 0, y: 0, z: 0}
   inputVelocityAtJump: {x: 0, y: 0, z: 0}

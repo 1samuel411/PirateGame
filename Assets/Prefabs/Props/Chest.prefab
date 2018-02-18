@@ -19,7 +19,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4196304603062756}
-  m_Layer: 0
+  - component: {fileID: 65033684636394684}
+  - component: {fileID: 114895895569418314}
+  m_Layer: 11
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,9 +38,8 @@ GameObject:
   - component: {fileID: 4084305064409716}
   - component: {fileID: 33163017342165286}
   - component: {fileID: 23501264926547764}
-  - component: {fileID: 320555941333045942}
-  - component: {fileID: 95237119417921922}
-  m_Layer: 0
+  - component: {fileID: 95585350717421092}
+  m_Layer: 11
   m_Name: SM_Prop_Chest_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +56,7 @@ GameObject:
   - component: {fileID: 4675115669594468}
   - component: {fileID: 33236665427989890}
   - component: {fileID: 23936350827594926}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Prop_Chest_Treasure_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +73,7 @@ GameObject:
   - component: {fileID: 4397668850714846}
   - component: {fileID: 33905213711968160}
   - component: {fileID: 23652211648043068}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Prop_Chest_Lid_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,8 +102,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1062296659885516}
   m_LocalRotation: {x: -0, y: 0.96157837, z: -0, w: 0.27453062}
-  m_LocalPosition: {x: 20.013031, y: -0.029, z: -161.62431}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 2.95, y: -8.76, z: 11.72}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 4084305064409716}
   m_Father: {fileID: 0}
@@ -257,7 +258,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1872457262095436}
   m_Mesh: {fileID: 4300002, guid: ec416d438706a944882a71eba667a948, type: 3}
---- !u!95 &95237119417921922
+--- !u!65 &65033684636394684
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1062296659885516}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.8, z: 0.76}
+  m_Center: {x: 0, y: 0.4, z: 0}
+--- !u!95 &95585350717421092
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
@@ -266,31 +279,27 @@ Animator:
   m_GameObject: {fileID: 1747262609814316}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1f94437477f5fa04da111618625fcbc9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!320 &320555941333045942
-PlayableDirector:
+--- !u!114 &114895895569418314
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1747262609814316}
+  m_GameObject: {fileID: 1062296659885516}
   m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 34ca56f154447834689efdefa150ba10, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: 114937684637991086, guid: 34ca56f154447834689efdefa150ba10, type: 2}
-    value: {fileID: 1747262609814316}
-  - key: {fileID: 114041989946546244, guid: 34ca56f154447834689efdefa150ba10, type: 2}
-    value: {fileID: 0}
-  m_ExposedReferences:
-    m_References: []
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11bcfc49fab9f35438f3c0138b434707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerDebugColor: {r: 1, g: 0, b: 0, a: 1}
+  triggerOffset: {x: 0, y: 0.5, z: 1}
+  triggerSize: {x: 2, y: 1, z: 2}
+  interactPointDebugColor: {r: 0, g: 0, b: 1, a: 1}
+  interactPointOffset: {x: -0, y: 0.5, z: 0.9}
