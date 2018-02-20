@@ -49,6 +49,14 @@ namespace PirateGame.Entity
         [ShowIf("slopeDetection")]
         public BaseEnums.Direction3d slopeRayDirection;
 
+        [Header("Interaction Check")]
+        public Color interactionDebugColor = Color.white;
+        public Vector3 interactionOffset;
+        public float interactionRadius;
+        public float interactionMaxDist;
+        public LayerMask interactionLayerMask;
+        public Collider[] interactionColliders;
+
         [Header("Debug Humanoid Variables")]
         public EntityEnums.HumanoidState state;
 
@@ -129,6 +137,8 @@ namespace PirateGame.Entity
             ApplyVelocity();
 
             SetForwardRotation();
+
+            CheckInteraction();            
         }
 
         public virtual void SetForwardRotation()
@@ -186,6 +196,19 @@ namespace PirateGame.Entity
                 slope = Vector3.Angle(Vector3.up, hit.normal);
             }
         }
+        #endregion
+
+        #region Interaction
+        void CheckInteraction()
+        {
+            RaycastHit[] hit;
+            hit = Physics.SphereCastAll(forwardTransform.position + interactionOffset, interactionRadius, forwardTransform.forward, interactionMaxDist, interactionLayerMask);
+            interactionColliders = new Collider[hit.Length];
+            for(int i = 0; i < hit.Length; i++)
+            {
+                interactionColliders[i] = hit[i].collider;
+            }
+          }
         #endregion
 
         private float jumpTime;
@@ -351,6 +374,12 @@ namespace PirateGame.Entity
             Vector3 origin = transform.position;
             origin += slopeRayOriginOffset;
             Debug.DrawRay(origin, GetDirectionVector3d(slopeRayDirection) * slopeRayLength, slopeDebugColor);
+
+            Gizmos.color = interactionDebugColor;
+            if(forwardTransform)
+            {
+                Gizmos.DrawWireSphere(forwardTransform.position + interactionOffset, interactionRadius);
+            }
         }
         #endregion
     }
