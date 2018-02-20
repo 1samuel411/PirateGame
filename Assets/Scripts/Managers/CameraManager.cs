@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PirateGame
+namespace PirateGame.Managers
 {
     public class CameraManager : MonoBehaviour
     {

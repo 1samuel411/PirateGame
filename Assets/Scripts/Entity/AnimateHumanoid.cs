@@ -13,7 +13,7 @@ namespace PirateGame.Entity.Animations
         protected void Awake ()
         {
             humanoid = GetComponent<EntityHumanoid> ();
-            animator = humanoid.animator;
+            animator = GetComponentInChildren<Animator> ();
 
             humanoid.UnGroundAction += UnGround;
             humanoid.LandAction += Land;
@@ -32,9 +32,9 @@ namespace PirateGame.Entity.Animations
             {
                 case EntityEnums.HumanoidState.Idle:
                     if (sprintToWalkTransitionCooldown > Time.time)
-                        animator.CrossFadeInFixedTime("SprintStop", 0.2f);
+                        animator.CrossFadeInFixedTime ("SprintStop", 0.2f);
                     else
-                        animator.CrossFadeInFixedTime("WalkStop", 0.2f);
+                        animator.CrossFadeInFixedTime ("WalkStop", 0.2f);
                     break;
 
                 case EntityEnums.HumanoidState.Walking:

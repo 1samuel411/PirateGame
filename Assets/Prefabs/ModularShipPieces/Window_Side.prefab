@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4262595588270014}
   - component: {fileID: 33853939320057104}
   - component: {fileID: 23114794057512170}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: pCube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 33471728355182448}
   - component: {fileID: 23835016224377266}
   - component: {fileID: 64346100584394054}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4534562648735018}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4818691049858480}
   - component: {fileID: 95774591836484466}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Window_Side
   m_TagString: Untagged
   m_Icon: {fileID: 0}
