@@ -11,6 +11,8 @@ namespace PirateGame.UI
         public Action EnableAction;
         public Action DisableAction;
 
+        public View view;
+
         void OnEnable()
         {
             if(EnableAction != null)
