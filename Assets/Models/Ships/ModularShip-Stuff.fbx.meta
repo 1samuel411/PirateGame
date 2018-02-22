@@ -1,0 +1,161 @@
+fileFormatVersion: 2
+guid: 695ae7948542d9f438dbae586a58a1a6
+timeCreated: 1518879880
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: CenterPlank
+    100002: CentralPlankUpwards
+    100004: CornerLow
+    100006: EdgeHigh1
+    100008: EdgeHigh2
+    100010: EdgeLow
+    100012: //RootNode
+    100014: NormalPlank
+    100016: Tapered1
+    100018: Tapered2
+    100020: Tapered3
+    100022: TaperedCurve1
+    100024: TaperedCurve2
+    100026: TaperedCurve3
+    100028: VerticalPlank
+    400000: CenterPlank
+    400002: CentralPlankUpwards
+    400004: CornerLow
+    400006: EdgeHigh1
+    400008: EdgeHigh2
+    400010: EdgeLow
+    400012: //RootNode
+    400014: NormalPlank
+    400016: Tapered1
+    400018: Tapered2
+    400020: Tapered3
+    400022: TaperedCurve1
+    400024: TaperedCurve2
+    400026: TaperedCurve3
+    400028: VerticalPlank
+    2100000: No Name
+    2300000: CenterPlank
+    2300002: CentralPlankUpwards
+    2300004: CornerLow
+    2300006: EdgeHigh1
+    2300008: EdgeHigh2
+    2300010: EdgeLow
+    2300012: NormalPlank
+    2300014: Tapered1
+    2300016: Tapered2
+    2300018: Tapered3
+    2300020: TaperedCurve1
+    2300022: TaperedCurve2
+    2300024: TaperedCurve3
+    2300026: VerticalPlank
+    3300000: CenterPlank
+    3300002: CentralPlankUpwards
+    3300004: CornerLow
+    3300006: EdgeHigh1
+    3300008: EdgeHigh2
+    3300010: EdgeLow
+    3300012: NormalPlank
+    3300014: Tapered1
+    3300016: Tapered2
+    3300018: Tapered3
+    3300020: TaperedCurve1
+    3300022: TaperedCurve2
+    3300024: TaperedCurve3
+    3300026: VerticalPlank
+    4300000: CornerLow
+    4300002: TaperedCurve3
+    4300004: TaperedCurve2
+    4300006: TaperedCurve1
+    4300008: CentralPlankUpwards
+    4300010: Tapered3
+    4300012: Tapered2
+    4300014: Tapered1
+    4300016: EdgeLow
+    4300018: VerticalPlank
+    4300020: EdgeHigh2
+    4300022: EdgeHigh1
+    4300024: NormalPlank
+    4300026: CenterPlank
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

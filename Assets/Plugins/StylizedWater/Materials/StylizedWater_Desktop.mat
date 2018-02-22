@@ -42,7 +42,7 @@ Material:
     - _RimSize: 2
     - _Rimfalloff: 0.25
     - _Rimtiling: 2
-    - _SurfaceHighlight: 0.05
+    - _SurfaceHighlight: 0
     - _SurfaceHightlighttiling: 0.25
     - _Surfacehightlightsize: 0
     - _Tiling: 0.812
@@ -50,9 +50,9 @@ Material:
     - _UseIntersectionHighlight: 0
     - _Wavesspeed: 3
     - _Wavesstrength: 0.01
-    - _Wavetint: 0.109
+    - _Wavetint: 0.133
     - _Worldspacetiling: 1
     m_Colors:
-    - _FresnelColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 0.422}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _WaterColor: {r: 0, g: 0.503546, b: 1, a: 1}
