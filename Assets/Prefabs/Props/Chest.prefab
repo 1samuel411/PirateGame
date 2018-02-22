@@ -303,3 +303,8 @@ MonoBehaviour:
   triggerSize: {x: 2, y: 1, z: 2}
   interactPointDebugColor: {r: 0, g: 0, b: 1, a: 1}
   interactPointOffset: {x: -0, y: 0.5, z: 0.9}
+  playerInteractAnimation: ChestOpen
+  myInteractAnimation: Chest Opening
+  playerEndInteractAnimation: ChestClose
+  myEndInteractAnimation: Chest Closing
+  animator: {fileID: 95585350717421092}

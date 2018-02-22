@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using PirateGame.Interactables;
 
 namespace PirateGame.Entity
 {
@@ -56,8 +57,17 @@ namespace PirateGame.Entity
         public float interactionMaxDist;
         public LayerMask interactionLayerMask;
         public Collider[] interactionColliders;
+        public Interactable currentInteractable;
 
         [Header("Debug Humanoid Variables")]
+        public bool overrideForward = false;
+
+        public bool canWalk = true;
+        public bool canSprint = true;
+        public bool canCrouch = true;
+        public bool canJump = true;
+        public bool canInteract = true;
+
         public EntityEnums.HumanoidState state;
 
         public Vector3 inputVelocity;
@@ -69,6 +79,11 @@ namespace PirateGame.Entity
         {
             get
             {
+                if(!canSprint && canWalk)
+                    return speedWalk;
+                if(!canWalk)
+                    return 0;
+
                 if (sprinting)
                     return speedSprint;
                 if (crouching)
@@ -77,8 +92,14 @@ namespace PirateGame.Entity
                 return speedWalk;
             }
         }
+        public bool interacting;
+        public bool interactingBegin;
+        public bool interactingFinal;
         public bool sprinting;
         public bool crouching;
+
+        public Vector3 targetPosition;
+        public Vector3 targetDirection;
 
         [ShowIf("slopeDetection")]
         public float slope;
@@ -94,6 +115,8 @@ namespace PirateGame.Entity
         public Action CrouchBeginAction;
         public Action IdleBeginAction;
         public Action WalkBeginAction;
+
+        public Action InteractBeginSequenceAction;
 
         public Action SprintEndAction;
         public Action CrouchEndAction;
@@ -123,6 +146,8 @@ namespace PirateGame.Entity
             CheckMovement();
 
             CheckState();
+
+            CheckAI();
         }
 
         public new void LateUpdate()
@@ -136,7 +161,8 @@ namespace PirateGame.Entity
 
             ApplyVelocity();
 
-            SetForwardRotation();
+            if(!overrideForward)
+                SetForwardRotation();
 
             CheckInteraction();            
         }
@@ -144,11 +170,9 @@ namespace PirateGame.Entity
         public virtual void SetForwardRotation()
         {
             LookAtMovement(velocityVector);
-
         }
 
         #region Velocity
-
         void ApplyVelocity()
         {
             Vector3 dir = new Vector3(0, 0, Mathf.Clamp(Mathf.Abs(inputVelocity.z) + Mathf.Abs(inputVelocity.x), 0, 1));
@@ -173,11 +197,9 @@ namespace PirateGame.Entity
 
             transform.localEulerAngles = currentRotation;
         }
-
         #endregion
 
         #region Slope Detection
-
         void SlopeCheck()
         {
             slope = 0;
@@ -198,6 +220,83 @@ namespace PirateGame.Entity
         }
         #endregion
 
+        #region AI
+        void CheckAI()
+        {
+            if(targetPosition != Vector3.zero)
+            {
+                Move(targetPosition);
+            }
+
+            if(targetDirection != Vector3.zero)
+            {
+                Look(targetDirection);
+            }
+        }
+
+        private Action moveToCallback;
+        public void MoveTo(Vector3 position, Action callback = null)
+        {
+            targetPosition = position;
+            moveToCallback = callback;
+        }
+
+        private Action lookAtCallback;
+        public void LookAt(Vector3 direction, Action callback = null)
+        {
+            targetDirection = direction;
+            lookAtCallback = callback;
+        }
+
+        void Look(Vector3 dir)
+        {
+            Vector3 currentRotation = transform.localEulerAngles;
+
+            if (dir.magnitude > 0.1f)
+                transform.rotation = Quaternion.LookRotation(dir);
+
+            float target = transform.localEulerAngles.y;
+
+            transform.localEulerAngles = currentRotation;
+
+            if(Mathf.Abs(transform.localEulerAngles.y - target) <= 0.2f)
+            {
+                lookAtCallback.Invoke();
+                lookAtCallback = null;
+                targetDirection = Vector3.zero;
+            }
+
+            LookAtMovement(dir);
+        }
+
+        void Move(Vector3 pos)
+        {
+            // simple move to for now? 
+            float differenceX = transform.position.x - pos.x;
+            if(Mathf.Abs(differenceX) > 0.05f)
+            {
+                inputVelocity.x = (differenceX < 0) ? 1 : -1;
+            }
+            else
+                inputVelocity.x = 0;
+
+            float differenceZ = transform.position.z - pos.z;
+            if(Mathf.Abs(differenceZ) > 0.05f)
+            {
+                inputVelocity.z = (differenceZ < 0) ? 1 : -1;
+            }
+            else
+                inputVelocity.z = 0;
+
+            if(moveToCallback != null && Mathf.Abs(differenceX) <= 0.05f && Mathf.Abs(differenceZ) <= 0.05f)
+            {
+                moveToCallback.Invoke();
+                moveToCallback = null;
+                targetPosition = Vector3.zero;
+            }
+        }
+        #endregion
+
         #region Interaction
         void CheckInteraction()
         {
@@ -208,13 +307,59 @@ namespace PirateGame.Entity
             {
                 interactionColliders[i] = hit[i].collider;
             }
-          }
+        }
+
+        public void Interact()
+        {
+            if(interactionColliders.Length <= 0)
+                return;
+
+            if(interacting)
+                return;
+
+            interacting = true;
+
+            currentInteractable = interactionColliders[0].gameObject.GetComponent<Interactable>();
+
+            Debug.Log("Moving to: " + currentInteractable.gameObject.name);
+            MoveTo(currentInteractable.GetInteractPoint(), LookAtBegin);
+        }
+
+        void LookAtBegin()
+        {
+            overrideForward = true;
+
+            Debug.Log("Looking at: " + currentInteractable.gameObject.name);
+            LookAt(currentInteractable.gameObject.transform.position - transform.position, InteractBeginSequence);
+        }
+
+        void InteractBeginSequence()
+        {
+            Debug.Log("Interacting with: " + currentInteractable.gameObject.name);
+            if(InteractBeginSequenceAction != null)
+                InteractBeginSequenceAction.Invoke();
+
+            interactingBegin = true;
+        }
+
+        public void InteractBeginInteractable()
+        {
+            currentInteractable.Interact(InteractSequenceComplete);
+        }
+
+        void InteractSequenceComplete(IInteractable interactable)
+        {
+            interactingFinal = true;
+
+            Debug.Log("Interaction sequence complete");
+        }
+
         #endregion
 
         private float jumpTime;
         public void Jump()
         {
-            if (jumping || !grounded)
+            if (jumping || !grounded || !canJump)
                 return;
 
             jumping = true;

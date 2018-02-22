@@ -36,11 +36,17 @@ namespace PirateGame.Entity.Animations
 	        humanoid.LandAction += Land;
 	        humanoid.SprintEndAction += SprintStop;
 	        humanoid.StateChangeAction += StateChange;
+            humanoid.InteractBeginSequenceAction += InteractBeginSequence;
         }
 
         void Update()
         {
             
+        }
+
+        private void InteractBeginSequence()
+        {
+            animator.CrossFadeInFixedTime(humanoid.currentInteractable.GetInteractAnimation(), 0.1f);
         }
 
         private float timeSinceSprinting;
@@ -51,6 +57,9 @@ namespace PirateGame.Entity.Animations
         
 	    private void StateChange(EntityEnums.HumanoidState state)
 	    {
+            if(humanoid.interactingBegin)
+                return;
+                
 	    	if(state == EntityEnums.HumanoidState.Walking)
             {
                 animator.CrossFadeInFixedTime("WalkStart", 0.2f);
@@ -70,6 +79,9 @@ namespace PirateGame.Entity.Animations
 
         private void UnGround(bool jumping)
         {
+            if(humanoid.interactingBegin)
+                return;
+
             if(jumping)
             {
                 if(humanoid.velocityPlanarMagnitude > 0.5f)
@@ -90,6 +102,9 @@ namespace PirateGame.Entity.Animations
 
         private void Land(bool jumping)
         {
+            if(humanoid.interactingBegin)
+                return;
+
             if(humanoid.velocityPlanarMagnitude > 2f)
             {
                 if(humanoid.sprinting)

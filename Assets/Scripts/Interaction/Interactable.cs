@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PirateGame.Entity;
@@ -16,6 +17,16 @@ namespace PirateGame.Interactables
 		[Header("InteractPoint")]
 		public Color interactPointDebugColor = Color.white;
 		public Vector3 interactPointOffset;
+
+		[Header("Animation")]
+		public string playerInteractAnimation;
+		public string myInteractAnimation;
+		public string playerEndInteractAnimation;
+		public string myEndInteractAnimation;
+
+		public Animator animator;
+
+		private Action<IInteractable> InteractCallback;
 
 		private BoxCollider boxCollider;
 		void Awake()
@@ -35,9 +46,20 @@ namespace PirateGame.Interactables
 			return newPos;
 		}
 
-		public void Interact()
+		public string GetInteractAnimation()
 		{
+			return playerInteractAnimation;
+		}
 
+		public void Interact(Action<IInteractable> Callback)
+		{
+			InteractCallback = Callback;
+			animator.CrossFadeInFixedTime(myInteractAnimation, 0.2f);
+		}
+
+		public void CompleteBeginAnimation()
+		{
+			InteractCallback(this);
 		}
 
 		// -------------------- Debug
