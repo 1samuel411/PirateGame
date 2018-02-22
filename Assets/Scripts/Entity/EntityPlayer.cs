@@ -54,6 +54,14 @@ namespace PirateGame.Entity
 
         void CheckInput()
         {
+            if(interacting)
+                return;
+            
+            if(InputManager.instance.player.GetButtonDown("Interact"))
+            {
+                Interact();
+            }
+
 	        inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
 	        inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
 
