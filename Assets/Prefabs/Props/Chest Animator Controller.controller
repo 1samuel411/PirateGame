@@ -32,9 +32,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b667198d95182b44a494012f09eaf0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MessageParent: 0
+  MessageParent: 1
   OnEnterEvents: []
-  OnExitEvents: []
+  OnExitEvents:
+  - FunctionName: CompleteStopAnimation
+    ParameterType: 0
+    IntParameter: 0
+    FloatParameter: 0
+    StringParameter: 
+    ObjectParameter: {fileID: 0}
+    CanTrigger: 0
   TimedEvents: []
 --- !u!114 &114772039355738388
 MonoBehaviour:

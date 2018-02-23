@@ -26,7 +26,16 @@ namespace PirateGame.Interactables
 
 		public Animator animator;
 
+		[Header("IK")]
+		public Color gripDebugColor = Color.white;
+		public Vector3 gripPoint1Offset;
+		public Vector3 gripPoint2Offset;
+
+		[Header("Debug")]
+		public bool activated;
+
 		private Action<IInteractable> InteractCallback;
+		private Action<IInteractable> UnInteractCallback;
 
 		private BoxCollider boxCollider;
 		void Awake()
@@ -46,15 +55,36 @@ namespace PirateGame.Interactables
 			return newPos;
 		}
 
+		public bool GetActive()
+		{
+			return activated;
+		}
+
 		public string GetInteractAnimation()
 		{
 			return playerInteractAnimation;
+		}
+
+		public string GetUnInteractAnimation()
+		{
+			return playerEndInteractAnimation;
 		}
 
 		public void Interact(Action<IInteractable> Callback)
 		{
 			InteractCallback = Callback;
 			animator.CrossFadeInFixedTime(myInteractAnimation, 0.2f);
+		}
+
+		public void UnInteract(Action<IInteractable> Callback)
+		{
+			UnInteractCallback = Callback;
+			animator.CrossFadeInFixedTime(myEndInteractAnimation, 0.2f);
+		}
+
+		public void CompleteStopAnimation()
+		{
+			UnInteractCallback(this);
 		}
 
 		public void CompleteBeginAnimation()
