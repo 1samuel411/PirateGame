@@ -294,6 +294,7 @@ namespace PirateGame.Entity
                 moveToCallback = null;
                 targetPosition = Vector3.zero;
             }
+            LookAtMovement(inputVelocity);
         }
         #endregion
 
@@ -319,6 +320,8 @@ namespace PirateGame.Entity
 
             interacting = true;
 
+            overrideForward = true;
+
             currentInteractable = interactionColliders[0].gameObject.GetComponent<Interactable>();
 
             Debug.Log("Moving to: " + currentInteractable.gameObject.name);
@@ -327,7 +330,6 @@ namespace PirateGame.Entity
 
         void LookAtBegin()
         {
-            overrideForward = true;
 
             Debug.Log("Looking at: " + currentInteractable.gameObject.name);
             LookAt(currentInteractable.gameObject.transform.position - transform.position, InteractBeginSequence);
