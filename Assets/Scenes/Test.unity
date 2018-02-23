@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44922173, g: 0.4959939, b: 0.5579777, a: 1}
+  m_IndirectSpecularColor: {r: 0.44922185, g: 0.49599433, b: 0.55797803, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -310,6 +310,26 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114895895569418314, guid: 524e850e55484f74d8935bafa59037d8,
+        type: 2}
+      propertyPath: playerInteractAnimation
+      value: ChestOpen
+      objectReference: {fileID: 0}
+    - target: {fileID: 114895895569418314, guid: 524e850e55484f74d8935bafa59037d8,
+        type: 2}
+      propertyPath: myInteractAnimation
+      value: Chest Opening
+      objectReference: {fileID: 0}
+    - target: {fileID: 114895895569418314, guid: 524e850e55484f74d8935bafa59037d8,
+        type: 2}
+      propertyPath: playerEndInteractAnimation
+      value: ChestClose
+      objectReference: {fileID: 0}
+    - target: {fileID: 114895895569418314, guid: 524e850e55484f74d8935bafa59037d8,
+        type: 2}
+      propertyPath: myEndInteractAnimation
+      value: Chest Closing
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 524e850e55484f74d8935bafa59037d8, type: 2}
   m_IsPrefabParent: 0
@@ -366,21 +386,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actions.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.keyboardMaps.Array.data[0].actionElementMaps.Array.size
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.size
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 4095403747723528, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -426,61 +431,6 @@ Prefab:
     - target: {fileID: 1481819466515080, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
       propertyPath: m_Name
       value: SceneManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.keyboardMaps.Array.data[0].actionElementMaps.Array.data[10]._actionId
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.keyboardMaps.Array.data[0].actionElementMaps.Array.data[10]._elementType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.keyboardMaps.Array.data[0].actionElementMaps.Array.data[10]._elementIdentifierId
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actions.Array.data[8]._id
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actions.Array.data[8]._name
-      value: Interact
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actions.Array.data[8]._type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actions.Array.data[8]._descriptiveName
-      value: Interact
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actions.Array.data[8]._userAssignable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actionCategoryMap.list.Array.data[0].actionIds.Array.data[8]
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.actionIdCounter
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 114196735901945152, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: _userData.keyboardMaps.Array.data[0].actionElementMaps.Array.data[10]._keyboardKeyCode
-      value: 101
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
