@@ -6,6 +6,7 @@ namespace PirateGame.UI.Views
     [System.Serializable]
     public class InteractableView : View
     {
+        public Text stopInteractingText;
         public Text interactableText;
 
     }

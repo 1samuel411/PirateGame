@@ -169,7 +169,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ChestClose
       takeName: mixamo.com
-      firstFrame: 154
+      firstFrame: 91
       lastFrame: 329
       wrapMode: 0
       orientationOffsetY: 0

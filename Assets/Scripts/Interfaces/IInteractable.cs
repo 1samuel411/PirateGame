@@ -11,6 +11,9 @@ namespace PirateGame.Interactables
 		void Interact(Action<IInteractable> callback);
 
 		string GetInteractAnimation();
+		string GetUnInteractAnimation();
+
+		bool GetActive();
 
 		Vector3 GetInteractPoint();
 

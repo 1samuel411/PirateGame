@@ -37,6 +37,7 @@ namespace PirateGame.Entity.Animations
             humanoid.SprintEndAction += SprintStop;
             humanoid.StateChangeAction += StateChange;
             humanoid.InteractBeginSequenceAction += InteractBeginSequence;
+            humanoid.InteractStopSequenceAction += InteractStopSequence;
         }
 
         void Update()
@@ -47,6 +48,11 @@ namespace PirateGame.Entity.Animations
         private void InteractBeginSequence()
         {
             animator.CrossFadeInFixedTime(humanoid.currentInteractable.GetInteractAnimation(), 0.1f);
+        }
+
+        private void InteractStopSequence()
+        {
+            animator.CrossFadeInFixedTime(humanoid.currentInteractable.GetUnInteractAnimation(), 0.1f);
         }
 
         private float timeSinceSprinting;

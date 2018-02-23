@@ -94,6 +94,7 @@ namespace PirateGame.Entity
         }
         public bool interacting;
         public bool interactingBegin;
+        public bool interactingStopping;
         public bool interactingFinal;
         public bool sprinting;
         public bool crouching;
@@ -117,6 +118,7 @@ namespace PirateGame.Entity
         public Action WalkBeginAction;
 
         public Action InteractBeginSequenceAction;
+        public Action InteractStopSequenceAction;
 
         public Action SprintEndAction;
         public Action CrouchEndAction;
@@ -337,11 +339,22 @@ namespace PirateGame.Entity
 
         void InteractBeginSequence()
         {
+            interactingBegin = true;
+
             Debug.Log("Interacting with: " + currentInteractable.gameObject.name);
             if(InteractBeginSequenceAction != null)
                 InteractBeginSequenceAction.Invoke();
+        }
 
-            interactingBegin = true;
+        public void UnInteract()
+        {
+            if(interactingStopping)
+                return;
+
+            interactingStopping = true;
+            Debug.Log("Stop Interacting With: " + currentInteractable.gameObject.name);
+            if(InteractStopSequenceAction != null)
+                InteractStopSequenceAction.Invoke();
         }
 
         public void InteractBeginInteractable()
@@ -354,6 +367,27 @@ namespace PirateGame.Entity
             interactingFinal = true;
 
             Debug.Log("Interaction sequence complete");
+        }
+
+        public void InteractStopInteractable()
+        {
+            currentInteractable.UnInteract(InteractSequenceCompleteStop);
+        }
+
+        void InteractSequenceCompleteStop(IInteractable interactable)
+        {
+            interactingFinal = false;
+            interacting = false;
+            interactingStopping = false;
+            interactingBegin = false;
+            overrideForward = false;
+
+
+            StateChangeAction.Invoke(state);
+
+            currentInteractable = null;
+
+            Debug.Log("Stop Interaction sequence complete");
         }
 
         #endregion

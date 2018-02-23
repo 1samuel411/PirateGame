@@ -55,8 +55,18 @@ namespace PirateGame.Entity
         void CheckInput()
         {
             if(interacting)
+            {
+                if(interactingFinal)
+                {
+                    if(InputManager.instance.player.GetButtonDown("Interact"))
+                    {
+                        UnInteract();
+                    }
+                }
+
                 return;
-            
+            }
+
             if(InputManager.instance.player.GetButtonDown("Interact"))
             {
                 Interact();
