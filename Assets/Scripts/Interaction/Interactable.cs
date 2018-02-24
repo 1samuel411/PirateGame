@@ -94,13 +94,15 @@ namespace PirateGame.Interactables
 
 		public void CompleteStopAnimation()
 		{
+		    activated = false;
 			UnInteractCallback(this);
-		}
+        }
 
 		public void CompleteBeginAnimation()
 		{
+		    activated = true;
 			InteractCallback(this);
-		}
+        }
 
 	    public bool GetGripPointLeft()
 	    {
