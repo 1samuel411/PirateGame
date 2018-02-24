@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 using PirateGame.Interactables;
+using RootMotion.FinalIK;
 
 namespace PirateGame.Entity
 {
@@ -31,6 +33,16 @@ namespace PirateGame.Entity
         public float speedRotate;
 
         public float speedRotateForward;
+
+        [Header("IK")]
+        public LimbIK leftArmIk;
+        public LimbIK rightArmIk;
+        [Range(0,1)]
+        public float leftWeight;
+        [Range(0,1)]
+        public float rightWeight;
+        public Transform leftTarget;
+        public Transform rightTarget;
 
         [Header("Slope")]
         public bool slopeDetection;
@@ -150,6 +162,8 @@ namespace PirateGame.Entity
             CheckState();
 
             CheckAI();
+
+            SetIK();
         }
 
         public new void LateUpdate()
@@ -342,8 +356,23 @@ namespace PirateGame.Entity
             interactingBegin = true;
 
             Debug.Log("Interacting with: " + currentInteractable.gameObject.name);
-            if(InteractBeginSequenceAction != null)
+            if (InteractBeginSequenceAction != null)
                 InteractBeginSequenceAction.Invoke();
+
+            // Set IK
+            if (currentInteractable.GetGripPointLeft())
+            {
+                leftTarget.transform.parent = currentInteractable.GetGripPointLeftTransform();
+                leftTarget.transform.localPosition = Vector3.zero;
+                DOTween.To(() => leftWeight, x => leftWeight = x, currentInteractable.GetGripPointLeftWeight(), 0.5f);
+            }
+
+            if (currentInteractable.GetGripPointRight())
+            {
+                rightTarget.transform.parent = currentInteractable.GetGripPointRightTransform();
+                rightTarget.transform.localPosition = Vector3.zero;
+                DOTween.To(() => rightWeight, x => rightWeight = x, currentInteractable.GetGripPointRightWeight(), 0.5f);
+            }
         }
 
         public void UnInteract()
@@ -382,12 +411,26 @@ namespace PirateGame.Entity
             interactingBegin = false;
             overrideForward = false;
 
+            leftTarget.parent = null;
+            rightTarget.parent = null;
+            rightWeight = 0;
+            leftWeight = 0;
 
             StateChangeAction.Invoke(state);
 
             currentInteractable = null;
 
             Debug.Log("Stop Interaction sequence complete");
+        }
+
+        #endregion
+
+        #region IK
+
+        void SetIK()
+        {
+            leftArmIk.solver.IKPositionWeight = leftWeight;
+            rightArmIk.solver.IKPositionWeight = rightWeight;
         }
 
         #endregion

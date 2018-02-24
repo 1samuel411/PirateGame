@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PirateGame.Entity;
+using Sirenix.OdinInspector;
 
 namespace PirateGame.Interactables
 {
@@ -27,11 +28,20 @@ namespace PirateGame.Interactables
 		public Animator animator;
 
 		[Header("IK")]
-		public Color gripDebugColor = Color.white;
-		public Vector3 gripPoint1Offset;
-		public Vector3 gripPoint2Offset;
+	    public bool gripPointRight;
+	    public bool gripPointLeft;
+        [ShowIf("gripPointRight")]
+        public Transform gripPointRightTransform;
+        [ShowIf("gripPointRight")]
+        [Range(0,1)]
+	    public float gripPointRightWeight;
+        [ShowIf("gripPointLeft")]
+        public Transform gripPointLeftTransform;
+        [ShowIf("gripPointLeft")]
+        [Range(0,1)]
+	    public float gripPointLeftWeight;
 
-		[Header("Debug")]
+        [Header("Debug")]
 		public bool activated;
 
 		private Action<IInteractable> InteractCallback;
@@ -92,14 +102,45 @@ namespace PirateGame.Interactables
 			InteractCallback(this);
 		}
 
-		// -------------------- Debug
-		public void OnDrawGizmos()
-		{
-			// Interact Point
-			Gizmos.color = interactPointDebugColor;
-			Gizmos.DrawCube(GetInteractPoint(), Vector3.one/4.0f);
+	    public bool GetGripPointLeft()
+	    {
+	        return gripPointLeft;
+	    }
 
-			Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+	    public bool GetGripPointRight()
+	    {
+	        return gripPointRight;
+	    }
+
+        public float GetGripPointRightWeight()
+	    {
+	        return gripPointRightWeight;
+	    }
+
+	    public Transform GetGripPointRightTransform()
+	    {
+	        return gripPointRightTransform;
+	    }
+
+	    public float GetGripPointLeftWeight()
+	    {
+	        return gripPointRightWeight;
+	    }
+
+	    public Transform GetGripPointLeftTransform()
+	    {
+	        return gripPointLeftTransform;
+        }
+
+        // -------------------- Debug
+        public void OnDrawGizmos()
+		{
+		    // Interact Point
+		    Gizmos.color = interactPointDebugColor;
+		    Gizmos.DrawCube(GetInteractPoint(), Vector3.one / 4.0f);
+
+            // Matrix
+            Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 			Gizmos.matrix = rotationMatrix;
 
 			// Trigger
