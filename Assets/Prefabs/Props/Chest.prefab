@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4806927046668888}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: rightHandTarget
   m_TagString: Untagged
   m_Icon: {fileID: -6488666005112524639, guid: 0000000000000000d000000000000000, type: 0}
@@ -51,7 +51,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4904991275144072}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: leftHandTarget
   m_TagString: Untagged
   m_Icon: {fileID: -6488666005112524639, guid: 0000000000000000d000000000000000, type: 0}
@@ -86,7 +86,8 @@ GameObject:
   - component: {fileID: 4675115669594468}
   - component: {fileID: 33236665427989890}
   - component: {fileID: 23936350827594926}
-  m_Layer: 11
+  - component: {fileID: 64010365743378300}
+  m_Layer: 12
   m_Name: SM_Prop_Chest_Treasure_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +104,8 @@ GameObject:
   - component: {fileID: 4397668850714846}
   - component: {fileID: 33905213711968160}
   - component: {fileID: 23652211648043068}
-  m_Layer: 11
+  - component: {fileID: 64916875994083612}
+  m_Layer: 12
   m_Name: SM_Prop_Chest_Lid_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -315,6 +317,34 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1872457262095436}
+  m_Mesh: {fileID: 4300002, guid: ec416d438706a944882a71eba667a948, type: 3}
+--- !u!64 &64010365743378300
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1752067097717690}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300004, guid: ec416d438706a944882a71eba667a948, type: 3}
+--- !u!64 &64916875994083612
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1872457262095436}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300002, guid: ec416d438706a944882a71eba667a948, type: 3}
 --- !u!65 &65033684636394684
 BoxCollider:

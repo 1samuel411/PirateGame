@@ -68,7 +68,7 @@ namespace PirateGame.Entity
         public float interactionRadius;
         public float interactionMaxDist;
         public LayerMask interactionLayerMask;
-        public Collider[] interactionColliders;
+        public List<Collider> interactionColliders = new List<Collider>();
         public Interactable currentInteractable;
 
         [Header("Debug Humanoid Variables")]
@@ -191,6 +191,9 @@ namespace PirateGame.Entity
         #region Velocity
         void ApplyVelocity()
         {
+            if(interactingFinal)
+                return;
+
             Vector3 dir = new Vector3(0, 0, Mathf.Clamp(Mathf.Abs(inputVelocity.z) + Mathf.Abs(inputVelocity.x), 0, 1));
 
             dir.z *= curSpeed;
@@ -204,6 +207,9 @@ namespace PirateGame.Entity
 
         public void LookAtMovement(Vector3 direction)
         {
+            if(interactingFinal)
+                return;
+                
             Vector3 currentRotation = transform.localEulerAngles;
 
             if (direction.magnitude > 0.1f)
@@ -288,24 +294,10 @@ namespace PirateGame.Entity
         void Move(Vector3 pos)
         {
             // simple move to for now? 
-            float differenceX = transform.position.x - pos.x;
-            if(Mathf.Abs(differenceX) > 0.05f)
+            inputVelocity = pos - transform.position;
+            if(moveToCallback != null && Mathf.Abs((pos - transform.position).magnitude) <= 0.65f)
             {
-                inputVelocity.x = (differenceX < 0) ? 1 : -1;
-            }
-            else
-                inputVelocity.x = 0;
-
-            float differenceZ = transform.position.z - pos.z;
-            if(Mathf.Abs(differenceZ) > 0.05f)
-            {
-                inputVelocity.z = (differenceZ < 0) ? 1 : -1;
-            }
-            else
-                inputVelocity.z = 0;
-
-            if(moveToCallback != null && Mathf.Abs(differenceX) <= 0.05f && Mathf.Abs(differenceZ) <= 0.05f)
-            {
+                inputVelocity = Vector3.zero;
                 moveToCallback.Invoke();
                 moveToCallback = null;
                 targetPosition = Vector3.zero;
@@ -319,16 +311,23 @@ namespace PirateGame.Entity
         {
             RaycastHit[] hit;
             hit = Physics.SphereCastAll(forwardTransform.position + interactionOffset, interactionRadius, forwardTransform.forward, interactionMaxDist, interactionLayerMask);
-            interactionColliders = new Collider[hit.Length];
+            interactionColliders.Clear();
             for(int i = 0; i < hit.Length; i++)
             {
-                interactionColliders[i] = hit[i].collider;
+                for(int x = 0 ; x < triggers.Count; x++)
+                {
+                    if(triggers[x].gameObject == hit[i].collider.gameObject)
+                    {
+                        interactionColliders.Add(hit[i].collider);
+                        break;
+                    }
+                }
             }
         }
 
         public void Interact()
         {
-            if(interactionColliders.Length <= 0)
+            if(interactionColliders.Count <= 0)
                 return;
 
             if(interacting)
@@ -344,9 +343,21 @@ namespace PirateGame.Entity
             MoveTo(currentInteractable.GetInteractPoint(), LookAtBegin);
         }
 
+        public void CancelInteract()
+        {
+            if(interactingFinal || !interacting)
+                return;
+
+            interacting = false;
+            interactingBegin = false;
+            overrideForward = false;
+
+            targetDirection = Vector3.zero;
+            targetPosition = Vector3.zero;
+        }
+
         void LookAtBegin()
         {
-
             Debug.Log("Looking at: " + currentInteractable.gameObject.name);
             LookAt(currentInteractable.gameObject.transform.position - transform.position, InteractBeginSequence);
         }
@@ -388,7 +399,7 @@ namespace PirateGame.Entity
 
         public void InteractBeginInteractable()
         {
-            currentInteractable.Interact(InteractSequenceComplete);
+            currentInteractable.Interact(this, InteractSequenceComplete);
         }
 
         void InteractSequenceComplete(IInteractable interactable)
@@ -396,6 +407,9 @@ namespace PirateGame.Entity
             interactingFinal = true;
 
             Debug.Log("Interaction sequence complete");
+
+            if(interactable.GetAutomatic())
+                UnInteract();
         }
 
         public void InteractStopInteractable()
