@@ -10,6 +10,8 @@ namespace PirateGame.Interactables
 	public class Interactable : MonoBehaviour, IInteractable
 	{
 
+		public bool automatic;
+
 		[Header("Trigger")]
 		public Color triggerDebugColor = Color.white;
 		public Vector3 triggerOffset;
@@ -44,6 +46,8 @@ namespace PirateGame.Interactables
         [Header("Debug")]
 		public bool activated;
 
+		public EntityHumanoid humanoid;
+
 		private Action<IInteractable> InteractCallback;
 		private Action<IInteractable> UnInteractCallback;
 
@@ -70,6 +74,11 @@ namespace PirateGame.Interactables
 			return activated;
 		}
 
+		public bool GetAutomatic()
+		{
+			return automatic;
+		}
+
 		public string GetInteractAnimation()
 		{
 			return playerInteractAnimation;
@@ -80,14 +89,18 @@ namespace PirateGame.Interactables
 			return playerEndInteractAnimation;
 		}
 
-		public void Interact(Action<IInteractable> Callback)
+		public void Interact(EntityHumanoid humanoid, Action<IInteractable> Callback)
 		{
+			this.humanoid = humanoid;
+
 			InteractCallback = Callback;
 			animator.CrossFadeInFixedTime(myInteractAnimation, 0.2f);
 		}
 
 		public void UnInteract(Action<IInteractable> Callback)
 		{
+			this.humanoid = null;
+			
 			UnInteractCallback = Callback;
 			animator.CrossFadeInFixedTime(myEndInteractAnimation, 0.2f);
 		}
@@ -96,13 +109,17 @@ namespace PirateGame.Interactables
 		{
 		    activated = false;
 			UnInteractCallback(this);
+			InteractionTrigger();
         }
 
 		public void CompleteBeginAnimation()
 		{
 		    activated = true;
 			InteractCallback(this);
+			InteractionTrigger();
         }
+
+		public virtual void InteractionTrigger(){}
 
 	    public bool GetGripPointLeft()
 	    {

@@ -61,16 +61,22 @@ namespace PirateGame.Entity
                     if(InputManager.instance.player.GetButtonDown("Interact"))
                     {
                         UnInteract();
+                        return;
                     }
                 }
-
-                return;
+                if(InputManager.instance.player.GetButtonDown("Interact"))
+                {
+                        CancelInteract();
+                }
             }
 
             if(InputManager.instance.player.GetButtonDown("Interact"))
             {
                 Interact();
             }
+
+            if(interacting && !interactingFinal)
+                return;
 
 	        inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
 	        inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
