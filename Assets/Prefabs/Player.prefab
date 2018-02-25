@@ -509,6 +509,7 @@ GameObject:
   - component: {fileID: 4999393390234322}
   - component: {fileID: 95555107834196404}
   - component: {fileID: 114498762723698170}
+  - component: {fileID: 114620907755360606}
   m_Layer: 0
   m_Name: Character_Pirate_Blackbeard_01
   m_TagString: Untagged
@@ -4406,6 +4407,8 @@ MonoBehaviour:
   rightWeight: 0
   leftTarget: {fileID: 4656484935544286}
   rightTarget: {fileID: 4227216098785182}
+  lookAtWeight: 0
+  lookAtIk: {fileID: 114620907755360606}
   slopeDetection: 1
   slopeDebug: 1
   slopeDebugColor: {r: 0, g: 1, b: 0.006896496, a: 1}
@@ -4425,6 +4428,7 @@ MonoBehaviour:
     m_Bits: 2048
   interactionColliders: []
   currentInteractable: {fileID: 0}
+  forwardMovementOnly: 1
   overrideForward: 0
   canWalk: 1
   canSprint: 1
@@ -4508,6 +4512,60 @@ MonoBehaviour:
   rootRotationWeight: 0
   rootRotationSpeed: 5
   maxRootRotationAngle: 45
+--- !u!114 &114620907755360606
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1348583497573446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776adaaacdc5c4e8ab0395120a6e972b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeStep: 0
+  fixTransforms: 1
+  solver:
+    IKPosition: {x: 0, y: 0, z: 0}
+    IKPositionWeight: 1
+    root: {fileID: 0}
+    target: {fileID: 0}
+    spine: []
+    head:
+      transform: {fileID: 0}
+      weight: 1
+      solverPosition: {x: 0, y: 0, z: 0}
+      solverRotation: {x: 0, y: 0, z: 0, w: 1}
+      defaultLocalPosition: {x: 0, y: 0, z: 0}
+      defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+      length: 0
+      axis: {x: -1, y: -0, z: -0}
+    eyes: []
+    bodyWeight: 0.5
+    headWeight: 0.5
+    eyesWeight: 1
+    clampWeight: 0.5
+    clampWeightHead: 0.5
+    clampWeightEyes: 0.5
+    clampSmoothing: 2
+    spineWeightCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: 0
+        value: 0.3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
 --- !u!114 &114824179563636174
 MonoBehaviour:
   m_ObjectHideFlags: 1

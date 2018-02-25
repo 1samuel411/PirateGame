@@ -94,7 +94,11 @@ namespace PirateGame.Interactables
 			this.humanoid = humanoid;
 
 			InteractCallback = Callback;
-			animator.CrossFadeInFixedTime(myInteractAnimation, 0.2f);
+
+            if(string.IsNullOrEmpty(myInteractAnimation))
+                CompleteBeginAnimation();
+            else
+			    animator.CrossFadeInFixedTime(myInteractAnimation, 0.2f);
 		}
 
 		public void UnInteract(Action<IInteractable> Callback)
@@ -102,7 +106,11 @@ namespace PirateGame.Interactables
 			this.humanoid = null;
 			
 			UnInteractCallback = Callback;
-			animator.CrossFadeInFixedTime(myEndInteractAnimation, 0.2f);
+
+		    if (string.IsNullOrEmpty(myEndInteractAnimation))
+		        CompleteStopAnimation();
+            else
+                animator.CrossFadeInFixedTime(myEndInteractAnimation, 0.2f);
 		}
 
 		public void CompleteStopAnimation()
