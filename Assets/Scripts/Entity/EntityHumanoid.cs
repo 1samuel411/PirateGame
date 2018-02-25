@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using DG.Tweening.Plugins.Options;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -44,6 +45,10 @@ namespace PirateGame.Entity
         public Transform leftTarget;
         public Transform rightTarget;
 
+        [Range(0,1)]
+        public float lookAtWeight;
+        public LookAtIK lookAtIk;
+
         [Header("Slope")]
         public bool slopeDetection;
         [ShowIf("slopeDetection")]
@@ -72,7 +77,11 @@ namespace PirateGame.Entity
         public Interactable currentInteractable;
 
         [Header("Debug Humanoid Variables")]
+        public bool forwardMovementOnly = true;
+
         public bool overrideForward = false;
+
+        public bool aiming = false;
 
         public bool canWalk = true;
         public bool canSprint = true;
@@ -91,7 +100,10 @@ namespace PirateGame.Entity
         {
             get
             {
-                if(!canSprint && canWalk)
+                if (aiming)
+                    sprinting = false;
+
+                if (!canSprint && canWalk)
                     return speedWalk;
                 if(!canWalk)
                     return 0;
@@ -191,14 +203,22 @@ namespace PirateGame.Entity
         #region Velocity
         void ApplyVelocity()
         {
-            if(interactingFinal)
-                return;
-
             Vector3 dir = new Vector3(0, 0, Mathf.Clamp(Mathf.Abs(inputVelocity.z) + Mathf.Abs(inputVelocity.x), 0, 1));
-
+            if (!forwardMovementOnly)
+            {
+                dir = new Vector3(inputVelocity.x, 0, inputVelocity.z);
+                dir = Vector3.ClampMagnitude(dir, 1);
+            }
+            dir.x *= curSpeed;
             dir.z *= curSpeed;
             dir = transform.TransformDirection(dir);
             dir.y = verticalSpeed;
+
+            if (interactingFinal)
+            {
+                dir.x = 0;
+                dir.z = 0;
+            }
 
             characterController.Move(dir * Time.deltaTime);
 
@@ -294,8 +314,11 @@ namespace PirateGame.Entity
         void Move(Vector3 pos)
         {
             // simple move to for now? 
-            inputVelocity = pos - transform.position;
-            if(moveToCallback != null && Mathf.Abs((pos - transform.position).magnitude) <= 0.65f)
+            Vector3 targetMovement = pos - transform.position;
+            targetMovement.y = 0;
+            inputVelocity = targetMovement;
+            
+            if(moveToCallback != null && Mathf.Abs(targetMovement.magnitude) <= 0.05f)
             {
                 inputVelocity = Vector3.zero;
                 moveToCallback.Invoke();
@@ -443,8 +466,13 @@ namespace PirateGame.Entity
 
         void SetIK()
         {
-            leftArmIk.solver.IKPositionWeight = leftWeight;
-            rightArmIk.solver.IKPositionWeight = rightWeight;
+            if(leftArmIk)
+                leftArmIk.solver.IKPositionWeight = leftWeight;
+            if(rightArmIk)
+                rightArmIk.solver.IKPositionWeight = rightWeight;
+
+            if (lookAtIk)
+                lookAtIk.solver.SetLookAtWeight(lookAtWeight);
         }
 
         #endregion
@@ -452,7 +480,7 @@ namespace PirateGame.Entity
         private float jumpTime;
         public void Jump()
         {
-            if (jumping || !grounded || !canJump)
+            if (jumping || !grounded || !canJump || interacting)
                 return;
 
             jumping = true;

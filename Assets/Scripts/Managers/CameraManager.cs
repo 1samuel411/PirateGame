@@ -9,11 +9,16 @@ namespace PirateGame.Managers
 
         public static CameraManager instance;
 
-        public Transform cameraObject;
+        public ThirdPersonCamera cameraObject;
 
         void Awake()
         {
             instance = this;
+        }
+
+        void Start()
+        {
+            cameraObject.target = PlayerManager.instance.playerEntity.transform;
         }
 
         void Update()

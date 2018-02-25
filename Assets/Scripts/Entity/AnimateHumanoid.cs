@@ -10,19 +10,6 @@ namespace PirateGame.Entity.Animations
 
         public string velocityXParameterName = "velocityX";
         public string velocityYParameterName = "velocityY";
-        public string velocityMagnitudeParameterName = "velocityMagnitude";
-
-        public string groundedName = "grounded";
-        public string jumpingName = "jumping";
-
-        public string jumpName = "jump";
-        public string fallingName = "fall";
-
-        public string landName = "land";
-
-        public string sprintName = "sprinting";
-
-        public string stateChange = "stateChange";
 
         public new Animator animator;
 
@@ -42,16 +29,27 @@ namespace PirateGame.Entity.Animations
 
         void Update()
         {
-
+            animator.SetFloat(velocityXParameterName, humanoid.velocityVectorDirectionInverse.x);
+            animator.SetFloat(velocityYParameterName, humanoid.velocityVectorDirectionInverse.z);
         }
 
         private void InteractBeginSequence()
         {
+            if (string.IsNullOrEmpty(humanoid.currentInteractable.GetInteractAnimation()))
+            {
+                humanoid.InteractBeginInteractable();
+                return;
+            }
             animator.CrossFadeInFixedTime(humanoid.currentInteractable.GetInteractAnimation(), 0.1f);
         }
 
         private void InteractStopSequence()
         {
+            if (string.IsNullOrEmpty(humanoid.currentInteractable.GetUnInteractAnimation()))
+            {
+                humanoid.InteractStopInteractable();
+                return;
+            }
             animator.CrossFadeInFixedTime(humanoid.currentInteractable.GetUnInteractAnimation(), 0.1f);
         }
 
@@ -68,7 +66,7 @@ namespace PirateGame.Entity.Animations
 
             if (state == EntityEnums.HumanoidState.Walking)
             {
-                animator.CrossFadeInFixedTime("WalkStart", 0.2f);
+                animator.CrossFadeInFixedTime(humanoid.aiming ? "Walk" : "WalkStart", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Sprinting)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using PirateGame.Managers;
 
@@ -28,6 +29,14 @@ namespace PirateGame
         public float offsetMoveSpeed = 5f;
         private float offsetTarget;
 
+        public float aimingOffsetAmount = 5;
+        private float preAimingOffsetAmount = 5;
+        public Vector3 aimingOffset;
+        private Vector3 preAimingOffset;
+        public bool canAim = true;
+        public bool forceAim;
+        public bool aiming;
+
         void Start()
         {
             offsetTarget = offset;
@@ -36,12 +45,37 @@ namespace PirateGame
         void Update()
         {
 
+            GetAim();
+
             GetMouseInput();
 
             GetScrollInput();
 
             SetPosition();
 
+        }
+
+        private bool lastAiming = false;
+        void GetAim()
+        {
+            aiming = (forceAim || InputManager.instance.player.GetButton("Aim") && canAim);
+
+            if (aiming != lastAiming)
+            {
+                lastAiming = aiming;
+                if (aiming)
+                {
+                    preAimingOffset = offsetMovement;
+                    preAimingOffsetAmount = offsetTarget;
+                    offsetTarget = aimingOffsetAmount;
+                    DOTween.To(() => offsetMovement, x => offsetMovement = x, aimingOffset, 01f);
+                }
+                else
+                {
+                    offsetTarget = preAimingOffsetAmount;
+                    DOTween.To(() => offsetMovement, x => offsetMovement = x, preAimingOffset, 01f);
+                }
+            }
         }
 
         void GetMouseInput()
@@ -60,6 +94,9 @@ namespace PirateGame
 
         void GetScrollInput()
         {
+            if (aiming)
+                return;
+
             if (InputManager.instance.player.GetButton("Zoom In"))
             {
                 offsetTarget += offsetMoveAmount;
@@ -76,8 +113,11 @@ namespace PirateGame
         void SetPosition()
         {
             offset = Mathf.Lerp(offset, offsetTarget, offsetMoveSpeed * Time.deltaTime);
-            
-            transform.position = (target.position + offsetMovement) - (transform.forward * offset);
+            Vector3 offsetMovementNew = target.position;
+            offsetMovementNew += target.right * offsetMovement.x;
+            offsetMovementNew += target.up * offsetMovement.y;
+            offsetMovementNew += target.forward * offsetMovement.z;
+            transform.position = (offsetMovementNew) - (transform.forward * offset);
         }
 
         public float ClampAngle(float angle, float min, float max)

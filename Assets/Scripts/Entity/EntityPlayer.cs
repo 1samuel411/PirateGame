@@ -16,18 +16,29 @@ namespace PirateGame.Entity
         public float inputSpeed;
     	
 		private Transform fakeCamera;
+		private Transform fakeCameraForward;
 
-    	
-        public new void Awake()
-        {
-            base.Awake();
-            
+
+	    public new void Awake()
+	    {
+	        base.Awake();
+
 	        fakeCamera = new GameObject().transform;
 	        fakeCamera.name = "Fake Camera: " + gameObject.name;
 	        fakeCamera.SetParent(null);
-        }
 
-        public new void Start()
+	        if (lookAtIk)
+	        {
+	            fakeCameraForward = new GameObject().transform;
+	            fakeCameraForward.name = "Fake Camera Child: " + gameObject.name;
+	            fakeCameraForward.SetParent(fakeCamera);
+	            fakeCameraForward.position = Vector3.forward * 100;
+	            fakeCameraForward.position += Vector3.up * 120;
+	            lookAtIk.solver.target = fakeCameraForward;
+	        }
+	    }
+
+	    public new void Start()
         {
 	        base.Start();
             
@@ -41,6 +52,8 @@ namespace PirateGame.Entity
 	        CheckInput();
             
 	        SetFakeCamera();
+
+            aiming = CameraManager.instance.cameraObject.aiming;
         }
         
 		void SetFakeCamera()
@@ -48,8 +61,8 @@ namespace PirateGame.Entity
 			if(!grounded)
 				return;
 				
-			fakeCamera.position = CameraManager.instance.cameraObject.position;	
-			fakeCamera.rotation = CameraManager.instance.cameraObject.rotation;
+			fakeCamera.position = CameraManager.instance.cameraObject.transform.position;	
+			fakeCamera.rotation = CameraManager.instance.cameraObject.transform.rotation;
 		}
 
         void CheckInput()
@@ -86,12 +99,24 @@ namespace PirateGame.Entity
                 Jump();
             }
 
-	        sprinting = (InputManager.instance.player.GetButton("Sprint"));
+            if(!aiming)
+	            sprinting = (InputManager.instance.player.GetButton("Sprint"));
         }
-        
-		public override void SetForwardRotation()
-		{
-			LookAtMovement(forwardTransform.TransformDirection(new Vector3(inputVelocity.x, 0, inputVelocity.z)));
-		}
-    }
+
+	    public override void SetForwardRotation()
+	    {
+	        if (aiming)
+	        {
+	            forwardMovementOnly = false;
+	            LookAtMovement(forwardTransform.forward);
+                lookAtWeight = Mathf.Lerp(lookAtWeight, 1f, 5 * Time.deltaTime);
+	        }
+	        else
+	        {
+	            forwardMovementOnly = true;
+	            LookAtMovement(forwardTransform.TransformDirection(new Vector3(inputVelocity.x, 0, inputVelocity.z)));
+	            lookAtWeight = Mathf.Lerp(lookAtWeight, 0f, 5 * Time.deltaTime);
+	        }
+	    }
+	}
 }
