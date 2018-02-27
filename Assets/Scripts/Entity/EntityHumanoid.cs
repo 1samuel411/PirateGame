@@ -77,11 +77,15 @@ namespace PirateGame.Entity
         public Interactable currentInteractable;
 
         [Header("Debug Humanoid Variables")]
+        public Vector2 clampYRotation = new Vector2(-40, 40);
+        public Vector2 clampXRotation = new Vector2(-360, 360);
+
         public bool forwardMovementOnly = true;
 
         public bool overrideForward = false;
 
         public bool aiming = false;
+        public bool forceAiming = false;
 
         public bool canWalk = true;
         public bool canSprint = true;
@@ -181,6 +185,8 @@ namespace PirateGame.Entity
         public new void LateUpdate()
         {
             base.LateUpdate();
+
+            CheckAiming();
         }
 
         public new void FixedUpdate()
@@ -192,7 +198,7 @@ namespace PirateGame.Entity
             if(!overrideForward)
                 SetForwardRotation();
 
-            CheckInteraction();            
+            CheckInteraction();  
         }
 
         public virtual void SetForwardRotation()
@@ -476,6 +482,12 @@ namespace PirateGame.Entity
         }
 
         #endregion
+
+        void CheckAiming()
+        {
+            if (forceAiming)
+                aiming = true;
+        }
 
         private float jumpTime;
         public void Jump()

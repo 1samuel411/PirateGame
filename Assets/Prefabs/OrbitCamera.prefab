@@ -108,7 +108,7 @@ MonoBehaviour:
   offsetMoveAmount: 2.38
   offsetMoveSpeed: 6.97
   aimingOffsetAmount: 2
-  aimingOffset: {x: 1, y: 2.54, z: 0}
+  aimingOffset: {x: 1, y: 2.3, z: 0}
   canAim: 1
   forceAim: 0
   aiming: 0
