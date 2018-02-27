@@ -4,12 +4,13 @@ namespace PirateGame.Interactables
 {
     public class Cannon : Interactable
     {
-
+        [Header("Cannon")]
         public Vector2 clampXRotation;
         private Vector2 originalClampXRotation;
         public Vector2 clampYRotation;
         private Vector2 originalClampYRotation;
 
+        public Transform barrelTransform;
 
         public override void InteractionTrigger()
         {
@@ -33,6 +34,15 @@ namespace PirateGame.Interactables
                 // Restore Clamps
                 humanoid.clampXRotation = originalClampXRotation;
                 humanoid.clampYRotation = originalClampYRotation;
+            }
+        }
+
+        void Update()
+        {
+            if(activated)
+            {
+                // Move barrel forward
+                barrelTransform.transform.rotation = humanoid.forwardTransform.rotation;
             }
         }
     }
