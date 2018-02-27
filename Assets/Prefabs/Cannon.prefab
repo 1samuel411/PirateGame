@@ -489,5 +489,6 @@ MonoBehaviour:
   gripPointLeftWeight: 1
   activated: 0
   humanoid: {fileID: 0}
-  clampXRotation: {x: 340, y: 20}
+  clampXRotation: {x: -20, y: 20}
   clampYRotation: {x: -20, y: 20}
+  barrelTransform: {fileID: 4329191328543080}
