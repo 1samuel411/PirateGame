@@ -103,8 +103,6 @@ namespace PirateGame.Interactables
 
 		public void UnInteract(Action<IInteractable> Callback)
 		{
-			this.humanoid = null;
-			
 			UnInteractCallback = Callback;
 
 		    if (string.IsNullOrEmpty(myEndInteractAnimation))
@@ -118,9 +116,10 @@ namespace PirateGame.Interactables
 		    activated = false;
 			UnInteractCallback(this);
 			InteractionTrigger();
+		    this.humanoid = null;
         }
 
-		public void CompleteBeginAnimation()
+        public void CompleteBeginAnimation()
 		{
 		    activated = true;
 			InteractCallback(this);

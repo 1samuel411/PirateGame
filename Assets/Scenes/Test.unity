@@ -261,13 +261,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114003191458982480, guid: 917bee4077b8d2f4982755b72903dd9e,
         type: 2}
-      propertyPath: offset
-      value: 7.6200004
+      propertyPath: offsetMovement.y
+      value: 2.54
       objectReference: {fileID: 0}
     - target: {fileID: 114003191458982480, guid: 917bee4077b8d2f4982755b72903dd9e,
         type: 2}
-      propertyPath: lookForwardClamp
-      value: 60
+      propertyPath: clampXAmount.y
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 114003191458982480, guid: 917bee4077b8d2f4982755b72903dd9e,
+        type: 2}
+      propertyPath: offset
+      value: 7.6200004
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 917bee4077b8d2f4982755b72903dd9e, type: 2}
@@ -706,6 +711,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114872628790155814, guid: c8b13952cbe5f964e9d13da27724f04c,
         type: 2}
+      propertyPath: clampXRotation.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114872628790155814, guid: c8b13952cbe5f964e9d13da27724f04c,
+        type: 2}
       propertyPath: activated
       value: 0
       objectReference: {fileID: 0}
@@ -730,10 +740,20 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: triggers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114620907755360606, guid: 51dc608b6161cc842b347f362d038f44,
         type: 2}
       propertyPath: solver.spine.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: groundedColliders.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4835516582751580, guid: 51dc608b6161cc842b347f362d038f44, type: 2}
       propertyPath: m_LocalPosition.x
@@ -1041,6 +1061,96 @@ Prefab:
         type: 2}
       propertyPath: solver.spine.Array.data[2].defaultLocalRotation.w
       value: 0.02608754
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: triggers.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: groundedColliders.Array.data[0]
+      value: 
+      objectReference: {fileID: 129808835}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: leftWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: rightWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: lookAtWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: currentInteractable
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: overrideForward
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: aiming
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: forceAiming
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: interacting
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: interactingBegin
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: interactingFinal
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114498762723698170, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: solver.maxFootRotationAngle
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 114498762723698170, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: solver.lowerPelvisWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: clampYRotation.x
+      value: -40
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: clampYRotation.y
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: clampXRotation.x
+      value: -360
+      objectReference: {fileID: 0}
+    - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
+        type: 2}
+      propertyPath: clampXRotation.y
+      value: 360
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 51dc608b6161cc842b347f362d038f44, type: 2}

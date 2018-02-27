@@ -151,7 +151,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1006190573197016}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.158, y: 0.06000012, z: -0.97700024}
+  m_LocalPosition: {x: 0.183, y: 0.06000012, z: -0.97700024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4329191328543080}
@@ -221,7 +221,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1658414076787794}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.158, y: 0.06, z: -0.977}
+  m_LocalPosition: {x: -0.164, y: 0.06, z: -0.977}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4329191328543080}
@@ -476,7 +476,7 @@ MonoBehaviour:
   triggerSize: {x: 3, y: 1, z: 3}
   interactPointDebugColor: {r: 1, g: 0, b: 0, a: 1}
   interactPointOffset: {x: 0, y: 0.25, z: -1.33}
-  playerInteractAnimation: 
+  playerInteractAnimation: CannonGrab
   myInteractAnimation: 
   playerEndInteractAnimation: 
   myEndInteractAnimation: 
@@ -489,3 +489,5 @@ MonoBehaviour:
   gripPointLeftWeight: 1
   activated: 0
   humanoid: {fileID: 0}
+  clampXRotation: {x: 340, y: 20}
+  clampYRotation: {x: -20, y: 20}

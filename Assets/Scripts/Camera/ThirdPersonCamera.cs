@@ -82,14 +82,14 @@ namespace PirateGame
         {
             mouseMovement = InputManager.instance.player.GetAxis2D("Mouse Y", "Mouse X");
 
-            Vector3 angle = transform.eulerAngles;
+            Vector3 angle = transform.localRotation.eulerAngles;
             angle += (new Vector3(mouseMovement.x, mouseMovement.y) * mouseMoveSpeed * Time.deltaTime);
 
             angle.x = WrapAngle(angle.x);
             angle.x = ClampAngle(angle.x, clampXAmount.x, clampXAmount.y);
+            angle.y = WrapAngle(angle.y);
             angle.y = ClampAngle(angle.y, clampYAmount.x, clampYAmount.y);
-
-            transform.eulerAngles = (angle);
+            transform.localRotation = Quaternion.Euler(angle);
         }
 
         void GetScrollInput()

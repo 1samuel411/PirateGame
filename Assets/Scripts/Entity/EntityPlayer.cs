@@ -54,6 +54,10 @@ namespace PirateGame.Entity
 	        SetFakeCamera();
 
             aiming = CameraManager.instance.cameraObject.aiming;
+            CameraManager.instance.cameraObject.forceAim = forceAiming;
+
+            CameraManager.instance.cameraObject.clampXAmount = clampYRotation;
+            CameraManager.instance.cameraObject.clampYAmount = clampXRotation;
         }
         
 		void SetFakeCamera()
