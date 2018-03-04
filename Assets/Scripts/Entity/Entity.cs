@@ -165,27 +165,36 @@ namespace PirateGame.Entity
         void OnCollisionEnter(Collision collision)
 		{				
 			collisions.Add(collision.collider);
+		    OnCollisionEnter();
+
 		}
+        public virtual void OnCollisionEnter() { }
 		
 		void OnCollisionExit(Collision collision)
 		{
 			collisions.Remove(collision.collider);
-		}
-		
-		void OnTriggerEnter(Collider collider)
+		    OnCollisionExit();
+        }
+        public virtual void OnCollisionExit() { }
+
+        void OnTriggerEnter(Collider collider)
 		{
 			triggers.Add(collider);
-		}
-		
-		void OnTriggerExit(Collider collider)
+		    OnTriggerEnter();
+        }
+        public virtual void OnTriggerEnter() { }
+
+        void OnTriggerExit(Collider collider)
 		{
 			triggers.Remove(collider);
-		}
+		    OnTriggerExit();
+        }
+        public virtual void OnTriggerExit() { }
         #endregion
 
         #region Ground Collision Detection
 
-	    void CheckGroundedCollision()
+        void CheckGroundedCollision()
 	    {
 	        groundedColliders = null;
             if (gCollisionDetection == EntityEnums.GroundedCollisionDetection.Capsule)

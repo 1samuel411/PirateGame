@@ -12,6 +12,8 @@ namespace PirateGame.Interactables
 
         public Transform barrelTransform;
 
+        public Shootable shootable;
+
         public override void InteractionTrigger()
         {
             if (activated)
@@ -20,8 +22,9 @@ namespace PirateGame.Interactables
                 humanoid.forceAiming = true;
 
                 // Clamp Rotation
-                originalClampXRotation = new Vector2(transform.eulerAngles.y + clampXRotation.x, transform.eulerAngles.y + clampXRotation.y);
-                humanoid.clampXRotation = clampXRotation;
+                originalClampXRotation = humanoid.clampXRotation;
+                float yRot = ThirdPersonCamera.WrapAngle(transform.eulerAngles.y);
+                humanoid.clampXRotation = new Vector2(yRot + clampXRotation.x, yRot + clampXRotation.y); ;
 
                 originalClampYRotation = humanoid.clampYRotation;
                 humanoid.clampYRotation = clampYRotation;
@@ -44,6 +47,19 @@ namespace PirateGame.Interactables
                 // Move barrel forward
                 barrelTransform.transform.rotation = humanoid.forwardTransform.rotation;
             }
+        }
+
+        public override void SendInput(string inputAction)
+        {
+            if (inputAction == "Shoot")
+            {
+                Fire();
+            }
+        }
+
+        public void Fire()
+        {
+            shootable.Shoot();
         }
     }
 }

@@ -139,7 +139,7 @@ namespace PirateGame
             return 360 - angle;
         }
 
-        private float WrapAngle(float angle)
+        public static float WrapAngle(float angle)
         {
             angle %= 360;
             if (angle > 180)
