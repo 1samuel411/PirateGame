@@ -73,7 +73,10 @@ namespace PirateGame.Entity
         {
             if(interacting)
             {
-                if(interactingFinal)
+                if(InputManager.instance.player.GetButtonDown("Shoot"))
+                    currentInteractable.SendInput("Shoot");
+
+                if (interactingFinal)
                 {
                     if(InputManager.instance.player.GetButtonDown("Interact"))
                     {

@@ -20,5 +20,7 @@ namespace PirateGame.Interactables
 
 		Vector3 GetInteractPoint();
 
+	    void SendInput(string inputAction);
+
 	}
 }

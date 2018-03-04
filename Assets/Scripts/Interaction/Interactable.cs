@@ -69,6 +69,11 @@ namespace PirateGame.Interactables
 			return newPos;
 		}
 
+	    public virtual void SendInput(string inputAction)
+	    {
+	        
+	    }
+
 		public bool GetActive()
 		{
 			return activated;

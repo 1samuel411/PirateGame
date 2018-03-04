@@ -144,6 +144,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1556931457428726
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4149572597670382}
+  - component: {fileID: 114411869545599670}
+  m_Layer: 0
+  m_Name: ObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1781013297621860
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,8 +224,22 @@ Transform:
   - {fileID: 4270290285951492}
   - {fileID: 4643885582367742}
   - {fileID: 4391161170379440}
+  - {fileID: 4149572597670382}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4149572597670382
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1556931457428726}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4095403747723528}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4270290285951492
 Transform:
@@ -523,6 +553,24 @@ MonoBehaviour:
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
+    - _id: 9
+      _name: Aim
+      _type: 1
+      _descriptiveName: Aim
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 0
+    - _id: 10
+      _name: Shoot
+      _type: 1
+      _descriptiveName: Shoot
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 0
     actionCategories:
     - _name: Default
       _descriptiveName: Default
@@ -532,7 +580,7 @@ MonoBehaviour:
     actionCategoryMap:
       list:
       - categoryId: 0
-        actionIds: 000000000100000002000000030000000400000005000000060000000700000008000000
+        actionIds: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
     inputBehaviors:
     - _id: 0
       _name: Default
@@ -763,10 +811,32 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 9
+        _elementType: 1
+        _elementIdentifierId: 4
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 0
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 10
+        _elementType: 1
+        _elementIdentifierId: 3
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 0
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     customControllerMaps: []
     customControllers: []
     playerIdCounter: 2
-    actionIdCounter: 9
+    actionIdCounter: 11
     actionCategoryIdCounter: 1
     inputBehaviorIdCounter: 1
     mapCategoryIdCounter: 1
@@ -833,6 +903,33 @@ MonoBehaviour:
   interacting: 0
   interactingFinal: 0
   interactingStopping: 0
+--- !u!114 &114411869545599670
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1556931457428726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd7e893c0e5bc64dacf42426ecd6dc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnableObjects:
+  - name: CannonMuzzleEffect
+    gameObject: {fileID: 1146760805399404, guid: 2baefa6b490dea24299219ff93773b0f,
+      type: 2}
+    initAmountToSpawn: 3
+    spawnedGameObjects: []
+  - name: CannonExplosionEffect
+    gameObject: {fileID: 1176408591254558, guid: 12e919a7d089154468bbd105a87281eb,
+      type: 2}
+    initAmountToSpawn: 3
+    spawnedGameObjects: []
+  - name: CannonProjectile
+    gameObject: {fileID: 1687088109033670, guid: 663a5f99ff92f6b4a8e6d144590466d9,
+      type: 2}
+    initAmountToSpawn: 3
+    spawnedGameObjects: []
 --- !u!114 &114438639094669400
 MonoBehaviour:
   m_ObjectHideFlags: 1
