@@ -17,9 +17,10 @@ namespace FAE
     /// </summary>
     public class WindController : MonoBehaviour
     {
-
         //[Header("Vector map")]
+#if UNITY_EDITOR
         public ProceduralMaterial windSubstance;
+#endif
         public Texture windVectors;
         public bool visualizeVectors = false;
         public static bool _visualizeVectors;
@@ -45,6 +46,7 @@ namespace FAE
         private float m_windStrength = 0f;
         private float m_windAmplitude = 0f;
 
+#if !UNITY_WEBGL
         void OnEnable()
         {
             windDirection = this.transform.localEulerAngles.y / 360f;
@@ -67,10 +69,11 @@ namespace FAE
 
             SetShaderParameters();
         }
+#endif
 
         public void Apply()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR 
             this.transform.localEulerAngles = new Vector3(0f, windDirection * 360f, 0f);
 
             //Sync the static var to the local var
@@ -85,6 +88,7 @@ namespace FAE
 
         private void SetShaderParameters()
         {
+#if !UNITY_WEBGL
             Shader.SetGlobalFloat("_WindSpeed", windSpeed);
             Shader.SetGlobalVector("_WindDirection", this.transform.rotation * Vector3.back);
             Shader.SetGlobalTexture("_WindVectors", windVectors);
@@ -92,6 +96,7 @@ namespace FAE
             Shader.SetGlobalFloat("_TrunkWindSpeed", trunkWindSpeed);
             Shader.SetGlobalFloat("_TrunkWindWeight", trunkWindWeight);
             Shader.SetGlobalFloat("_TrunkWindSwinging", trunkWindSwinging);
+#endif
 
         }
 
@@ -161,6 +166,7 @@ namespace FAE
         private void GetSubstanceOutput()
         {
 
+#if UNITY_EDITOR
             if (!windSubstance)
             {
                 Debug.Log(this.name + ": FAE_WindVectors Substance material is not set!");
@@ -172,8 +178,8 @@ namespace FAE
             Texture[] substanceOutputs = windSubstance.GetGeneratedTextures();
             windVectors = substanceOutputs[0];
 
+#endif
         }
-
 
     }
 }
