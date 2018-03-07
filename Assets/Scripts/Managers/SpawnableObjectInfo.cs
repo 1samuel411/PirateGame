@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnableObjectInfo : MonoBehaviour
+namespace PirateGame.Managers
 {
-
-    public bool ready = false;
-
-    void OnEnable()
+    public class SpawnableObjectInfo : Base
     {
-        ready = false;
-    }
 
-    void OnDisable()
-    {
-        ready = true;
+        public bool ready = false;
+
+        void OnEnable()
+        {
+            ready = false;
+        }
+
+        void OnDisable()
+        {
+            ready = true;
+        }
     }
 }

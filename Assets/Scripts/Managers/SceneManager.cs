@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PirateGame.Managers
 {
-    public class SceneManager : MonoBehaviour
+    public class SceneManager : Base
     {
 
         public static SceneManager instance;

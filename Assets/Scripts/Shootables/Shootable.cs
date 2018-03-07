@@ -1,72 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PirateGame.Effects;
+using PirateGame.Managers;
+using PirateGame.Projectiles;
 using UnityEngine;
 
-public class Shootable : MonoBehaviour, IShootable
+namespace PirateGame.Shootables
 {
-
-    public float fireRate;
-
-    public Transform muzzleTransform;
-    public Effect muzzleEffect;
-    public Projectile projectile;
-
-    public Animator animator;
-    public string animationName = "Fire";
-
-    public bool canShoot = true;
-
-    private float timeAtShoot;
-
-    void Start()
+    public class Shootable : Base, IShootable
     {
 
-    }
+        public float fireRate;
 
-    void Update()
-    {
-        if (Time.time >= (timeAtShoot + fireRate))
-            canShoot = true;
-    }
+        public Transform muzzleTransform;
+        public Effect muzzleEffect;
+        public Projectile projectile;
 
-    public void Shoot()
-    {
-        if (!canShoot)
-            return;
+        public Animator animator;
+        public string animationName = "Fire";
 
-        canShoot = false;
+        public bool canShoot = true;
 
-        timeAtShoot = Time.time;
+        private float timeAtShoot;
 
-        if(animator)
-            animator.CrossFadeInFixedTime(animationName, 0.0f);
+        void Start()
+        {
 
-        ObjectManager.instance.Instantiate(muzzleEffect.GetGameObject(), muzzleTransform.position, muzzleTransform.rotation);
-        ObjectManager.instance.Instantiate(projectile.GetGameObject(), muzzleTransform.position, muzzleTransform.rotation);
-    }
+        }
 
-    public bool GetCanShoot()
-    {
-        return canShoot;
-    }
+        void Update()
+        {
+            if (Time.time >= (timeAtShoot + fireRate))
+                canShoot = true;
+        }
 
-    public float GetFireRate()
-    {
-        return fireRate;
-    }
+        public void Shoot()
+        {
+            if (!canShoot)
+                return;
 
-    public Transform GetMuzzle()
-    {
-        return muzzleTransform;
-    }
+            canShoot = false;
 
-    public IEffect GetMuzzleEffect()
-    {
-        return muzzleEffect;
-    }
+            timeAtShoot = Time.time;
 
-    public IProjectile GetProjectile()
-    {
-        return projectile;
+            if (animator)
+                animator.CrossFadeInFixedTime(animationName, 0.0f);
+
+            ObjectManager.instance.Instantiate(muzzleEffect.GetGameObject(), muzzleTransform.position,
+                muzzleTransform.rotation);
+            ObjectManager.instance.Instantiate(projectile.GetGameObject(), muzzleTransform.position,
+                muzzleTransform.rotation);
+        }
+
+        public bool GetCanShoot()
+        {
+            return canShoot;
+        }
+
+        public float GetFireRate()
+        {
+            return fireRate;
+        }
+
+        public Transform GetMuzzle()
+        {
+            return muzzleTransform;
+        }
+
+        public IEffect GetMuzzleEffect()
+        {
+            return muzzleEffect;
+        }
+
+        public IProjectile GetProjectile()
+        {
+            return projectile;
+        }
     }
 }

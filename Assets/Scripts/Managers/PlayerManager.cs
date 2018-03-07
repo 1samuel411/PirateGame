@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PirateGame.Managers
 {
-    public class PlayerManager : MonoBehaviour 
+    public class PlayerManager : Base 
     {
 
         public static PlayerManager instance;

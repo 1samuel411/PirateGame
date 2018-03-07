@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PirateGame.Managers
 {
-    public class CameraManager : MonoBehaviour
+    public class CameraManager : Base
     {
 
         public static CameraManager instance;
@@ -23,7 +23,7 @@ namespace PirateGame.Managers
 
         void Update()
         {
-            if (cameraObject)
+            if (cameraObject && PlayerManager.instance.playerEntity)
                 cameraObject.target = PlayerManager.instance.playerEntity.transform;
         }
     }

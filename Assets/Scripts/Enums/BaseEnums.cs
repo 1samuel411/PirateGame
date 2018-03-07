@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PirateGame
 {
-    public class BaseEnums : MonoBehaviour
+    public class BaseEnums
     {
 
         public enum Direction3d

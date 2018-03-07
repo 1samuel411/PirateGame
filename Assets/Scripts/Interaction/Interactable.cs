@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 
 namespace PirateGame.Interactables
 {
-	public class Interactable : MonoBehaviour, IInteractable
+	public class Interactable : Base, IInteractable
 	{
 
 		public bool automatic;

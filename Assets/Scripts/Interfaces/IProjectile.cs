@@ -1,21 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PirateGame.Effects;
 using UnityEngine;
 
-public interface IProjectile
+namespace PirateGame.Projectiles
 {
+    public interface IProjectile
+    {
 
-    GameObject GetGameObject();
+        GameObject GetGameObject();
 
-    int GetDamageAmount();
+        int GetDamageAmount();
 
-    float GetAutoDestructTime();
+        float GetAutoDestructTime();
 
-    float GetSpeed();
+        float GetSpeed();
 
-    float GetGravity();
+        float GetGravity();
 
-    void SetAutoDestructTime();
+        void SetAutoDestructTime();
 
-    IEffect GetImpactEffect();
+        IEffect GetImpactEffect();
+    }
 }

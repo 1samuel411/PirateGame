@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PirateGame.Effects;
 using PirateGame.Entity;
+using PirateGame.Managers;
+using PirateGame.Projectiles;
 using UnityEngine;
 
 public class Projectile : Entity, IProjectile
