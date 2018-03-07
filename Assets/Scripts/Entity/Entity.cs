@@ -388,7 +388,7 @@ namespace PirateGame.Entity
                 {
                     if (grounded)
                     {
-                        verticalSpeed = 0;
+                        verticalSpeed = -1;
                     }
 
                     verticalSpeed -= gravity * Time.deltaTime;

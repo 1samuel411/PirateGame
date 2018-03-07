@@ -18,12 +18,13 @@ namespace PirateGame.Managers
 
         void Start()
         {
-            cameraObject.target = PlayerManager.instance.playerEntity.transform;
+            
         }
 
         void Update()
         {
-
+            if (cameraObject)
+                cameraObject.target = PlayerManager.instance.playerEntity.transform;
         }
     }
 }

@@ -35,7 +35,9 @@ public class Projectile : Entity, IProjectile
     IEnumerator ResetRigidbody()
     {
         yield return null;
-        velocityVector = transform.forward * speed;
+        velocityVector = Vector3.zero;
+        rigidbody.velocity = Vector3.zero;
+        AddForwardForce(Vector3.forward, speed);
     }
 
     public override void OnCollisionEnter()

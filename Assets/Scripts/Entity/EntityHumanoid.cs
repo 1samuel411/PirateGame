@@ -124,6 +124,8 @@ namespace PirateGame.Entity
         public bool interactingBegin;
         public bool interactingStopping;
         public bool interactingFinal;
+        public Vector3 interactingOffset;
+
         public bool sprinting;
         public bool crouching;
 
@@ -324,7 +326,7 @@ namespace PirateGame.Entity
             targetMovement.y = 0;
             inputVelocity = targetMovement;
             
-            if(moveToCallback != null && Mathf.Abs(targetMovement.magnitude) <= 0.05f)
+            if(moveToCallback != null && Mathf.Abs(targetMovement.magnitude) <= 0.075f)
             {
                 inputVelocity = Vector3.zero;
                 moveToCallback.Invoke();
@@ -435,6 +437,8 @@ namespace PirateGame.Entity
         {
             interactingFinal = true;
 
+            interactingOffset = transform.position - interactable.GetInteractPoint();
+
             Debug.Log("Interaction sequence complete");
 
             if(interactable.GetAutomatic())
@@ -543,7 +547,7 @@ namespace PirateGame.Entity
             {
                 if (grounded && !jumping)
                 {
-                    verticalSpeed = 0;
+                    verticalSpeed = -1;
                 }
 
                 verticalSpeed -= gravity * Time.deltaTime;

@@ -12,6 +12,8 @@ namespace PirateGame.Managers
         
         public static UIManager instance;
 
+        public string initialScreen = "Menu";
+
         [System.Serializable]
         public struct MenuScreen
         {
@@ -30,11 +32,18 @@ namespace PirateGame.Managers
             instance = this;
 
             FadeOut();
+
+            ScreenSwitch(initialScreen);
         }
 
         void Reload()
         {
-            for(int i = 0; i < activeScreens.Count; i++)
+            for (int i = 0; i < menuScreens.Count; i++)
+            {
+                menuScreens[i].menuScreen.gameObject.SetActive(false);
+            }
+
+            for (int i = 0; i < activeScreens.Count; i++)
             {
                 activeScreens[i].menuScreen.gameObject.SetActive(true);
             }
@@ -50,6 +59,7 @@ namespace PirateGame.Managers
             {
                 activeScreens.Add(menuScreens.Find(x => x.name == controllerToSwitchTo));
             }
+            Reload();
         }
 
         public void UnloadAll()
