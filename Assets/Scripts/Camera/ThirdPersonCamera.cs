@@ -11,7 +11,7 @@ namespace PirateGame
     /// Takes input from the mouse and mouse scroll wheel to zoom in and out (offset)
     /// X and Y are reversed in the rotation field so keep that in mind
     /// </summary>
-    public class ThirdPersonCamera : MonoBehaviour
+    public class ThirdPersonCamera : Base
     {
 
         public Transform target;

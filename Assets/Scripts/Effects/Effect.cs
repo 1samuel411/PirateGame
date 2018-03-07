@@ -2,46 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Effect : MonoBehaviour, IEffect
+namespace PirateGame.Effects
 {
-
-    public float autoDestructTime;
-
-    private float activateTime;
-
-    void OnEnable()
+    public class Effect : Base, IEffect
     {
-        SetAutoDestructTime();
-    }
 
-    void Awake()
-    {
-        SetAutoDestructTime();
-    }
+        public float autoDestructTime;
 
-    void Update()
-    {
-        CheckAutoDestruct();
-    }
+        private float activateTime;
 
-    public GameObject GetGameObject()
-    {
-        return gameObject;
-    }
+        void OnEnable()
+        {
+            SetAutoDestructTime();
+        }
 
-    public void SetAutoDestructTime()
-    {
-        activateTime = autoDestructTime + Time.time;
-    }
+        void Awake()
+        {
+            SetAutoDestructTime();
+        }
 
-    public void CheckAutoDestruct()
-    {
-        if(Time.time >= activateTime)
-            gameObject.SetActive(false);
-    }
+        void Update()
+        {
+            CheckAutoDestruct();
+        }
 
-    public float GetAutoDestructTime()
-    {
-        return autoDestructTime;
+        public GameObject GetGameObject()
+        {
+            return gameObject;
+        }
+
+        public void SetAutoDestructTime()
+        {
+            activateTime = autoDestructTime + Time.time;
+        }
+
+        public void CheckAutoDestruct()
+        {
+            if(Time.time >= activateTime)
+                gameObject.SetActive(false);
+        }
+
+        public float GetAutoDestructTime()
+        {
+            return autoDestructTime;
+        }
     }
 }

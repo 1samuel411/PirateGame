@@ -1,3 +1,4 @@
+using PirateGame.Shootables;
 using UnityEngine;
 
 namespace PirateGame.Interactables

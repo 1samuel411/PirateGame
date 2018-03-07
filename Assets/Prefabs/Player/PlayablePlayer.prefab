@@ -864,7 +864,7 @@ GameObject:
   - component: {fileID: 114476811733821492}
   - component: {fileID: 143684473606455764}
   m_Layer: 8
-  m_Name: Player
+  m_Name: PlayablePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4428,8 +4428,12 @@ MonoBehaviour:
     m_Bits: 2048
   interactionColliders: []
   currentInteractable: {fileID: 0}
+  clampYRotation: {x: -40, y: 40}
+  clampXRotation: {x: -360, y: 360}
   forwardMovementOnly: 1
   overrideForward: 0
+  aiming: 0
+  forceAiming: 0
   canWalk: 1
   canSprint: 1
   canCrouch: 1
@@ -4443,6 +4447,7 @@ MonoBehaviour:
   interactingBegin: 0
   interactingStopping: 0
   interactingFinal: 0
+  interactingOffset: {x: 0, y: 0, z: 0}
   sprinting: 0
   crouching: 0
   targetPosition: {x: 0, y: 0, z: 0}
@@ -4464,14 +4469,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityXParameterName: velocityX
   velocityYParameterName: velocityY
-  velocityMagnitudeParameterName: velocityMagnitude
-  groundedName: grounded
-  jumpingName: jumping
-  jumpName: jump
-  fallingName: fall
-  landName: land
-  sprintName: sprinting
-  stateChange: stateChange
   animator: {fileID: 95555107834196404}
 --- !u!114 &114498762723698170
 MonoBehaviour:

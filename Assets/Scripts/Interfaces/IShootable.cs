@@ -1,19 +1,24 @@
 ﻿
+using PirateGame.Effects;
+using PirateGame.Projectiles;
 using UnityEngine;
 
-public interface IShootable
+namespace PirateGame.Shootables
 {
+    public interface IShootable
+    {
 
-    void Shoot();
+        void Shoot();
 
-    float GetFireRate();
+        float GetFireRate();
 
-    bool GetCanShoot();
+        bool GetCanShoot();
 
-    Transform GetMuzzle();
+        Transform GetMuzzle();
 
-    IEffect GetMuzzleEffect();
+        IEffect GetMuzzleEffect();
 
-    IProjectile GetProjectile();
+        IProjectile GetProjectile();
 
+    }
 }

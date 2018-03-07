@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PirateGame.Managers
 {
-    public class InputManager : MonoBehaviour
+    public class InputManager : Base
     {
         public static InputManager instance;
 

@@ -7,7 +7,7 @@ using PirateGame.UI;
 
 namespace PirateGame.Managers
 {
-	public class UIManager : MonoBehaviour
+	public class UIManager : Base
     {
         
         public static UIManager instance;

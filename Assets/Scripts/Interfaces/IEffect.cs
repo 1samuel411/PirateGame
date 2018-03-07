@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEffect
+namespace PirateGame.Effects
 {
-    float GetAutoDestructTime();
+    public interface IEffect
+    {
+        float GetAutoDestructTime();
 
-    void CheckAutoDestruct();
+        void CheckAutoDestruct();
 
-    void SetAutoDestructTime();
+        void SetAutoDestructTime();
 
-    GameObject GetGameObject();
+        GameObject GetGameObject();
+    }
 }

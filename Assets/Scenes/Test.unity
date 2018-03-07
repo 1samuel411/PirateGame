@@ -425,6 +425,10 @@ Prefab:
       propertyPath: aiming
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1887108794819736, guid: 917bee4077b8d2f4982755b72903dd9e, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 917bee4077b8d2f4982755b72903dd9e, type: 2}
   m_IsPrefabParent: 0
@@ -4522,6 +4526,10 @@ Prefab:
     - target: {fileID: 114471745033308786, guid: 51dc608b6161cc842b347f362d038f44,
         type: 2}
       propertyPath: interactingOffset.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553447139664640, guid: 51dc608b6161cc842b347f362d038f44, type: 2}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
