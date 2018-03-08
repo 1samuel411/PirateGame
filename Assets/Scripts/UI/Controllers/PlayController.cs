@@ -9,18 +9,22 @@ namespace PirateGame.UI.Controllers
 
         public string mainMenuController = "Menu";
         public string ipAddress;
-        public string portAddress;
+        public int portAddress;
 
         public PlayMenuView playMenuView;
 
         public void JoinServer()
         {
-            
+            PNetworkManager.instance.networkAddress = ipAddress;
+            PNetworkManager.instance.networkPort = portAddress;
+            PNetworkManager.instance.PStartClient();
         }
 
         public void HostServer()
         {
-            
+            PNetworkManager.instance.networkAddress = ipAddress;
+            PNetworkManager.instance.networkPort = portAddress;
+            PNetworkManager.instance.PStartHost();
         }
 
         public void UpdateIp(string newIp)
@@ -30,7 +34,7 @@ namespace PirateGame.UI.Controllers
 
         public void UpdatePort(string newPort)
         {
-            portAddress = newPort;
+            portAddress = int.Parse(newPort);
         }
 
         public void Back()
