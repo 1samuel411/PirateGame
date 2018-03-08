@@ -17,12 +17,18 @@ namespace PirateGame.UI
         {
             if(EnableAction != null)
                 EnableAction.Invoke();
+
+            Enabled();
         }
+        public virtual void Enabled() { }
 
         void OnDisable()
         {
             if(DisableAction != null)
                 DisableAction.Invoke();
+
+            Disabled();
         }
+        public virtual void Disabled() { }
     }
 }

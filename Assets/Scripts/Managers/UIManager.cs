@@ -27,6 +27,11 @@ namespace PirateGame.Managers
         public float fadeSpeed;
         public Image fadeImage;
 
+        public Controller inGameCanvas;
+        public Controller mainMenuCanvas;
+
+        public string menuScene = "Menu";
+
         void Awake()
         {
             instance = this;
@@ -34,6 +39,20 @@ namespace PirateGame.Managers
             FadeOut();
 
             ScreenSwitch(initialScreen);
+        }
+
+        void Update()
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == menuScene)
+            {
+                inGameCanvas.gameObject.SetActive(false);
+                mainMenuCanvas.gameObject.SetActive(true);
+            }
+            else
+            {
+                inGameCanvas.gameObject.SetActive(true);
+                mainMenuCanvas.gameObject.SetActive(false);
+            }
         }
 
         void Reload()

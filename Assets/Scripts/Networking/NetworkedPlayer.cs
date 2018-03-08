@@ -1,16 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class NetworkedPlayer : MonoBehaviour {
+namespace PirateGame.Networking
+{
+    public class NetworkedPlayer : NetworkClient
+    {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        void Start()
+        {
+            Application.runInBackground = true;
+        }
+
+        void Update()
+        {
+
+        }
+
+        public override void Disconnect()
+        {
+            
+        }
+    }
 }
