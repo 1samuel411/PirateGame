@@ -1692,19 +1692,6 @@ Prefab:
       propertyPath: playerEntity
       value: 
       objectReference: {fileID: 1912327657}
-    - target: {fileID: 114911500206794752, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: cameraObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481819466515080, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
-      propertyPath: m_Name
-      value: SceneManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481819466515080, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
   m_IsPrefabParent: 0
@@ -4428,7 +4415,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1553447139664640, guid: 51dc608b6161cc842b347f362d038f44, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 51dc608b6161cc842b347f362d038f44, type: 2}
