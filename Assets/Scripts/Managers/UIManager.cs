@@ -4,6 +4,7 @@ using System;
 using UnityEngine.UI;
 using UnityEngine;
 using PirateGame.UI;
+using PirateGame.UI.Controllers;
 
 namespace PirateGame.Managers
 {
@@ -32,8 +33,16 @@ namespace PirateGame.Managers
 
         public string menuScene = "Menu";
 
+        public bool loading;
+        public LoadingController loadingController;
+
         void Awake()
         {
+            if (instance != null)
+            {
+                return;
+            }
+
             instance = this;
 
             FadeOut();
@@ -41,8 +50,15 @@ namespace PirateGame.Managers
             ScreenSwitch(initialScreen);
         }
 
+        private bool lastLoading;
         void Update()
         {
+            if (lastLoading != loading)
+            {
+                lastLoading = loading;
+                UpdateLoading();
+            }
+
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == menuScene)
             {
                 inGameCanvas.gameObject.SetActive(false);
@@ -53,6 +69,14 @@ namespace PirateGame.Managers
                 inGameCanvas.gameObject.SetActive(true);
                 mainMenuCanvas.gameObject.SetActive(false);
             }
+        }
+
+        void UpdateLoading()
+        {
+            if(loading)
+                loadingController.ToggleOn();
+            else
+                loadingController.ToggleOff();
         }
 
         void Reload()

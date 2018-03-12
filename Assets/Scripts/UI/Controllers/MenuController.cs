@@ -9,15 +9,11 @@ namespace PirateGame.UI.Controllers
     public class MenuController : Controller
     {
 
-        public NetworkingBase networkingBase;
-
         public string disconnectedController = "Play";
         public string connectedController = "Lobby";
 
         void Start()
         {
-            networkingBase = GetComponent<NetworkingBase>();
-
             PNetworkManager.instance.disconnectAction += OnDisconnect;
             PNetworkManager.instance.connectAction += OnConnect;
         }

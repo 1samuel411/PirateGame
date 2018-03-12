@@ -12,6 +12,11 @@ namespace PirateGame.Managers
 
         void Awake()
         {
+            if (instance != null)
+            {
+                return;
+            }
+
             instance = this;
 
             player = Rewired.ReInput.players.GetPlayer(0);

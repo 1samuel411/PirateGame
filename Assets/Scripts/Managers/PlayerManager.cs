@@ -14,6 +14,11 @@ namespace PirateGame.Managers
 
         void Awake()
         {
+            if (instance != null)
+            {
+                return;
+            }
+
             user.username = "User" + Random.Range(0, 9999);
             instance = this;
         }
@@ -49,7 +54,7 @@ namespace PirateGame.Managers
         {
             get { return (rank * 20); }
         }
-
         public int xp;
+
     }
 }

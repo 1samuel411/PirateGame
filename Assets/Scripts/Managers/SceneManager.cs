@@ -11,6 +11,17 @@ namespace PirateGame.Managers
 
         void Awake()
         {
+            if (instance != null)
+            {
+                return;
+            }
+
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             instance = this;
         }
     }

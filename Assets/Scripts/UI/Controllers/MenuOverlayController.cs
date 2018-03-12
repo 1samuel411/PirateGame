@@ -17,7 +17,7 @@ namespace PirateGame.UI.Controllers
             overlayView.rankText.text = PlayerManager.instance.user.rank.ToString();
             overlayView.usernameText.text = PlayerManager.instance.user.username;
 
-            overlayView.xpBarImage.fillAmount = PlayerManager.instance.user.xp / PlayerManager.instance.user.xpToRank;
+            overlayView.xpBarImage.fillAmount = (float)PlayerManager.instance.user.xp / (float)PlayerManager.instance.user.xpToRank;
 
             overlayView.xpText.text = PlayerManager.instance.user.xp + " / " + PlayerManager.instance.user.xpToRank;
         }

@@ -13,6 +13,12 @@ namespace PirateGame.UI.Controllers
 
         public PlayMenuView playMenuView;
 
+        public override void Enabled()
+        {
+            playMenuView.ipField.text = ipAddress;
+            playMenuView.portField.text = portAddress.ToString();
+        }
+
         public void JoinServer()
         {
             PNetworkManager.instance.networkAddress = ipAddress;

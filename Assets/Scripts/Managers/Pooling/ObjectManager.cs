@@ -14,6 +14,11 @@ namespace PirateGame.Managers
 
         void Awake()
         {
+            if (instance != null)
+            {
+                return;
+            }
+
             instance = this;
 
             Initialize();

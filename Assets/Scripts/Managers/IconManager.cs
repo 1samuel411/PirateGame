@@ -12,8 +12,15 @@ namespace PirateGame.Managers
 
         public Sprite[] rankSprites;
 
+        public Color[] crewColors;
+
         void Awake()
         {
+            if (instance != null)
+            {
+                return;
+            }
+
             instance = this;
         }
 

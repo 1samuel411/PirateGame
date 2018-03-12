@@ -14,5 +14,9 @@ namespace PirateGame.UI.Views
         public Text rankText;
 
         public Text usernameText;
+
+        public Image backgroundImage;
+
+        public Image leaderImage;
     }
 }

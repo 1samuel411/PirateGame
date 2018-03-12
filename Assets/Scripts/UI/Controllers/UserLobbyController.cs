@@ -14,16 +14,46 @@ namespace PirateGame.UI.Controllers
         public int user;
 
 
+        void Awake()
+        {
+            SetData();
+        }
+
         void Update()
         {
-            userLobbyView.rankImage.sprite = IconManager.instance.rankSprites[PNetworkManager.instance.networkUsers[user].userData.rank];
-
-            userLobbyView.rankText.text = PNetworkManager.instance.networkUsers[user].userData.rank.ToString();
-
-            userLobbyView.readyImage.gameObject.SetActive(PNetworkManager.instance.networkUsers[user].ready);
-
-            userLobbyView.usernameText.text = PNetworkManager.instance.networkUsers[user].userData.username;
+            SetData();
         }
+
+        void SetData()
+        {
+            userLobbyView.rankImage.sprite = IconManager.instance.rankSprites[ServerManager.instance.networkUsers[user].userData.rank];
+
+            userLobbyView.rankText.text = ServerManager.instance.networkUsers[user].userData.rank.ToString();
+
+            userLobbyView.readyImage.gameObject.SetActive(ServerManager.instance.networkUsers[user].ready);
+
+            userLobbyView.usernameText.text = ServerManager.instance.networkUsers[user].userData.username;
+
+            Crew crew = CrewManager.GetCrew(ServerManager.instance.networkUsers[user].crew);
+
+            userLobbyView.leaderImage.gameObject.SetActive(false);
+            userLobbyView.backgroundImage.color = Color.white;
+
+            if (CrewManager.HasCrew(ServerManager.instance.networkUsers[user].crew))
+            {
+                if (crew.leader == user)
+                {
+                    userLobbyView.leaderImage.gameObject.SetActive(true);
+                }
+
+                userLobbyView.backgroundImage.color = CrewManager.GetCrewColor(crew.crewColor);
+            }
+
+            Color backgroundColor = userLobbyView.backgroundImage.color;
+            backgroundColor.a = 0.4f;
+            userLobbyView.backgroundImage.color = backgroundColor;
+        }
+
         
     }
 }

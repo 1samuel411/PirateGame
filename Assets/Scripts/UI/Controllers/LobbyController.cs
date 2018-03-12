@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using PirateGame.Managers;
+using PirateGame.Networking;
 using PirateGame.UI.Views;
 using UnityEngine;
 
@@ -13,11 +14,14 @@ namespace PirateGame.UI.Controllers
 
         public List<UserLobbyController> users = new List<UserLobbyController>();
 
-        void OnEnable()
+        public override void Enabled()
         {
             PNetworkManager.instance.networkUserChange += RefreshUsers;
+            networkedPlayer = PNetworkManager.instance.client.connection.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>();
 
             RefreshUsers();
+
+            UpdateReady();
         }
 
         void RefreshUsers()
@@ -28,7 +32,7 @@ namespace PirateGame.UI.Controllers
             }
             users.Clear();
 
-            foreach (KeyValuePair<int, NetworkUser> player in PNetworkManager.instance.networkUsers)
+            foreach (KeyValuePair<int, NetworkUser> player in ServerManager.instance.networkUsers)
             {
                 AddUser(player.Key);
             }
@@ -49,7 +53,8 @@ namespace PirateGame.UI.Controllers
 
         public void ReadyToggle()
         {
-            
+            ServerManager.instance.ReadyToggle();
+            UpdateReady();
         }
 
         public void Quit()
@@ -57,5 +62,33 @@ namespace PirateGame.UI.Controllers
             PNetworkManager.instance.Disconnect();
         }
 
+        public void ChangeCrew()
+        {
+            ServerManager.instance.ChangeCrew();
+        }
+
+        private NetworkedPlayer networkedPlayer = null;
+        void UpdateReady()
+        {
+            lobbyView.readyButton.color = !(ServerManager.instance.networkUsers[networkedPlayer.networkId].ready)
+                ? lobbyView.readyColor
+                : lobbyView.unReadyColor;
+
+            lobbyView.readyText.text = !(ServerManager.instance.networkUsers[networkedPlayer.networkId].ready)
+                ? "Ready"
+                : "Not Ready";
+        }
+
+        void Update()
+        {
+            if (ServerManager.instance.readyToPlay)
+            {
+                lobbyView.infoText.text = "Game is starting in " + ServerManager.instance.lobbyTimer + " seconds...";
+            }
+            else
+            {
+                lobbyView.infoText.text = "";
+            }
+        }
     }
 }

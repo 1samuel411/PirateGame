@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 32bf52fcccb720e40b76f2404c6b10be, type: 2}
---- !u!1001 &1979804133
+--- !u!1001 &2110747611
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
