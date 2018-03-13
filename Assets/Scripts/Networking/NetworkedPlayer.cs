@@ -135,8 +135,8 @@ namespace PirateGame.Networking
         {
             UpdateCrew();
 
-            ServerManager.instance.RefreshCrews();
             ServerManager.instance.RefreshUsers();
+            ServerManager.instance.RefreshCrews();
         }
 
     }

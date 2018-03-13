@@ -16,6 +16,18 @@ namespace PirateGame.Managers
         public Dictionary<int, NetworkUser> networkUsers = new Dictionary<int, NetworkUser>();
         public List<NetworkUser> networkUser = new List<NetworkUser>();
 
+        private NetworkedPlayer _myNetworkedPlayer;
+        public NetworkedPlayer myNetworkPlayer
+        {
+            get
+            {
+                if(_myNetworkedPlayer == null)
+                    _myNetworkedPlayer = PNetworkManager.instance.client.connection.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>();
+
+                return _myNetworkedPlayer;
+            }
+        }
+
         public List<Crew> crews = new List<Crew>();
 
         [SyncVar] public bool inLobby = true;
@@ -44,6 +56,7 @@ namespace PirateGame.Managers
             networkUser = networkUsers.Values.ToList();
 
             UpdateLobby();
+
         }
 
         public void RefreshCrews()
@@ -72,7 +85,7 @@ namespace PirateGame.Managers
             uncompressedData = ObjectSerializer.Decompress(uncompressedData);
             crews = ObjectSerializer.DeSerialize(uncompressedData) as List<Crew>;
 
-            if (PNetworkManager.instance.crewsChange != null && !isServer)
+            if (PNetworkManager.instance.crewsChange != null)
                 PNetworkManager.instance.crewsChange.Invoke();
         }
 

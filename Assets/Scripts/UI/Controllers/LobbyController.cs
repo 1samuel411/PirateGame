@@ -13,13 +13,15 @@ namespace PirateGame.UI.Controllers
         public LobbyView lobbyView;
 
         public List<UserLobbyController> users = new List<UserLobbyController>();
+        public List<UserCrewController> usersCrew = new List<UserCrewController>();
 
         public override void Enabled()
         {
             PNetworkManager.instance.networkUserChange += RefreshUsers;
-            networkedPlayer = PNetworkManager.instance.client.connection.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>();
+            PNetworkManager.instance.crewsChange += RefreshCrews;
 
             RefreshUsers();
+            RefreshCrews();
 
             UpdateReady();
         }
@@ -38,6 +40,27 @@ namespace PirateGame.UI.Controllers
             }
         }
 
+        void RefreshCrews()
+        {
+            for (int i = 0; i < usersCrew.Count; i++)
+            {
+                GameObject.Destroy(usersCrew[i].gameObject);
+            }
+            usersCrew.Clear();
+
+            if (ServerManager.instance.myNetworkPlayer == null)
+                return;
+
+            Crew myCrew = CrewManager.GetCrew(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].crew);
+            if (myCrew == null)
+                return;
+
+            for(int i = 0; i < myCrew.members.Count; i++)
+            {
+                AddCrew(myCrew.members[i]);
+            }
+        }
+
         void AddUser(int networkUser)
         {
             GameObject newUserGameObject = Instantiate(lobbyView.userLobbyPrefab);
@@ -49,6 +72,25 @@ namespace PirateGame.UI.Controllers
             controller.user = networkUser;
 
             users.Add(controller);
+        }
+
+        void AddCrew(int networkUser)
+        {
+            GameObject newUserGameObject = Instantiate(lobbyView.crewUserLobbyPrefab);
+            newUserGameObject.transform.SetParent(lobbyView.crewPlayerHolder);
+            newUserGameObject.transform.localScale = Vector3.one;
+            newUserGameObject.transform.localPosition = Vector3.zero;
+
+            UserCrewController controller = newUserGameObject.GetComponent<UserCrewController>();
+            controller.user = networkUser;
+            controller.lobbyController = this;
+
+            usersCrew.Add(controller);
+        }
+
+        public void KickUser(int userConnectionId)
+        {
+            Debug.Log("Kicking: " + userConnectionId);   
         }
 
         public void ReadyToggle()
@@ -67,14 +109,13 @@ namespace PirateGame.UI.Controllers
             ServerManager.instance.ChangeCrew();
         }
 
-        private NetworkedPlayer networkedPlayer = null;
         void UpdateReady()
         {
-            lobbyView.readyButton.color = !(ServerManager.instance.networkUsers[networkedPlayer.networkId].ready)
+            lobbyView.readyButton.color = !(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].ready)
                 ? lobbyView.readyColor
                 : lobbyView.unReadyColor;
 
-            lobbyView.readyText.text = !(ServerManager.instance.networkUsers[networkedPlayer.networkId].ready)
+            lobbyView.readyText.text = !(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].ready)
                 ? "Ready"
                 : "Not Ready";
         }
@@ -89,6 +130,14 @@ namespace PirateGame.UI.Controllers
             {
                 lobbyView.infoText.text = "";
             }
+
+            lobbyView.crewNameText.text = "Join a crew...";
+;
+            Crew myCrew = CrewManager.GetCrew(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].crew);
+            if (myCrew == null)
+                return;
+
+            lobbyView.crewNameText.text = myCrew.crewName;
         }
     }
 }

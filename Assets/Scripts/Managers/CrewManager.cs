@@ -85,5 +85,7 @@ namespace PirateGame.Managers
 
         public string crewPassword;
 
+        public bool hasPassword;
+
     }
 }

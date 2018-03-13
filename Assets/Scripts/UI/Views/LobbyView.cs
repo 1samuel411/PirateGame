@@ -24,5 +24,9 @@ namespace PirateGame.UI.Views
         public Image crewButton;
         public Text crewText;
 
+        public GameObject crewUserLobbyPrefab;
+        public Transform crewPlayerHolder;
+        public Text crewNameText;
+
     }
 }
