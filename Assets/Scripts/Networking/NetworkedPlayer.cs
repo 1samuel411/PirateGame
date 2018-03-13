@@ -73,33 +73,32 @@ namespace PirateGame.Networking
             ServerManager.instance.RefreshUsers();
         }
 
-        public void ChangeCrew()
+        public void ChangeCrew(int x)
         {
             Debug.Log("[Networked Player] Changing Crews");
 
             if (ServerManager.instance.inLobby == false)
                 return;
 
-            CmdChangeCrew();
+            CmdChangeCrew(x);
         }
 
-        void UpdateCrew()
+        public void LeaveCrew()
+        {
+            Debug.Log("[Networked Player] Leaving Crews");
+
+            if (ServerManager.instance.inLobby == false)
+                return;
+
+            ChangeCrew(-1);
+        }
+
+        void UpdateCrew(int x)
         {
             NetworkUser user = ServerManager.instance.networkUsers[networkId];
 
             // Get next crew
-            int nextCrew = CrewManager.GetNextCrew(user.crew);
-
-            // Check the logistics
-            int maxCheck = 0;
-            while (ServerManager.instance.crews[nextCrew].members.Count >= 4)
-            {
-                if (maxCheck > 40)
-                    break;
-
-                maxCheck++;
-                nextCrew = CrewManager.GetNextCrew(user.crew);
-            }
+            int nextCrew = x;
 
             // TODO: Implement a password check
 
@@ -119,6 +118,10 @@ namespace PirateGame.Networking
 
             // Update Network Users
             user.crew = nextCrew;
+            
+            if(nextCrew < 0)
+                return;
+
             ServerManager.instance.networkUsers[networkId] = user;
 
             // Add to crew
@@ -131,9 +134,25 @@ namespace PirateGame.Networking
         }
 
         [Command]
-        public void CmdChangeCrew()
+        public void CmdChangeCrew(int x)
         {
-            UpdateCrew();
+            UpdateCrew(x);
+
+            ServerManager.instance.RefreshUsers();
+            ServerManager.instance.RefreshCrews();
+        }
+
+        public void ChangeCrewName(string newName)
+        {
+            Debug.Log("Renaming Crew");
+            CmdChangeCrewName(newName);
+        }
+
+        [Command]
+        public void CmdChangeCrewName(string newName)
+        {
+            if(networkId == ServerManager.instance.crews[networkId].leader)
+                ServerManager.instance.crews[networkId].crewName = newName;
 
             ServerManager.instance.RefreshUsers();
             ServerManager.instance.RefreshCrews();

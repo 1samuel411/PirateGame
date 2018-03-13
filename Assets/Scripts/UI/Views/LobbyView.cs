@@ -25,8 +25,11 @@ namespace PirateGame.UI.Views
         public Text crewText;
 
         public GameObject crewUserLobbyPrefab;
+        public GameObject crewLobbyPrefab;
         public Transform crewPlayerHolder;
         public Text crewNameText;
+        public InputField crewNameInputField;
+        public Button leaveButton;
 
     }
 }

@@ -117,12 +117,22 @@ namespace PirateGame.Managers
 
         public void ReadyToggle()
         {
-            PNetworkManager.instance.client.connection.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().ReadyToggle();
+            myNetworkPlayer.ReadyToggle();
         }
 
-        public void ChangeCrew()
+        public void ChangeCrew(int x)
         {
-            PNetworkManager.instance.client.connection.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().ChangeCrew();
+            myNetworkPlayer.ChangeCrew(x);            
+        }
+
+        public void ChangeCrewName(string x)
+        {
+            myNetworkPlayer.ChangeCrewName(x);
+        }
+
+        public void LeaveCrew()
+        {
+            myNetworkPlayer.LeaveCrew();
         }
 
         void UpdateLobby()

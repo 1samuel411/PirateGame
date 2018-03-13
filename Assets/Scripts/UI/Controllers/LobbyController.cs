@@ -14,6 +14,7 @@ namespace PirateGame.UI.Controllers
 
         public List<UserLobbyController> users = new List<UserLobbyController>();
         public List<UserCrewController> usersCrew = new List<UserCrewController>();
+        public List<CrewJoinController> crewJoins = new List<CrewJoinController>();
 
         public override void Enabled()
         {
@@ -42,6 +43,12 @@ namespace PirateGame.UI.Controllers
 
         void RefreshCrews()
         {
+            for (int i = 0; i < crewJoins.Count; i++)
+            {
+                GameObject.Destroy(crewJoins[i].gameObject);
+            }
+            crewJoins.Clear();
+
             for (int i = 0; i < usersCrew.Count; i++)
             {
                 GameObject.Destroy(usersCrew[i].gameObject);
@@ -50,14 +57,23 @@ namespace PirateGame.UI.Controllers
 
             if (ServerManager.instance.myNetworkPlayer == null)
                 return;
-
             Crew myCrew = CrewManager.GetCrew(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].crew);
-            if (myCrew == null)
-                return;
-
-            for(int i = 0; i < myCrew.members.Count; i++)
+            
+            if (myCrew != null)
             {
-                AddCrew(myCrew.members[i]);
+                lobbyView.crewNameInputField.text = myCrew.crewName;
+                
+                for(int i = 0; i < myCrew.members.Count; i++)
+                {
+                    AddCrewUser(myCrew.members[i]);
+                }
+            }
+            else
+            {
+                for(int i = 0 ; i < ServerManager.instance.crews.Count; i++)
+                {
+                    AddCrew(i);
+                }
             }
         }
 
@@ -74,7 +90,7 @@ namespace PirateGame.UI.Controllers
             users.Add(controller);
         }
 
-        void AddCrew(int networkUser)
+        void AddCrewUser(int networkUser)
         {
             GameObject newUserGameObject = Instantiate(lobbyView.crewUserLobbyPrefab);
             newUserGameObject.transform.SetParent(lobbyView.crewPlayerHolder);
@@ -86,6 +102,19 @@ namespace PirateGame.UI.Controllers
             controller.lobbyController = this;
 
             usersCrew.Add(controller);
+        }
+
+        void AddCrew(int crewId)
+        {
+            GameObject newUserGameObject = Instantiate(lobbyView.crewLobbyPrefab);
+            newUserGameObject.transform.SetParent(lobbyView.crewPlayerHolder);
+            newUserGameObject.transform.localScale = Vector3.one;
+            newUserGameObject.transform.localPosition = Vector3.zero;
+
+            CrewJoinController controller = newUserGameObject.GetComponent<CrewJoinController>();
+            controller.crewId = crewId;
+
+            crewJoins.Add(controller);
         }
 
         public void KickUser(int userConnectionId)
@@ -104,9 +133,19 @@ namespace PirateGame.UI.Controllers
             PNetworkManager.instance.Disconnect();
         }
 
-        public void ChangeCrew()
+        public void ChangeCrew(int x)
         {
-            ServerManager.instance.ChangeCrew();
+            ServerManager.instance.ChangeCrew(x);
+        }
+
+        public void ChangeCrewName(string newName)
+        {
+            ServerManager.instance.ChangeCrewName(newName);
+        }
+
+        public void LeaveCrew()
+        {
+            ServerManager.instance.LeaveCrew();
         }
 
         void UpdateReady()
@@ -134,10 +173,29 @@ namespace PirateGame.UI.Controllers
             lobbyView.crewNameText.text = "Join a crew...";
 ;
             Crew myCrew = CrewManager.GetCrew(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].crew);
+            
+            lobbyView.leaveButton.gameObject.SetActive(false);
+            
+            
             if (myCrew == null)
+            {
+                lobbyView.crewNameInputField.gameObject.SetActive(false);
                 return;
+            }
 
+            lobbyView.leaveButton.gameObject.SetActive(true);
             lobbyView.crewNameText.text = myCrew.crewName;
+
+            lobbyView.crewNameText.gameObject.SetActive(false);
+
+            if(ServerManager.instance.myNetworkPlayer.networkId == myCrew.leader)
+            {
+                lobbyView.crewNameInputField.gameObject.SetActive(true);
+            }
+            else
+            {
+                lobbyView.crewNameText.gameObject.SetActive(true);
+            }
         }
     }
 }
