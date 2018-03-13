@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -272,6 +272,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 32bf52fcccb720e40b76f2404c6b10be, type: 2}
+--- !u!114 &1327705843 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114082769850351584, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1332757197}
+  m_Script: {fileID: 11500000, guid: f52f9a8c8e8a89649925064e48b20140, type: 3}
 --- !u!1001 &1332757197
 Prefab:
   m_ObjectHideFlags: 0
@@ -279,6 +285,21 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114069136721132180, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: networkUser.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114777086452494940, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: activeScreens.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114069136721132180, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: crews.Array.data[0].members.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4095403747723528, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -316,6 +337,31 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 612722735}
+    - target: {fileID: 114777086452494940, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: activeScreens.Array.data[0].name
+      value: Lobby
+      objectReference: {fileID: 0}
+    - target: {fileID: 114777086452494940, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: activeScreens.Array.data[0].menuScreen
+      value: 
+      objectReference: {fileID: 1327705843}
+    - target: {fileID: 114069136721132180, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: networkUser.Array.data[0].userData.username
+      value: User8776
+      objectReference: {fileID: 0}
+    - target: {fileID: 114069136721132180, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: networkUser.Array.data[0].crew
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114069136721132180, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: readyToPlay
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
   m_IsPrefabParent: 0

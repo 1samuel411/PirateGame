@@ -43,8 +43,10 @@ namespace PirateGame.UI.Controllers
                 if (crew.leader == user)
                 {
                     crewView.leaderImage.gameObject.SetActive(true);
-
-                    if (ServerManager.instance.myNetworkPlayer.networkId != user)
+                }
+                else
+                {
+                    if (ServerManager.instance.myNetworkPlayer.networkId == crew.leader)
                     {
                         crewView.kickButton.SetActive(true);
                     }

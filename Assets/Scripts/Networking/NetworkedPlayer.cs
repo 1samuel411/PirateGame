@@ -151,8 +151,8 @@ namespace PirateGame.Networking
         [Command]
         public void CmdChangeCrewName(string newName)
         {
-            if(networkId == ServerManager.instance.crews[networkId].leader)
-                ServerManager.instance.crews[networkId].crewName = newName;
+            if(networkId == ServerManager.instance.crews[ServerManager.instance.networkUsers[networkId].crew].leader)
+                ServerManager.instance.crews[ServerManager.instance.networkUsers[networkId].crew].crewName = newName;
 
             ServerManager.instance.RefreshUsers();
             ServerManager.instance.RefreshCrews();

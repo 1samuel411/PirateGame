@@ -27,9 +27,13 @@ namespace PirateGame.UI.Controllers
 			Crew crew = ServerManager.instance.crews[crewId];
 			crewJoinView.crewCountText.text = crew.members.Count.ToString() + "/4";
 			crewJoinView.crewNameText.text = crew.crewName;
-		}
+            crewJoinView.joinButton.gameObject.SetActive(true);
 
-		public void Join()
+            if(crew.members.Count >= 4)
+                crewJoinView.joinButton.gameObject.SetActive(false);
+        }
+
+        public void Join()
 		{
 			ServerManager.instance.ChangeCrew(crewId);
 		}

@@ -179,6 +179,7 @@ namespace PirateGame.UI.Controllers
             
             if (myCrew == null)
             {
+                lobbyView.crewNameText.gameObject.SetActive(true);
                 lobbyView.crewNameInputField.gameObject.SetActive(false);
                 return;
             }

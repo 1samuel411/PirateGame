@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -327,6 +327,7 @@ MonoBehaviour:
   crewJoinView:
     crewNameText: {fileID: 114720994452671970}
     crewCountText: {fileID: 114049204875026390}
+    joinButton: {fileID: 114326454511858766}
   crewId: 0
 --- !u!114 &114900886519574274
 MonoBehaviour:

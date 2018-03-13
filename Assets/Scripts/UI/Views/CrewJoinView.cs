@@ -11,9 +11,9 @@ namespace PirateGame.UI.Views
 	{
 
 		public Text crewNameText;
-		public Text crewCountText; 
+		public Text crewCountText;
 
-		
+	    public Button joinButton;
 
 	}
 }
