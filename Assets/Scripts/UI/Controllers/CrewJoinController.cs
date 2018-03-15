@@ -29,6 +29,10 @@ namespace PirateGame.UI.Controllers
 			crewJoinView.crewNameText.text = crew.crewName;
             crewJoinView.joinButton.gameObject.SetActive(true);
 
+		    Color backgroundColor = CrewManager.GetCrewColor(crewId);
+            backgroundColor.a = 0.4f;
+            crewJoinView.backgroundImage.color = backgroundColor;
+
             if(crew.members.Count >= 4)
                 crewJoinView.joinButton.gameObject.SetActive(false);
         }

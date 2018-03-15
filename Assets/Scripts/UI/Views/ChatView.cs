@@ -7,15 +7,8 @@ namespace PirateGame.UI.Views
 {
     
 	[System.Serializable]
-	public class CrewJoinView : View 
+	public class ChatView : View 
 	{
-
-		public Text crewNameText;
-		public Text crewCountText;
-
-	    public Button joinButton;
-
-	    public Image backgroundImage;
-
+		
 	}
 }

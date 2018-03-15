@@ -142,6 +142,43 @@ namespace PirateGame.Networking
             ServerManager.instance.RefreshCrews();
         }
 
+        public void KickCrewMember(int target, bool authoritative = false)
+        {
+            CmdKickCrewMember(target, authoritative);
+        }
+
+        [Command]
+        public void CmdKickCrewMember(int target, bool authoritative)
+        {
+            if (!authoritative)
+            {
+                Crew myCrew = ServerManager.instance.crews[ServerManager.instance.networkUsers[networkId].crew];
+
+                if (myCrew == null)
+                    return;
+
+                if (networkId == myCrew.leader)
+                {
+                    // kick authorized
+                    ServerManager.instance.crews[ServerManager.instance.networkUsers[target].crew]
+                        .members.Remove(target);
+                    ServerManager.instance.networkUsers[target].crew = -1;
+
+                    ServerManager.instance.RefreshUsers();
+                    ServerManager.instance.RefreshCrews();
+                }
+            }
+            else
+            {
+                // kick authorized
+                ServerManager.instance.crews[ServerManager.instance.networkUsers[target].crew].members.Remove(target);
+                ServerManager.instance.networkUsers[target].crew = -1;
+
+                ServerManager.instance.RefreshUsers();
+                ServerManager.instance.RefreshCrews();
+            }
+        }
+
         public void ChangeCrewName(string newName)
         {
             Debug.Log("Renaming Crew");

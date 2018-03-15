@@ -119,7 +119,8 @@ namespace PirateGame.UI.Controllers
 
         public void KickUser(int userConnectionId)
         {
-            Debug.Log("Kicking: " + userConnectionId);   
+            Debug.Log("Kicking: " + userConnectionId);
+            ServerManager.instance.KickCrewMember(userConnectionId);
         }
 
         public void ReadyToggle()

@@ -33,12 +33,22 @@ namespace PirateGame.Managers
 
         public void PStartHost()
         {
+            if (ServerManager.instance != null)
+            {
+                ServerManager.instance.crews = ServerManager.instance.defaultCrews;
+                ServerManager.instance.networkUsers.Clear();
+            }
             StartHost();
             UIManager.instance.loading = true;
         }
 
         public void PStartClient()
         {
+            if (ServerManager.instance != null)
+            {
+                ServerManager.instance.crews = ServerManager.instance.defaultCrews;
+                ServerManager.instance.networkUsers.Clear();
+            }
             StartClient();
             UIManager.instance.loading = true;
         }
@@ -114,6 +124,7 @@ namespace PirateGame.Managers
 	        {
 	            if (player.Value.networkConnection == con.connectionId)
 	            {
+                    ServerManager.instance.RemoveCrewMember(player.Key);
 	                ServerManager.instance.networkUsers.Remove(player.Key);
 
 	                if (networkUserChange != null)

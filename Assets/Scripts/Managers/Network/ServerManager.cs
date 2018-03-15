@@ -29,6 +29,7 @@ namespace PirateGame.Managers
         }
 
         public List<Crew> crews = new List<Crew>();
+        [HideInInspector] public List<Crew> defaultCrews = new List<Crew>();
 
         [SyncVar] public bool inLobby = true;
         [SyncVar] public bool readyToPlay = true;
@@ -38,6 +39,8 @@ namespace PirateGame.Managers
 
         void Awake()
         {
+            defaultCrews = crews;
+
             if (instance != null)
             {
                 return;
@@ -130,6 +133,16 @@ namespace PirateGame.Managers
             myNetworkPlayer.ChangeCrewName(x);
         }
 
+        public void KickCrewMember(int x)
+        {
+            myNetworkPlayer.KickCrewMember(x);
+        }
+
+        public void RemoveCrewMember(int x)
+        {
+            myNetworkPlayer.KickCrewMember(x, true);
+        }
+
         public void LeaveCrew()
         {
             myNetworkPlayer.LeaveCrew();
@@ -139,7 +152,6 @@ namespace PirateGame.Managers
         {
             if (!isServer)
                 return;
-
         }
 
         private IEnumerator lobbyCoroutine;
