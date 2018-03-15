@@ -16,6 +16,7 @@ namespace PirateGame.Managers
 
 	    public Action networkUserChange;
 	    public Action crewsChange;
+		public Action chatChange;
 
         public Action<NetworkConnection> connectAction;
 	    public Action<NetworkConnection> disconnectAction;

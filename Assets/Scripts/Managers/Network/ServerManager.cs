@@ -151,6 +151,11 @@ namespace PirateGame.Managers
             myNetworkPlayer.LeaveCrew();
         }
 
+        public void SendChat(string text)
+        {
+            myNetworkPlayer.SendChat(text);
+        }
+
         void UpdateLobby()
         {
             if (!isServer)

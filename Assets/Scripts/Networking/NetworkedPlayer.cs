@@ -6,6 +6,7 @@ using PirateGame.Managers;
 using Rewired.Data;
 using UnityEngine;
 using UnityEngine.Networking;
+using PirateGame.UI.Controllers;
 
 namespace PirateGame.Networking
 {
@@ -195,5 +196,20 @@ namespace PirateGame.Networking
             ServerManager.instance.RefreshCrews();
         }
 
+        public void SendChat(string text)
+        {
+            RpcSendChat(text);
+        }
+
+        [ClientRpc]
+        public void RpcSendChat(string text)
+        {
+            Chat newChat = new Chat();
+            newChat.datePosted = DateTime.Now;
+            newChat.playerName = ServerManager.instance.networkUsers[networkId].userData.username;
+            newChat.message = text;
+            ServerManager.instance.chats.Add(newChat);
+            PNetworkManager.instance.chatChange();
+        }
     }
 }
