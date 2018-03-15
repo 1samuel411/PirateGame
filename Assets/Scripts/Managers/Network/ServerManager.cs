@@ -6,6 +6,7 @@ using PirateGame.Networking;
 using UnityEngine;
 using UnityEngine.Networking;
 using PirateGame.UI.Controllers;
+using UnityEngine.Networking.NetworkSystem;
 
 namespace PirateGame.Managers
 {
@@ -199,6 +200,12 @@ namespace PirateGame.Managers
                 lobbyTimer -= 1;
             }
 
+            UIManager.instance.FadeIn(FadeInCallback);
+        }
+
+        void FadeInCallback()
+        {
+            UIManager.instance.ScreenSwitch("LoadScene");
             PNetworkManager.instance.ServerChangeScene("Test");
         }
     }

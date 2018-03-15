@@ -9,6 +9,7 @@ namespace PirateGame.Managers
         public static PlayerManager instance;
 
         public PirateGame.Entity.EntityPlayer playerEntity;
+        public PlayablePlayer playablePlayer;
 
         public User user;
 
@@ -26,6 +27,9 @@ namespace PirateGame.Managers
         void Update()
         {
             CheckUI();
+
+            if (playablePlayer == null && playerEntity != null)
+                playablePlayer = playerEntity.GetComponent<PlayablePlayer>();
         }
 
         void CheckUI()

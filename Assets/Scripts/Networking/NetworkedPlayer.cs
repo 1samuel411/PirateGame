@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PirateGame.Entity;
 using PirateGame.Managers;
 using Rewired.Data;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace PirateGame.Networking
 
         [SyncVar] public int networkId = 0;
 
+        public GameObject player;
+
         void Start()
         {
             if (isLocalPlayer)
@@ -24,7 +27,6 @@ namespace PirateGame.Networking
 
                 SendData();
             }
-
         }
 
         void SendData()
@@ -198,18 +200,42 @@ namespace PirateGame.Networking
 
         public void SendChat(string text)
         {
+            CmdSendChat(text);
+        }
+
+        [Command]
+        public void CmdSendChat(string text)
+        {
             RpcSendChat(text);
         }
 
         [ClientRpc]
         public void RpcSendChat(string text)
         {
+            Debug.Log("Recieved text from : " + networkId + ", : "+ text);
             Chat newChat = new Chat();
             newChat.datePosted = DateTime.Now;
             newChat.playerName = ServerManager.instance.networkUsers[networkId].userData.username;
             newChat.message = text;
+            if(CrewManager.HasCrew(ServerManager.instance.networkUsers[networkId].crew))
+                newChat.playerCrewColor = CrewManager.GetCrewColor(ServerManager.instance.crews[ServerManager.instance.networkUsers[networkId].crew].crewColor);
+            else
+                newChat.playerCrewColor = Color.white;
+
             ServerManager.instance.chats.Add(newChat);
             PNetworkManager.instance.chatChange();
+        }
+
+        [ClientRpc]
+        public void RpcSetMyPlayer(GameObject player)
+        {
+            if (isLocalPlayer)
+            {
+                PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
+            }
+            player.GetComponent<PlayablePlayer>().playerId = networkId;
+
+            this.player = player;
         }
     }
 }

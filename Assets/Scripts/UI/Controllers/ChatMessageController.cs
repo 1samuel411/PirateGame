@@ -25,7 +25,8 @@ namespace PirateGame.UI.Controllers
 
 		void SetData()
 		{
-			chatView.chatText.text = chat.datePosted.ToString("hh:mm:ss") + "   " + chat.playerName + ": " + chat.message;
+            chatView.chatText.text = "<color=#" + ColorUtility.ToHtmlStringRGB(chat.playerCrewColor) + ">" + chat.datePosted.ToString("h:m:s") + "   " + chat.playerName + ": " + chat.message + "</color>";
+
 		}
 
 	}

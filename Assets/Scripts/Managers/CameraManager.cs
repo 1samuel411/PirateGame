@@ -29,7 +29,14 @@ namespace PirateGame.Managers
         void Update()
         {
             if (cameraObject && PlayerManager.instance.playerEntity)
+            {
+                cameraObject.gameObject.SetActive(true);
                 cameraObject.target = PlayerManager.instance.playerEntity.transform;
+            }
+            else
+            {
+                cameraObject.gameObject.SetActive(false);
+            }
         }
     }
 }

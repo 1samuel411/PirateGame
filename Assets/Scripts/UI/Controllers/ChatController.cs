@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using PirateGame.UI.Views;
 using PirateGame.Managers;
+using Sirenix.Utilities;
+using UnityEngine.UI;
 
 namespace PirateGame.UI.Controllers
 {
@@ -21,24 +23,16 @@ namespace PirateGame.UI.Controllers
 
 		public void SendChat(string text)
 		{
+		    if (text.IsNullOrWhitespace())
+		        return;
+
 			ServerManager.instance.SendChat(text);
 			chatView.inputField.text = "";
 		}
 
 		void RefreshChat()
 		{
-			int newChat = 0;
-			for(int i = 0; i < chats.Count; i++)
-			{
-				for(int x = 0; x < ServerManager.instance.chats.Count; x++)
-				{
-					if(chats[i].chat == ServerManager.instance.chats[x])
-					{
-						newChat++;
-					}
-				}
-			}
-			AddChat(ServerManager.instance.chats[newChat]);
+			AddChat(ServerManager.instance.chats[ServerManager.instance.chats.Count-1]);
 		}
 
 		void AddChat(Chat chat)
@@ -48,10 +42,19 @@ namespace PirateGame.UI.Controllers
 			newObj.transform.localPosition = Vector3.zero;
 			newObj.transform.localScale = Vector3.one;
 
-			ChatMessageController messageController = newObj.GetComponent<ChatMessageController>();
+		    StartCoroutine(EnableForceExpand());
+
+            ChatMessageController messageController = newObj.GetComponent<ChatMessageController>();
 			messageController.chat = chat;
-		} 
-	}
+		}
+
+	    IEnumerator EnableForceExpand()
+	    {
+		    chatView.holder.GetComponent<VerticalLayoutGroup>().childForceExpandWidth = false;
+	        yield return null;
+            chatView.holder.GetComponent<VerticalLayoutGroup>().childForceExpandWidth = true;
+        }
+    }
 
 	[System.Serializable]
 	public class Chat
@@ -59,5 +62,9 @@ namespace PirateGame.UI.Controllers
 		public string playerName;
 		public string message;
 		public DateTime datePosted;
+	    public Color playerCrewColor;
+
+        public bool crewOnly;
+
 	}
 }

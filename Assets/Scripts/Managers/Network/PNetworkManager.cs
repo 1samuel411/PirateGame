@@ -21,6 +21,8 @@ namespace PirateGame.Managers
         public Action<NetworkConnection> connectAction;
 	    public Action<NetworkConnection> disconnectAction;
 
+	    public GameObject playerGameObject;
+
         void Awake()
         {
             if (instance != null)
@@ -58,7 +60,11 @@ namespace PirateGame.Managers
 
         public void Disconnect()
 	    {
-	        StopClient();
+	        ServerManager.instance.crews = ServerManager.instance.defaultCrews;
+	        ServerManager.instance.networkUsers.Clear();
+	        ServerManager.instance.chats.Clear();
+
+            StopClient();
             StopServer();
 
 	        ServerManager.instance.networkUsers.Clear();
@@ -94,12 +100,23 @@ namespace PirateGame.Managers
 
 	    public override void OnServerAddPlayer(NetworkConnection con, short playerControllerId)
 	    {
-	        base.OnServerAddPlayer(con, playerControllerId);
-	        NetworkedPlayer networkPlayer = con.playerControllers[playerControllerId].gameObject.GetComponent<NetworkedPlayer>();
-	        networkPlayer.networkId = con.connectionId;
+	        if (playerControllerId == 0)
+	        {
+	            base.OnServerAddPlayer(con, playerControllerId);
+
+                NetworkedPlayer networkPlayer = con.playerControllers[playerControllerId]
+	                .gameObject.GetComponent<NetworkedPlayer>();
+	            networkPlayer.networkId = con.connectionId;
+	        }
+            else if (playerControllerId == 1)
+	        {
+	            GameObject player = (GameObject)Instantiate(playerGameObject, Vector3.zero, Quaternion.identity);
+	            NetworkServer.AddPlayerForConnection(con, player, playerControllerId);
+                con.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().RpcSetMyPlayer(con.playerControllers[1].gameObject);
+            }
         }
 
-        public override void OnServerReady(NetworkConnection con)
+	    public override void OnServerReady(NetworkConnection con)
 	    {
 	        base.OnServerReady(con);
 
@@ -137,7 +154,22 @@ namespace PirateGame.Managers
 	            }
 	        }
 	    }
-	}
+
+	    public override void ServerChangeScene(string newSceneName)
+	    {
+	        base.ServerChangeScene(newSceneName);
+	    }
+
+	    public override void OnClientSceneChanged(NetworkConnection conn)
+	    {
+	        base.OnClientSceneChanged(conn);
+
+            UIManager.instance.ScreenSwitch("Lobby");
+	        UIManager.instance.FadeOut();
+
+            ClientScene.AddPlayer(conn, 1);
+        }
+    }
 }
 
 [System.Serializable]
