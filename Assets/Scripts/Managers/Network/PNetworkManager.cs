@@ -37,6 +37,7 @@ namespace PirateGame.Managers
             {
                 ServerManager.instance.crews = ServerManager.instance.defaultCrews;
                 ServerManager.instance.networkUsers.Clear();
+				ServerManager.instance.chats.Clear();
             }
             StartHost();
             UIManager.instance.loading = true;
@@ -48,6 +49,7 @@ namespace PirateGame.Managers
             {
                 ServerManager.instance.crews = ServerManager.instance.defaultCrews;
                 ServerManager.instance.networkUsers.Clear();
+				ServerManager.instance.chats.Clear();
             }
             StartClient();
             UIManager.instance.loading = true;

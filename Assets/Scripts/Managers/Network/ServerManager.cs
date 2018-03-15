@@ -5,6 +5,7 @@ using System.Linq;
 using PirateGame.Networking;
 using UnityEngine;
 using UnityEngine.Networking;
+using PirateGame.UI.Controllers;
 
 namespace PirateGame.Managers
 {
@@ -15,6 +16,8 @@ namespace PirateGame.Managers
 
         public Dictionary<int, NetworkUser> networkUsers = new Dictionary<int, NetworkUser>();
         public List<NetworkUser> networkUser = new List<NetworkUser>();
+
+        public List<Chat> chats = new List<Chat>(); 
 
         private NetworkedPlayer _myNetworkedPlayer;
         public NetworkedPlayer myNetworkPlayer

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using PirateGame.UI.Views;
@@ -11,5 +12,13 @@ namespace PirateGame.UI.Controllers
 		public ChatView chatView;
 		
 		
+		
+	}
+
+	public class Chat
+	{
+		public string playerName;
+		public string message;
+		public DateTime datePosted;
 	}
 }

@@ -9,6 +9,11 @@ namespace PirateGame.UI.Views
 	[System.Serializable]
 	public class ChatView : View 
 	{
+		public InputField inputField;
+
+		public Transform holder;
+
+		public GameObject chatPrefab;
 		
 	}
 }

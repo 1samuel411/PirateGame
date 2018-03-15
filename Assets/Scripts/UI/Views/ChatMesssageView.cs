@@ -10,5 +10,7 @@ namespace PirateGame.UI.Views
 	public class ChatMessageView : View 
 	{
 		
+		public Text chatText;
+
 	}
 }

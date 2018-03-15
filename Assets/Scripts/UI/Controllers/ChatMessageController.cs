@@ -10,5 +10,23 @@ namespace PirateGame.UI.Controllers
 	{
 
 		public ChatMessageView chatView;
+		
+		public Chat chat;
+
+		void Start()
+		{
+			SetData();
+		}
+
+		void Update()
+		{
+			SetData();
+		}
+
+		void SetData()
+		{
+			chatView.chatText.text = chat.datePosted.ToString("hh:mm:ss") + "   " + chat.playerName + ": " + chat.message;
+		}
+
 	}
 }
