@@ -16,6 +16,7 @@ namespace PirateGame.Networking
     {
 
         [SyncVar] public int networkId = 0;
+        [SyncVar] public bool enablePlayer;
 
         public GameObject player;
         private PlayablePlayer playablePlayer;
@@ -247,12 +248,15 @@ namespace PirateGame.Networking
             Debug.Log("adding player!");
             PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
             CmdEnablePlayer();
+
+            player.gameObject.transform.position = Vector3.zero;
+            player.gameObject.transform.rotation = Quaternion.identity;
         }
 
         [Command]
         public void CmdEnablePlayer()
         {
-            RpcEnablePlayer();
+            enablePlayer = true;
         }
 
         [ClientRpc]
@@ -280,8 +284,11 @@ namespace PirateGame.Networking
         {
             if (isLocalPlayer)
             {
-                //    CmdSendMyData(player.transform.position, player.transform.rotation);    
+                CmdSendMyData(player.transform.position, player.transform.rotation);    
             }
+
+            if(enablePlayer)
+                player.gameObject.SetActive(true);
         }
     }
 }
