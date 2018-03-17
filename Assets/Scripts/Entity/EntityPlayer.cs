@@ -26,8 +26,9 @@ namespace PirateGame.Entity
 	        fakeCamera = new GameObject().transform;
 	        fakeCamera.name = "Fake Camera: " + gameObject.name;
 	        fakeCamera.SetParent(null);
+	        DontDestroyOnLoad(fakeCamera);
 
-	        if (lookAtIk)
+            if (lookAtIk)
 	        {
 	            fakeCameraForward = new GameObject().transform;
 	            fakeCameraForward.name = "Fake Camera Child: " + gameObject.name;
@@ -49,7 +50,7 @@ namespace PirateGame.Entity
         {
             base.Update();
 
-            if (!isLocalPlayer)
+            if (!ServerManager.instance.myNetworkPlayer.isLocalPlayer)
                 return;
 
 	        CheckInput();

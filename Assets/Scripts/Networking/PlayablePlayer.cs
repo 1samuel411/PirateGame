@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PirateGame.Managers;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace PirateGame.Networking
 {
-    public class PlayablePlayer : NetworkingBase
+    public class PlayablePlayer : Base
     {
 
-        [SyncVar] public int playerId;
+        public MonoBehaviour[] localOnlyComponents;
 
-        public void SendMyData()
+        void Update()
         {
-            
+            for (int i = 0; i < localOnlyComponents.Length; i++)
+            {
+                localOnlyComponents[i].enabled = ServerManager.instance.myNetworkPlayer.isLocalPlayer;
+            }
         }
 
     }

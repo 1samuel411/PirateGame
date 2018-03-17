@@ -12,23 +12,23 @@ namespace PirateGame.UI.Controllers
 
         public PlayerCanvasView canvasView;
 
-        private PlayablePlayer playablePlayer;
+        private NetworkedPlayer networkedPlayer;
 
         void Awake()
         {
-            playablePlayer = GetComponent<PlayablePlayer>();
+            networkedPlayer = GetComponentInParent<NetworkedPlayer>();
         }
 
         void Update()
         {
-            if (!playablePlayer)
+            if (!networkedPlayer)
                 return;
 
-            canvasView.nameText.color = CrewManager.GetCrewColor(ServerManager.instance.networkUsers[playablePlayer.playerId].crew);
+            canvasView.nameText.color = CrewManager.GetCrewColor(ServerManager.instance.networkUsers[networkedPlayer.networkId].crew);
 
             canvasView.nameText.text =
-                ServerManager.instance.networkUsers[playablePlayer.playerId].userData.rank +
-                " | " + ServerManager.instance.networkUsers[playablePlayer.playerId]
+                ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.rank +
+                " | " + ServerManager.instance.networkUsers[networkedPlayer.networkId]
                     .userData.username;
             canvasView.canvasTransform.LookAt(CameraManager.instance.cameraObject.transform);
         }

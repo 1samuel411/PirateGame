@@ -18,9 +18,14 @@ namespace PirateGame.Networking
         [SyncVar] public int networkId = 0;
 
         public GameObject player;
+        private PlayablePlayer playablePlayer;
 
         void Start()
         {
+            DontDestroyOnLoad(gameObject);
+            playablePlayer = player.GetComponent<PlayablePlayer>();
+            player.gameObject.SetActive(false);
+
             if (isLocalPlayer)
             {
                 if(PNetworkManager.instance.connectAction != null)
@@ -237,19 +242,46 @@ namespace PirateGame.Networking
             PNetworkManager.instance.chatChange();
         }
 
-        [Command]
-        public void CmdSetMyPlayer(GameObject player)
+        public void AddPlayer()
         {
-            player.GetComponent<PlayablePlayer>().playerId = networkId;
+            Debug.Log("adding player!");
+            PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
+            CmdEnablePlayer();
         }
 
-        [TargetRpc]
-        public void TargetSetMyPlayer(NetworkConnection con, GameObject player)
+        [Command]
+        public void CmdEnablePlayer()
         {
-            Debug.Log("Targeted player; " + con.connectionId + ", adding local player!");
-            PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
+            RpcEnablePlayer();
+        }
 
-            this.player = player;
+        [ClientRpc]
+        public void RpcEnablePlayer()
+        {
+            player.gameObject.SetActive(true);
+            player.gameObject.transform.position = Vector3.zero;
+            player.gameObject.transform.rotation = Quaternion.identity;
+        }
+
+        [Command]
+        public void CmdSendMyData(Vector3 pos, Quaternion rot)
+        {
+            RpcSyncPos(pos, rot);
+        }
+
+        [ClientRpc]
+        public void RpcSyncPos(Vector3 pos, Quaternion rot)
+        {
+            player.transform.position = pos;
+            player.transform.rotation = rot;
+        }
+
+        void Update()
+        {
+            if (isLocalPlayer)
+            {
+                //    CmdSendMyData(player.transform.position, player.transform.rotation);    
+            }
         }
     }
 }

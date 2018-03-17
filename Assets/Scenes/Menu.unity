@@ -311,6 +311,30 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11401706, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
+      propertyPath: FontSize
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 11401706, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
+      propertyPath: BackgroundOpacity
+      value: 0.323
+      objectReference: {fileID: 0}
+    - target: {fileID: 11401706, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
+      propertyPath: BackgroundColor.a
+      value: 0.323
+      objectReference: {fileID: 0}
+    - target: {fileID: 11401706, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
+      propertyPath: LogWarnings
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11401706, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
+      propertyPath: StackTraceMessages
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101706, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
   m_IsPrefabParent: 0

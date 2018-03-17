@@ -100,21 +100,14 @@ namespace PirateGame.Managers
 
 	    public override void OnServerAddPlayer(NetworkConnection con, short playerControllerId)
 	    {
-	        if (playerControllerId == 0)
-	        {
-	            base.OnServerAddPlayer(con, playerControllerId);
+	        if (con.playerControllers.Count >= 1)
+	            return;
 
-                NetworkedPlayer networkPlayer = con.playerControllers[playerControllerId]
-	                .gameObject.GetComponent<NetworkedPlayer>();
-	            networkPlayer.networkId = con.connectionId;
-	        }
-            else if (playerControllerId == 1)
-	        {
-	            GameObject player = (GameObject)Instantiate(playerGameObject, Vector3.zero, Quaternion.identity);
-	            NetworkServer.AddPlayerForConnection(con, player, playerControllerId);
-                con.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().CmdSetMyPlayer(con.playerControllers[1].gameObject);
-                con.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().TargetSetMyPlayer(con, con.playerControllers[1].gameObject);
-            }
+	        base.OnServerAddPlayer(con, playerControllerId);
+
+            NetworkedPlayer networkPlayer = con.playerControllers[playerControllerId]
+	            .gameObject.GetComponent<NetworkedPlayer>();
+	        networkPlayer.networkId = con.connectionId;
         }
 
 	    public override void OnServerReady(NetworkConnection con)
@@ -170,7 +163,7 @@ namespace PirateGame.Managers
 	        UIManager.instance.ScreenSwitch("Lobby");
 	        UIManager.instance.FadeOut();
 
-            ClientScene.AddPlayer(conn, 1);
+            conn.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().AddPlayer();
         }
     }
 }
