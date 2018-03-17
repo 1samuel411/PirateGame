@@ -8,6 +8,7 @@ using Rewired.Data;
 using UnityEngine;
 using UnityEngine.Networking;
 using PirateGame.UI.Controllers;
+using UnityEngine.Playables;
 
 namespace PirateGame.Networking
 {
@@ -46,6 +47,7 @@ namespace PirateGame.Networking
             ServerManager.instance.networkUsers[networkId] = user;
 
             ServerManager.instance.RefreshUsers();
+            ServerManager.instance.RefreshCrews();
         }
 
         public void ReadyToggle()
@@ -100,6 +102,18 @@ namespace PirateGame.Networking
         {
             NetworkUser user = ServerManager.instance.networkUsers[networkId];
 
+            List<int> members = new List<int>();
+            for (int i = 0; i < ServerManager.instance.networkUsers.Count; i++)
+            {
+                if(ServerManager.instance.networkUsers[i].networkConnection == user.networkConnection)
+                    continue;
+
+                if (ServerManager.instance.networkUsers[i].crew == user.crew)
+                {
+                    members.Add(ServerManager.instance.networkUsers[i].networkConnection);
+                }
+            }
+
             // Get next crew
             int nextCrew = x;
 
@@ -131,7 +145,7 @@ namespace PirateGame.Networking
             ServerManager.instance.crews[user.crew].members.Add(user.networkConnection);
 
             // Check leader
-            if(ServerManager.instance.crews[user.crew].leader == -1)
+            if (ServerManager.instance.crews[user.crew].leader == -1)
                 ServerManager.instance.crews[user.crew].leader = user.networkConnection;
 
         }
@@ -163,10 +177,8 @@ namespace PirateGame.Networking
                 if (networkId == myCrew.leader)
                 {
                     // kick authorized
-                    ServerManager.instance.crews[ServerManager.instance.networkUsers[target].crew]
-                        .members.Remove(target);
+                    ServerManager.instance.crews[ServerManager.instance.networkUsers[target].crew].members.Remove(target);
                     ServerManager.instance.networkUsers[target].crew = -1;
-
                     ServerManager.instance.RefreshUsers();
                     ServerManager.instance.RefreshCrews();
                 }
@@ -176,7 +188,6 @@ namespace PirateGame.Networking
                 // kick authorized
                 ServerManager.instance.crews[ServerManager.instance.networkUsers[target].crew].members.Remove(target);
                 ServerManager.instance.networkUsers[target].crew = -1;
-
                 ServerManager.instance.RefreshUsers();
                 ServerManager.instance.RefreshCrews();
             }
@@ -226,14 +237,17 @@ namespace PirateGame.Networking
             PNetworkManager.instance.chatChange();
         }
 
-        [ClientRpc]
-        public void RpcSetMyPlayer(GameObject player)
+        [Command]
+        public void CmdSetMyPlayer(GameObject player)
         {
-            if (isLocalPlayer)
-            {
-                PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
-            }
             player.GetComponent<PlayablePlayer>().playerId = networkId;
+        }
+
+        [TargetRpc]
+        public void TargetSetMyPlayer(NetworkConnection con, GameObject player)
+        {
+            Debug.Log("Targeted player; " + con.connectionId + ", adding local player!");
+            PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
 
             this.player = player;
         }

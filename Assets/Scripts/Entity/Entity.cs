@@ -18,7 +18,7 @@ namespace PirateGame.Entity
     /// </summary>
 
 	[RequireComponent(typeof(Collider))]
-    public class Entity : Base
+    public class Entity : NetworkingBase
     {
 
         [Header("Entity")]

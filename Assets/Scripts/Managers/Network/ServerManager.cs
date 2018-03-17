@@ -26,11 +26,14 @@ namespace PirateGame.Managers
             get
             {
                 if(_myNetworkedPlayer == null)
+                {
                     _myNetworkedPlayer = PNetworkManager.instance.client.connection.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>();
-
+                }
                 return _myNetworkedPlayer;
             }
         }
+
+        private int myId = 0;
 
         public List<Crew> crews = new List<Crew>();
         [HideInInspector] public List<Crew> defaultCrews = new List<Crew>();
@@ -205,6 +208,7 @@ namespace PirateGame.Managers
 
         void FadeInCallback()
         {
+            inLobby = false;
             UIManager.instance.ScreenSwitch("LoadScene");
             PNetworkManager.instance.ServerChangeScene("Test");
         }

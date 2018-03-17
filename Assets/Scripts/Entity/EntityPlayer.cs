@@ -49,6 +49,9 @@ namespace PirateGame.Entity
         {
             base.Update();
 
+            if (!isLocalPlayer)
+                return;
+
 	        CheckInput();
             
 	        SetFakeCamera();

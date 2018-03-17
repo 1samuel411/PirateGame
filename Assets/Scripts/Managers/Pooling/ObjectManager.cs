@@ -142,6 +142,7 @@ namespace PirateGame.Managers
             GameObject spawnedObject = GameObject.Instantiate(gameObject, Vector3.zero, Quaternion.identity);
             SpawnableObjectInfo spawnedObjectInfo = spawnedObject.AddComponent<SpawnableObjectInfo>();
             spawnedGameObjects.Add(spawnedObjectInfo);
+            GameObject.DontDestroyOnLoad(spawnedObject);
             spawnedObject.SetActive(false);
             return spawnedObjectInfo;
         }

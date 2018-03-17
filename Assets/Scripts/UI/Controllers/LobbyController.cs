@@ -58,19 +58,19 @@ namespace PirateGame.UI.Controllers
             if (ServerManager.instance.myNetworkPlayer == null)
                 return;
             Crew myCrew = CrewManager.GetCrew(ServerManager.instance.networkUsers[ServerManager.instance.myNetworkPlayer.networkId].crew);
-            
+
             if (myCrew != null)
             {
                 lobbyView.crewNameInputField.text = myCrew.crewName;
-                
-                for(int i = 0; i < myCrew.members.Count; i++)
+
+                for (int i = 0; i < myCrew.members.Count; i++)
                 {
                     AddCrewUser(myCrew.members[i]);
                 }
             }
             else
             {
-                for(int i = 0 ; i < ServerManager.instance.crews.Count; i++)
+                for (int i = 0; i < ServerManager.instance.crews.Count; i++)
                 {
                     AddCrew(i);
                 }

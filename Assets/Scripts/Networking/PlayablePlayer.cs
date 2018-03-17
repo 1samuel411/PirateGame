@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace PirateGame.Networking
 {
-    public class PlayablePlayer : MonoBehaviour
+    public class PlayablePlayer : NetworkingBase
     {
 
-        public int playerId;
+        [SyncVar] public int playerId;
+
+        public void SendMyData()
+        {
+            
+        }
 
     }
 }

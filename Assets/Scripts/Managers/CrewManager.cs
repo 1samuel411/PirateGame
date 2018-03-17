@@ -79,8 +79,8 @@ namespace PirateGame.Managers
     {
 
         public string crewName;
-        public List<int> members;
         public int leader = -1;
+        public List<int> members = new List<int>();
         public int crewColor = 0;
 
         public string crewPassword;

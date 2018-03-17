@@ -4846,6 +4846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerEntity: {fileID: 0}
+  playablePlayer: {fileID: 0}
   user:
     username: 
     xp: 0
@@ -8663,7 +8664,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: -0.0000070035458}
-  m_SizeDelta: {x: 360, y: 10}
+  m_SizeDelta: {x: 386, y: 10}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!224 &224956308291525646
 RectTransform:

@@ -13,11 +13,6 @@ namespace PirateGame.Managers
         {
             if (instance != null)
             {
-                return;
-            }
-
-            if (instance != null)
-            {
                 Destroy(gameObject);
                 return;
             }

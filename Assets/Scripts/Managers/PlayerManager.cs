@@ -1,3 +1,4 @@
+using PirateGame.Entity;
 using PirateGame.Networking;
 using UnityEngine;
 
@@ -26,6 +27,12 @@ namespace PirateGame.Managers
 
         void Update()
         {
+            if (playerEntity == null)
+            {
+                if(PNetworkManager.instance && PNetworkManager.instance.IsClientConnected() && PNetworkManager.instance.client.connection.playerControllers.Count >= 2)
+                    playerEntity = PNetworkManager.instance.client.connection.playerControllers[1].gameObject.GetComponent<EntityPlayer>();
+                return;
+            }
             CheckUI();
 
             if (playablePlayer == null && playerEntity != null)

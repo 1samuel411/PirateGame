@@ -112,7 +112,8 @@ namespace PirateGame.Managers
 	        {
 	            GameObject player = (GameObject)Instantiate(playerGameObject, Vector3.zero, Quaternion.identity);
 	            NetworkServer.AddPlayerForConnection(con, player, playerControllerId);
-                con.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().RpcSetMyPlayer(con.playerControllers[1].gameObject);
+                con.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().CmdSetMyPlayer(con.playerControllers[1].gameObject);
+                con.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().TargetSetMyPlayer(con, con.playerControllers[1].gameObject);
             }
         }
 
@@ -164,7 +165,9 @@ namespace PirateGame.Managers
 	    {
 	        base.OnClientSceneChanged(conn);
 
-            UIManager.instance.ScreenSwitch("Lobby");
+            Debug.Log("GAME SCENE LOADED");
+
+	        UIManager.instance.ScreenSwitch("Lobby");
 	        UIManager.instance.FadeOut();
 
             ClientScene.AddPlayer(conn, 1);
