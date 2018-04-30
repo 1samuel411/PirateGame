@@ -7,6 +7,8 @@ namespace PirateGame.Managers
     public class SceneManager : Base
     {
 
+        public string playfabTitleId;
+
         public static SceneManager instance;
 
         void Awake()

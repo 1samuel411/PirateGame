@@ -21,5 +21,8 @@ namespace PirateGame.UI.Views
 		public GameObject registerViewObject;
 		public Text registerViewText;
 
-	}
+	    public GameObject passwordInfoBox;
+	    public Text passwordInfoBoxText;
+
+    }
 }

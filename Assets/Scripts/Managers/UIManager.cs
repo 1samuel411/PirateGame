@@ -159,5 +159,15 @@ namespace PirateGame.Managers
                 callback.Invoke();
             }
         }
+
+        public static string StrikeThrough(string s)
+        {
+            string strikethrough = "";
+            foreach (char c in s)
+            {
+                strikethrough = strikethrough + c + '\u0336';
+            }
+            return strikethrough;
+        }
     }
 }
