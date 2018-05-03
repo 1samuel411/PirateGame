@@ -15,13 +15,18 @@ namespace PirateGame.UI.Views
 		public InputField emailFieldRegister;
 		public InputField passwordFieldRegister;
 		public InputField passwordConfirmFieldRegister;
+	    public InputField emailFieldForgotPassword;
 
-		public GameObject loginViewObject;
+	    public Toggle rememberMeToggle;
+
+        public GameObject loginViewObject;
 		public Text loginViewText;
-		public GameObject registerViewObject;
-		public Text registerViewText;
+	    public GameObject registerViewObject;
+	    public Text registerViewText;
+	    public GameObject forgotPasswordViewObject;
+	    public Text forgotPasswordViewText;
 
-	    public GameObject passwordInfoBox;
+        public GameObject passwordInfoBox;
 	    public Text passwordInfoBoxText;
 
     }

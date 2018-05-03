@@ -169,5 +169,18 @@ namespace PirateGame.Managers
             }
             return strikethrough;
         }
+
+        public bool IsScreenOpen(string screen)
+        {
+            for (int i = 0; i < UIManager.instance.activeScreens.Count; i++)
+            {
+                if (UIManager.instance.activeScreens[i].name == screen)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
