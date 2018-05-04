@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 394c673477ec0374d81f85ec444e8ece
-timeCreated: 1461655284
-licenseType: Store
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -141,6 +139,7 @@ ModelImporter:
     7400002: Walk_Fwd_Start
     7400004: Walk_Fwd_Start_InPlace
     9500000: //RootNode
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -168,6 +167,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5

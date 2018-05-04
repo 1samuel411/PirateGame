@@ -4,6 +4,7 @@ using PirateGame.Networking;
 using PlayFab;
 using PlayFab.ClientModels;
 using Sirenix.Utilities;
+using SNetwork;
 using UnityEngine;
 
 namespace PirateGame.Managers
@@ -35,8 +36,14 @@ namespace PirateGame.Managers
         
         void Update()
         {
+            // Ignore master server
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                masterServerNeeded = false;
+            }
+
             // Refresh Data
-            if (Time.time >= _refreshUSerDataTimer)
+            if (Time.time >= _refreshUSerDataTimer && UIManager.instance.IsScreenOpen("Account") == false)
             {
                 _refreshUSerDataTimer = Time.time + refreshUserDataTime;
                 RefreshUserData();
@@ -83,7 +90,23 @@ namespace PirateGame.Managers
             if (UIManager.instance.IsScreenOpen("Account"))
             {
                 UIManager.instance.loading = false;
-                UIManager.instance.ScreenSwitch("Menu");
+                
+                // Connect to master server
+                UIManager.instance.loading = true;
+                Debug.Log("Connecting to Master Server");
+                if (masterServerNeeded == false)
+                {
+                    ResponseMessage fake = new ResponseMessage();
+                    fake.type = ResponseMessage.ResponseType.Success;
+                    OnConnectToClientInit(fake);
+                }
+                else
+                {
+                    MasterClientManager.instance.onConnectDelegate += OnConnectToClientInit;
+                    MasterClientManager.instance.onDisconnectDelegate += OnDisconnectFromMasterServer;
+                    MasterClientManager.instance.onCloseDelegate += OnCloseFromMasterServer;
+                    MasterClientManager.instance.Connect();
+                }
             }
 
             // Update XP
@@ -107,6 +130,43 @@ namespace PirateGame.Managers
         void PlayfabError(PlayFabError error)
         {
             Debug.Log("[PlayerManager] PlayFab Error: " + error.ErrorMessage);
+        }
+
+        public bool masterServerNeeded = true;
+        void OnConnectToClientInit(ResponseMessage response)
+        {
+            UIManager.instance.loading = false;
+
+            if (response.type == ResponseMessage.ResponseType.Failure)
+            {
+                Debug.Log("Could not connect to master server");    
+            }
+            else if (response.type == ResponseMessage.ResponseType.Full)
+            {
+                Debug.Log("Master Server is full");
+            }
+            else
+            {
+                Debug.Log("Connected to Master Server");
+                UIManager.instance.ScreenSwitch("Menu");
+                MasterClientManager.instance.onConnectDelegate -= OnConnectToClientInit;
+            }
+        }
+
+        void OnDisconnectFromMasterServer()
+        {
+            UIManager.instance.loading = false;
+
+            Debug.Log("Connection to Master Server lost...");
+            UIManager.instance.ScreenSwitch("Account");
+        }
+
+        void OnCloseFromMasterServer()
+        {
+            UIManager.instance.loading = false;
+
+            Debug.Log("Connection to Master Server lost...");
+            UIManager.instance.ScreenSwitch("Account");
         }
     }
 

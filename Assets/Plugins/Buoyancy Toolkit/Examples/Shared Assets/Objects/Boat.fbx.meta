@@ -13,12 +13,19 @@ labels:
 - force
 - water3
 - android
-timeCreated: 18446744011573954816
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
+    100000: Boat
+    100002: //RootNode
+    400000: Boat
+    400002: //RootNode
+    2300000: Boat
+    3300000: Boat
     4300000: Cube
     4300002: Boat
+    7400000: Default Take
+    11100000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 0
@@ -38,6 +45,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5

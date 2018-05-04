@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: fc02e8c5566270346af068f3591733b8
-timeCreated: 1462338751
-licenseType: Store
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -140,6 +138,7 @@ ModelImporter:
     7400000: Jog_Fwd_Stop
     7400002: Jog_Fwd_Stop_InPlace
     9500000: //RootNode
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -170,6 +169,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5

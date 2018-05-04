@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using PirateGame.Managers;
+using PlayFab;
 using UnityEngine;
 
 namespace PirateGame.UI.Controllers
@@ -50,9 +51,16 @@ namespace PirateGame.UI.Controllers
             
         }
 
+        public void Logout()
+        {
+            UIManager.instance.ScreenSwitch("Account");
+            MasterClientManager.instance.Disconnect();
+        }
+
         public void Quit()
         {
-
+            UIManager.instance.ScreenSwitch("Account");
+            MasterClientManager.instance.Disconnect();
         }
 
     }
