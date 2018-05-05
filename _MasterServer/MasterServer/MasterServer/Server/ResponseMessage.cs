@@ -1,30 +1,27 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace SNetwork
 {
-	public struct ResponseMessage
-	{
-		public enum ResponseType
-		{
-			Success,
-			Failure,
+    public struct ResponseMessage
+    {
+        public enum ResponseType
+        {
+            Success,
+            Failure,
             Full
-		};
+        }
 
-		public ResponseType type;
-	}
+        public ResponseType type;
+    }
 
     [Serializable]
     public class Response
     {
+        public ResponseCallback callback;
+        public int customCode;
         public int headerCode;
         public int sendCode;
-        public int customCode;
-
-        public ResponseCallback callback;
 
         public Response(ResponseCallback callback, int headerCode, int sendCode, int customCode)
         {

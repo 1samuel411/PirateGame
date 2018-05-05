@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace SNetwork
 {
     /// <summary>
-    /// Serializable KeyValuePairs
+    ///     Serializable KeyValuePairs
     /// </summary>
     [Serializable]
     public class KeyValuePairs
@@ -15,13 +13,12 @@ namespace SNetwork
 
         public KeyValuePairs(string key, object value)
         {
-            this.Key = key;
-            this.Value = value;
+            Key = key;
+            Value = value;
         }
 
         public KeyValuePairs()
         {
-
         }
     }
 }

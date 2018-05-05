@@ -92,6 +92,9 @@ public class MasterClientManager : MonoBehaviour
 
     public object GetServerData(string key)
     {
+        if (_client.serverData == null)
+            return null;
+
         return _client.serverData.FirstOrDefault(x => x.Key.Equals(key)).Value;
     }
 
@@ -146,23 +149,25 @@ public class MasterClientManager : MonoBehaviour
 	        onCloseDelegate();
 
         Debug.Log("Connection Closed!");
-		// Do something
-	}
+        // Do something
 
-	public void Disconnect()
+	    Destroy(this.gameObject);
+    }
+
+    public void Disconnect()
 	{
 	    if (onDisconnectDelegate != null)
 	        onDisconnectDelegate();
 
 		_client.Disconnect(OnDisconnected);
-	}
+    }
 
-	public void OnDisconnected()
+    public void OnDisconnected()
 	{
 		Debug.Log("Disconnected!");
 
         // Destroy client
-        Destroy(_client);
+        Destroy(this.gameObject);
 	}
 
     public void SendString(string message)
@@ -191,5 +196,11 @@ public class MasterClientManager : MonoBehaviour
             OnConnected(messageResposne);
             Disconnect();
         }
+    }
+
+
+    public void SendNetworkUser(MasterNetworkPlayer player)
+    {
+        MasterMessaging.instance.SendMasterNetworkPlayer(player, 2, _client.ourId, 0, _client.clientSocket);
     }
 }

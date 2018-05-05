@@ -14,8 +14,11 @@ namespace PirateGame.Managers
 
         public static PlayerManager instance;
 
+        public bool loggedIn;
+
         public PirateGame.Entity.EntityPlayer playerEntity;
         public PlayablePlayer playablePlayer;
+        public MasterNetworkPlayer masterNetworkPlayer;
 
         public float refreshUserDataTime = 30f;
         private float _refreshUSerDataTimer;
@@ -36,6 +39,13 @@ namespace PirateGame.Managers
         
         void Update()
         {
+            if (loggedIn)
+            {
+                masterNetworkPlayer.id = MasterClientManager.instance.getId();
+                masterNetworkPlayer.username = user.username;
+                masterNetworkPlayer.playfabId = user.playfabId;
+            }
+
             // Ignore master server
             if (Input.GetKeyDown(KeyCode.P))
             {
@@ -149,16 +159,19 @@ namespace PirateGame.Managers
             {
                 Debug.Log("Connected to Master Server");
                 UIManager.instance.ScreenSwitch("Menu");
+                loggedIn = true;
                 MasterClientManager.instance.onConnectDelegate -= OnConnectToClientInit;
+
+                masterNetworkPlayer.username = user.username;
+                masterNetworkPlayer.playfabId = user.playfabId;
+
+                MasterClientManager.instance.SendNetworkUser(masterNetworkPlayer);
             }
         }
 
         void OnDisconnectFromMasterServer()
         {
             UIManager.instance.loading = false;
-
-            Debug.Log("Connection to Master Server lost...");
-            UIManager.instance.ScreenSwitch("Account");
         }
 
         void OnCloseFromMasterServer()
@@ -167,6 +180,7 @@ namespace PirateGame.Managers
 
             Debug.Log("Connection to Master Server lost...");
             UIManager.instance.ScreenSwitch("Account");
+            loggedIn = false;
         }
     }
 

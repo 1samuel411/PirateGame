@@ -25,10 +25,22 @@ namespace SNetwork
         public static MasterNetworkPlayer[] ConvertToNetworkPlayers(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject(jsonString) as MasterNetworkPlayer[];
+            return JsonConvert.DeserializeObject<MasterNetworkPlayer[]>(jsonString);
         }
 
         public static byte[] ConvertNetworkPlayersToBytes(MasterNetworkPlayer[] list)
+        {
+            string jsonString = JsonConvert.SerializeObject(list);
+            return ConvertASCIIToBytes(jsonString);
+        }
+
+        public static MasterNetworkPlayer ConvertToNetworkPlayer(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            return JsonConvert.DeserializeObject<MasterNetworkPlayer>(jsonString);
+        }
+
+        public static byte[] ConvertNetworkPlayerToBytes(MasterNetworkPlayer list)
         {
             string jsonString = JsonConvert.SerializeObject(list);
             return ConvertASCIIToBytes(jsonString);
@@ -49,25 +61,25 @@ namespace SNetwork
         public static KeyValuePairs[] ConvertDataToKeyValuePairs(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject(jsonString) as KeyValuePairs[];
+            return JsonConvert.DeserializeObject<KeyValuePairs[]>(jsonString);
         }
 
         public static KeyValuePairs ConvertDataToKeyValuePair(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject(jsonString) as KeyValuePairs;
+            return JsonConvert.DeserializeObject<KeyValuePairs>(jsonString);
         }
 
         public static object[] ConvertDataToObjects(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject(jsonString) as object[];
+            return JsonConvert.DeserializeObject<object[]>(jsonString);
         }
 
         public static object ConvertDataToObject(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject(jsonString) as object;
+            return JsonConvert.DeserializeObject<object>(jsonString);
         }
 
         public static byte[] ConvertObjectToBytes(object Object)

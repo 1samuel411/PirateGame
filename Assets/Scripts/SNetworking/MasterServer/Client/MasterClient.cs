@@ -78,6 +78,7 @@ namespace SNetwork.Client
                     attempts++;
 
                     clientSocket.Connect(IPAddress.Parse(ip), port);
+                    clientSocket.Connect(IPAddress.Parse(ip), port);
                 }
                 catch (SocketException)
                 {
@@ -125,6 +126,7 @@ namespace SNetwork.Client
             {
                 SendString("/leave");
             }
+            DisconnectCallback();
         }
 
         private Action CallbackDisconnect;
@@ -175,6 +177,7 @@ namespace SNetwork.Client
         public bool IsConnectedClient()
         {
             bool connected = clientSocket.Connected;
+
             if(connected)
                 connected = Network.IsConnected(clientSocket);
 
@@ -185,11 +188,6 @@ namespace SNetwork.Client
                     CallbackClosed();
                     CallbackClosed = null;
                 }
-
-                if (disconnecting)
-                {
-                    DisconnectCallback();
-                }
             }
 
             return connected;
@@ -199,5 +197,6 @@ namespace SNetwork.Client
         {
             return networkPlayers;
         }
+
     }
 }

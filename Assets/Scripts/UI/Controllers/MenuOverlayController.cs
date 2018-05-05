@@ -13,6 +13,7 @@ namespace PirateGame.UI.Controllers
         public string optionsMenuController;
         public string characterMenuController;
         public string mainMenuController;
+        public string friendsMenuController = "Friends";
 
         void Update()
         {
@@ -24,6 +25,34 @@ namespace PirateGame.UI.Controllers
             overlayView.xpBarImage.fillAmount = (float)(PlayerManager.instance.user.xp - PlayerManager.instance.user.xpToLevel) / (float)(PlayerManager.instance.user.xpToRank - PlayerManager.instance.user.xpToLevel);
 
             overlayView.xpText.text = PlayerManager.instance.user.xp + " / " + PlayerManager.instance.user.xpToRank;
+
+            if (MasterClientManager.instance.isConnected() && PlayerManager.instance.loggedIn)
+            {
+                if (MasterClientManager.instance.GetServerData("UserCount") != null)
+                    overlayView.connectedUsersText.text = "Connected Users: " + MasterClientManager.instance.GetServerData("UserCount");
+            }
+
+            RefreshFriendRequests();
+        }
+
+        private float lastRefresh;
+        void RefreshFriendRequests()
+        {
+            if (Time.time >= lastRefresh)
+            {
+                lastRefresh = Time.time + 1.5f;
+            }
+            else
+            {
+                return;
+            }
+
+            // Refresh friends
+        }
+
+        public void Friends()
+        {
+            UIManager.instance.AddScreenAdditive(friendsMenuController);
         }
 
         public void Options()

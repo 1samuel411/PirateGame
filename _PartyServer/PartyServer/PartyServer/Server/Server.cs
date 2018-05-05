@@ -71,16 +71,11 @@ namespace SNetwork.Server
                 iteration++;
 
                 // TODO: Make this update when a user leaves or something
-                Thread.Sleep((int)(_userSyncTime * 1000) / 3);
+                Thread.Sleep((int)(_userSyncTime * 1000));
 
-               // Messaging.instance.SendNetworkPlayers(ByteParser.ConvertNetworkPlayersToBytes(clientSockets.Values.ToArray()), clientSockets, 2);
-
-                Thread.Sleep((int)(_userSyncTime * 1000) / 3);
-
-                //if(serverData.Count > 0)
-                    Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()), clientSockets, 2);
-
-                Thread.Sleep((int)(_userSyncTime * 1000) / 3);
+				SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
+				
+				Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()), clientSockets, 2);
             }
         }
         
@@ -175,7 +170,8 @@ namespace SNetwork.Server
                 ResponseManager.instance.HandleResponse(dataBuffer.Skip(5).ToArray(), headerCode, sendCode, BitConverter.ToInt16(customCode, 0), socket, clientSockets[socket].id);
             }
 
-            BeginReceiving(socket);
+            if(socket.Connected)
+				BeginReceiving(socket);
         }
 
         public void SetServerData(KeyValuePairs data)

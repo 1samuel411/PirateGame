@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace SNetwork.Server
 {
     public class ServerResponseHandler
     {
-
-        private Server _server;
+        private readonly Server _server;
 
         public ServerResponseHandler(Server server)
         {
             _server = server;
         }
-        
+
         public void Initialize()
         {
             ResponseManager.instance.Clear();
@@ -26,6 +21,7 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response12, 12);
             ResponseManager.instance.AddServerResponse(Response3, 3);
             ResponseManager.instance.AddServerResponse(Response2, 2);
+            ResponseManager.instance.AddServerResponse(Response50, 50);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -54,6 +50,14 @@ namespace SNetwork.Server
         {
             Console.WriteLine("Recieved a 2: " + fromId + ": " + responseBytes.Length);
             _server.SetServerData(ByteParser.ConvertDataToKeyValuePair(responseBytes));
+        }
+
+        public void Response50(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            Console.WriteLine("Recieved a 50: " + fromId + ": " + responseBytes.Length);
+            _server.clientSockets[fromSocket] = ByteParser.ConvertToNetworkPlayer(responseBytes);
+            _server.clientSockets[fromSocket].id = fromId;
+            Console.WriteLine("Users info: " + _server.clientSockets[fromSocket].id + ", " + _server.clientSockets[fromSocket].username + ", " + _server.clientSockets[fromSocket].playfabId);
         }
     }
 }

@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 
 namespace SNetwork.Server
 {
-    public class CommandHandler 
+    public class CommandHandler
     {
-	    private static List<Command> commands = new List<Command>();
+        private static readonly List<Command> commands = new List<Command>();
 
         public static void RunCommand(string command, string commandText, Socket fromSocket, int id)
         {
-            Command foundCommand = commands.FirstOrDefault(x => x.commandName == command) as Command;
+            var foundCommand = commands.FirstOrDefault(x => x.commandName == command);
             if (foundCommand == null)
             {
                 Console.WriteLine("[SNetworking] Invalid Request");
@@ -25,11 +24,9 @@ namespace SNetwork.Server
         public static void RunCommand(string command, Socket fromSocket, int id)
         {
             if (command.StartsWith("!") || command.StartsWith("/"))
-            {
                 command = command.Substring(1);
-            }
             command += " command is confirmed";
-            string[] commandStrings = command.Split(' ');
+            var commandStrings = command.Split(' ');
             RunCommand(commandStrings[0], commandStrings[1], fromSocket, id);
         }
 

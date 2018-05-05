@@ -23,6 +23,14 @@ namespace SNetwork
             }
         }
 
+        // Header: 50
+        public void SendMasterNetworkPlayer(MasterNetworkPlayer player, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            byte[] data = ByteParser.ConvertNetworkPlayerToBytes(player);
+            SendFinal(data, 50, sendCode, fromCode, customCode, sockets);
+        }
+
         // Header: 21
         public void SendCommand(string text, int sendCode, int fromCode, int customCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
         {
@@ -164,7 +172,7 @@ namespace SNetwork
                 targetSockets.Add(sockets.FirstOrDefault(x => x.Value.id == sendCode).Key);
             // Master client
             else if (sendCode == 1)
-                targetSockets.Add(sockets.FirstOrDefault(x => x.Value.masterUser == true && x.Value.id != fromCode).Key);
+                targetSockets.Add(sockets.FirstOrDefault(x => x.Value.id != fromCode).Key);
             // Only All clients except to the from code
             else
             {

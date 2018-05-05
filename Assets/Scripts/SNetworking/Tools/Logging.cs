@@ -51,7 +51,7 @@ namespace SNetwork
 		public void AddLog(string message)
 		{
 			if(messageList.Count > 50)
-				messageList.RemoveAt(messageList.Count);
+				messageList.RemoveAt(messageList.Count -1);
 
 			messageList.Insert(0, message);
 		}
