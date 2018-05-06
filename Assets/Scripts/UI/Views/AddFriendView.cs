@@ -12,5 +12,7 @@ namespace PirateGame.UI.Views
 
         public InputField searchInputField;
 
+        public Text responseText;
+
     }
 }

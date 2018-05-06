@@ -18,13 +18,12 @@ namespace PirateGame.Managers
 
         public PirateGame.Entity.EntityPlayer playerEntity;
         public PlayablePlayer playablePlayer;
-        public MasterNetworkPlayer masterNetworkPlayer;
 
         public float refreshUserDataTime = 30f;
         private float _refreshUSerDataTimer;
 
         public User user;
-        //public LoginResult playfabData;
+        public List<FriendInfo> friends = new List<FriendInfo>();
 
         void Awake()
         {
@@ -39,18 +38,13 @@ namespace PirateGame.Managers
         
         void Update()
         {
-            if (loggedIn)
-            {
-                masterNetworkPlayer.id = MasterClientManager.instance.getId();
-                masterNetworkPlayer.username = user.username;
-                masterNetworkPlayer.playfabId = user.playfabId;
-            }
-
             // Ignore master server
             if (Input.GetKeyDown(KeyCode.P))
             {
                 masterServerNeeded = false;
             }
+
+            RefreshFriends();
 
             // Refresh Data
             if (Time.time >= _refreshUSerDataTimer && UIManager.instance.IsScreenOpen("Account") == false)
@@ -70,16 +64,32 @@ namespace PirateGame.Managers
                 playablePlayer = playerEntity.GetComponent<PlayablePlayer>();
         }
 
-        public void PlayerLogin(LoginResult result)
+        private float lastRefresh;
+        public delegate void RefreshFriendsDelegate();
+        public RefreshFriendsDelegate refreshFriendsDelegate;
+        public void RefreshFriends()
         {
-            user.username = result.InfoResultPayload.PlayerProfile.DisplayName;
-            user.playfabId = result.PlayFabId;
+            if (Time.time >= lastRefresh && UIManager.instance.IsScreenOpen("Account") == false)
+            {
+                lastRefresh = Time.time + 5f;
 
-            UIManager.instance.loading = true;
-            RefreshUserData();
+                // Refresh friends
+                Debug.Log("[PlayerManager] Refreshing Friends List");
+                GetFriendsListRequest request = new GetFriendsListRequest();
+                PlayFabClientAPI.GetFriendsList(request, GetFriendsRequest, PlayfabError);
+            }
         }
 
-        public void RefreshUserData()
+        void GetFriendsRequest(GetFriendsListResult result)
+        {
+            friends = result.Friends;
+
+            if(refreshFriendsDelegate != null)
+                refreshFriendsDelegate.Invoke();
+        }
+
+
+        void RefreshUserData()
         {
             Debug.Log("[PlayerManager] Refreshing our User's Data");
 
@@ -93,6 +103,15 @@ namespace PirateGame.Managers
             request.PlayFabId = user.playfabId;
             request.Keys = keysRequestList;
             PlayFabClientAPI.GetUserData(request, GetUserDataResponse, PlayfabError);
+        }
+
+        public void PlayerLogin(LoginResult result)
+        {
+            user.username = result.InfoResultPayload.PlayerProfile.DisplayName;
+            user.playfabId = result.PlayFabId;
+
+            UIManager.instance.loading = true;
+            RefreshUserData();
         }
 
         void GetUserDataResponse(GetUserDataResult response)
@@ -160,12 +179,16 @@ namespace PirateGame.Managers
                 Debug.Log("Connected to Master Server");
                 UIManager.instance.ScreenSwitch("Menu");
                 loggedIn = true;
+
                 MasterClientManager.instance.onConnectDelegate -= OnConnectToClientInit;
 
+                MasterNetworkPlayer masterNetworkPlayer = new MasterNetworkPlayer();
                 masterNetworkPlayer.username = user.username;
                 masterNetworkPlayer.playfabId = user.playfabId;
 
                 MasterClientManager.instance.SendNetworkUser(masterNetworkPlayer);
+
+                lastRefresh = Time.time;
             }
         }
 

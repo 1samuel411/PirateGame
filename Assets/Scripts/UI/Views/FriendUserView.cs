@@ -15,9 +15,9 @@ namespace PirateGame.UI.Views
 
         public Text usernameText;
 
-        public GameObject invitedHolder;
-        public GameObject acceptedHolder;
-        public GameObject unacceptedHolder;
-
+        public GameObject requestedHolder;
+        public GameObject acceptRequestHolder;
+        public GameObject friendsHolder;
+        public GameObject joinHolder;
     }
 }
