@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Sockets;
 using Newtonsoft.Json;
 
@@ -55,7 +56,20 @@ namespace SNetwork.Server
         public void Response50(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             Console.WriteLine("Recieved a 50: " + fromId + ": " + responseBytes.Length);
-            _server.clientSockets[fromSocket] = ByteParser.ConvertToNetworkPlayer(responseBytes);
+            MasterNetworkPlayer masterNetworkPlayer = ByteParser.ConvertToNetworkPlayer(responseBytes);
+
+            // Check it doesn't exist
+            MasterNetworkPlayer check = _server.clientSockets.Values.FirstOrDefault(x => x.playfabId == masterNetworkPlayer.playfabId);
+            if (check != null)
+            {
+                // Exists
+                Console.WriteLine("[SNetworking] This user already is loggged in");
+                Messaging.instance.SendInfoMessage(fromSocket, "Already Logged In", 0);
+                _server.RemoveSocket(fromSocket);
+                return;
+            }
+
+            _server.clientSockets[fromSocket] = masterNetworkPlayer;
             _server.clientSockets[fromSocket].id = fromId;
             Console.WriteLine("Users info: " + _server.clientSockets[fromSocket].id + ", " + _server.clientSockets[fromSocket].username + ", " + _server.clientSockets[fromSocket].playfabId);
         }

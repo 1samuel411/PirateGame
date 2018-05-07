@@ -34,18 +34,6 @@ namespace SNetwork
             return ConvertASCIIToBytes(jsonString);
         }
 
-        public static PartyNetworkPlayer[] ConvertToNetworkPlayersParty(byte[] data)
-        {
-            string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject<PartyNetworkPlayer[]>(jsonString);
-        }
-
-        public static byte[] ConvertNetworkPlayersToBytes(PartyNetworkPlayer[] list)
-        {
-            string jsonString = JsonConvert.SerializeObject(list);
-            return ConvertASCIIToBytes(jsonString);
-        }
-
         public static MasterNetworkPlayer ConvertToNetworkPlayer(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
@@ -53,18 +41,6 @@ namespace SNetwork
         }
 
         public static byte[] ConvertNetworkPlayerToBytes(MasterNetworkPlayer list)
-        {
-            string jsonString = JsonConvert.SerializeObject(list);
-            return ConvertASCIIToBytes(jsonString);
-        }
-
-        public static PartyNetworkPlayer ConvertToNetworkPlayerParty(byte[] data)
-        {
-            string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject<PartyNetworkPlayer>(jsonString);
-        }
-
-        public static byte[] ConvertNetworkPlayerToBytes(PartyNetworkPlayer list)
         {
             string jsonString = JsonConvert.SerializeObject(list);
             return ConvertASCIIToBytes(jsonString);
@@ -85,13 +61,25 @@ namespace SNetwork
         public static KeyValuePairs[] ConvertDataToKeyValuePairs(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject< KeyValuePairs[]>(jsonString);
+            return JsonConvert.DeserializeObject<KeyValuePairs[]>(jsonString);
         }
 
         public static KeyValuePairs ConvertDataToKeyValuePair(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            return JsonConvert.DeserializeObject< KeyValuePairs>(jsonString);
+            return JsonConvert.DeserializeObject<KeyValuePairs>(jsonString);
+        }
+
+        public static Room ConvertDataToRoom(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            return JsonConvert.DeserializeObject<Room>(jsonString);
+        }
+
+        public static byte[] ConvertRoomToData(Room room)
+        {
+            string jsonString = JsonConvert.SerializeObject(room);
+            return ConvertASCIIToBytes(jsonString);
         }
 
         public static object[] ConvertDataToObjects(byte[] data)

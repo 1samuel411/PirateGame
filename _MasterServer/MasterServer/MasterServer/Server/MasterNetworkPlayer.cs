@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using SNetwork.Server;
 
 namespace SNetwork
 {
@@ -11,6 +13,18 @@ namespace SNetwork
         public int id = -1;
         public string playfabId = "";
         public string username = "";
+
+        public string roomId
+        {
+            get
+            {
+                Room room = ServerManager.instance.server.rooms.FirstOrDefault(x => x.usersInRoomIds.Contains(id));
+                if (room == null)
+                    return "";
+                else
+                    return room.roomId;
+            }
+        }
 
         public MasterNetworkPlayer(int id, string username)
         {

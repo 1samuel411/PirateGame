@@ -21,6 +21,8 @@ namespace SNetwork.Server
         public int maxUsers;
         public List<KeyValuePairs> serverData = new List<KeyValuePairs>();
 
+        public List<Room> rooms = new List<Room>();
+
         public Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         private void BeginAccepting()
@@ -59,6 +61,7 @@ namespace SNetwork.Server
             _userSyncThread.Start();
         }
 
+        private List<int> uniqueIdsToSync = new List<int>();
         private void Sync()
         {
             var iteration = 0;
@@ -66,13 +69,41 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (_userSyncTime * 1000));
+                Thread.Sleep((int) (_userSyncTime * 1000)/3);
 
                 SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
 
                 //if(serverData.Count > 0)
                 Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()),
                     clientSockets, 2);
+
+                Thread.Sleep((int)(_userSyncTime * 1000) / 3);
+
+                // Send User Id
+                for (int i = 0; i < uniqueIdsToSync.Count; i++)
+                {
+                    Messaging.instance.SendId(uniqueIdsToSync[i], uniqueIdsToSync[i], 0, 0, clientSockets);
+                    uniqueIdsToSync.RemoveAt(i);
+                }
+
+
+                Thread.Sleep((int) (_userSyncTime * 1000) /3);
+
+                // TODO: Optimize this
+                // Send Room data
+                for (int i = 0; i < clientSockets.Count; i++)
+                {
+                    Room room = rooms.First(x => x.usersInRoomIds.Contains(clientSockets.Values.ElementAt(i).id));
+                    if (room != null)
+                    {
+                        // Send room 
+                        Messaging.instance.SendRoom(room, clientSockets.Values.ElementAt(i).id, clientSockets);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
             }
         }
 
@@ -100,8 +131,10 @@ namespace SNetwork.Server
             {
                 Console.WriteLine("[SNetworking] Max clients reached");
                 Messaging.instance.SendInfoMessage(socket, "Full", 0);
+                RemoveSocket(socket);
                 return;
             }
+
             Console.WriteLine("[SNetworking] Connection received from: " + socket.LocalEndPoint);
 
             var uniqueId = new Random().Next(3, maxUsers + 5);
@@ -129,10 +162,11 @@ namespace SNetwork.Server
             }
 
             Console.WriteLine("Assigning unique id: " + uniqueId);
-
             clientSockets.Add(socket, new MasterNetworkPlayer(uniqueId));
+            uniqueIdsToSync.Add(uniqueId);
 
-            Messaging.instance.SendId(uniqueId, uniqueId, 0, 0, clientSockets);
+            string roomId = CreateRoom(uniqueId);
+            Console.WriteLine("Assigning Room: " + roomId);
 
             BeginReceiving(socket);
             BeginAccepting();
@@ -205,6 +239,7 @@ namespace SNetwork.Server
                 var socketRetrieved = clientSockets.FirstOrDefault(t => t.Key == socket);
                 Console.WriteLine("[SNetworking] MasterNetworkPlayer: " + socketRetrieved.Value.id +
                                   ", has been lost.");
+                LeaveRoom(socketRetrieved.Key, true);
                 RemoveSocket(socket);
             }
             return isConnected;
@@ -212,6 +247,9 @@ namespace SNetwork.Server
 
         public void RemoveSocket(Socket socket)
         {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+            LeaveRoom(socket, true);
             clientSockets.Remove(socket);
         }
 
@@ -219,6 +257,46 @@ namespace SNetwork.Server
         {
             var socket = (Socket) AR.AsyncState;
             socket.EndSend(AR);
+        }
+
+        public string CreateRoom(int userId)
+        {
+            Room newRoom = new Room(userId);
+            rooms.Add(newRoom);
+            return newRoom.roomId;
+        }
+
+        public void JoinRoom(Socket clientSocket, string id)
+        {
+            Room room = rooms.FirstOrDefault(x => x.roomId == id);
+            if (room == null)
+            {
+                // TODO: No room found, send message
+                return;
+            }
+            
+            room.usersInRoomIds.Add(clientSockets[clientSocket].id);
+        }
+
+        public void LeaveRoom(Socket clientSocket, bool forever = false)
+        {
+            Room room = rooms.FirstOrDefault(x => x.roomId == clientSockets[clientSocket].roomId);
+            if (room == null)
+            {
+                // No room found, CreateRoom
+                if (forever)
+                    return;
+
+                CreateRoom(clientSockets[clientSocket].id);
+                return;
+            }
+
+            room.usersInRoomIds.Remove(clientSockets[clientSocket].id);
+
+            if (room.usersInRoomIds.Count <= 0)
+            {
+                rooms.Remove(room);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
+using SNetwork.Server;
 
 namespace SNetwork
 {
@@ -18,6 +19,13 @@ namespace SNetwork
                     _instance = new Messaging();
                 return _instance;
             }
+        }
+
+        // Header: 70
+        public void SendRoom(Room room, int sendCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
+        {
+            var data = ByteParser.ConvertRoomToData(room);
+            SendFinal(data, 70, sendCode, 0, 0, sockets);
         }
 
         // Header: 21
@@ -170,8 +178,11 @@ namespace SNetwork
 
             targetSockets.ForEach(x =>
             {
-                if (!Network.IsConnected(x) || targetSockets.Count <= 0) return;
+                if (x == null || !Network.IsConnected(x) || targetSockets.Count <= 0) return;
             });
+
+            if (targetSockets.Contains(null))
+                return;
 
             var headerByte = (byte) header;
             var sendCodeByte = (byte) sendCode;
@@ -222,7 +233,8 @@ namespace SNetwork
         private void SendCallback(IAsyncResult AR)
         {
             var socket = (Socket) AR.AsyncState;
-            socket.EndSend(AR);
+            if(socket.Connected)
+                socket.EndSend(AR);
         }
     }
 

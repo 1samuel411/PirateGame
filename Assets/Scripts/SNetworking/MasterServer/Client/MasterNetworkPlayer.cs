@@ -9,12 +9,12 @@ namespace SNetwork
     [Serializable]
 	public class MasterNetworkPlayer
 	{
+	    public List<KeyValuePairs> data = new List<KeyValuePairs>();
 
         public int id = -1;
-        public string username = "";
         public string playfabId = "";
-
-        public List<KeyValuePairs> data = new List<KeyValuePairs>();
+        public string username = "";
+        public string roomId = "";
 
         public MasterNetworkPlayer(int id, string username)
         {

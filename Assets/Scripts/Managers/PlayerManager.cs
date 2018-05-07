@@ -25,6 +25,15 @@ namespace PirateGame.Managers
         public User user;
         public List<FriendInfo> friends = new List<FriendInfo>();
 
+        public Room roomInfo
+        {
+            get
+            {
+                if (loggedIn) return MasterClientManager.instance.GetRoom();
+                else return null;
+            }
+        }
+
         void Awake()
         {
             if (instance != null)
@@ -185,6 +194,7 @@ namespace PirateGame.Managers
                 MasterNetworkPlayer masterNetworkPlayer = new MasterNetworkPlayer();
                 masterNetworkPlayer.username = user.username;
                 masterNetworkPlayer.playfabId = user.playfabId;
+                masterNetworkPlayer.roomId = "";
 
                 MasterClientManager.instance.SendNetworkUser(masterNetworkPlayer);
 

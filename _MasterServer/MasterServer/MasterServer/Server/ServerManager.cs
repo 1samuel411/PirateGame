@@ -6,7 +6,7 @@ namespace SNetwork.Server
 {
     public class ServerManager
     {
-        private static ServerManager instance;
+        public static ServerManager instance;
         private ServerResponseHandler _serverResponseHandler;
         public Server server;
 
@@ -27,7 +27,7 @@ namespace SNetwork.Server
 
             instance = this;
 
-            Create("127.0.0.1", 1525, 50000, 2000);
+            Create("127.0.0.1", 1525, 50000, 1000);
             ListenForCommands();
             return;
 
@@ -51,6 +51,39 @@ namespace SNetwork.Server
                 var command = Console.ReadLine();
                 if (command.Equals("Help"))
                     Console.WriteLine("The authorities have been alerted!");
+
+                if (command.Equals("ListRooms"))
+                {
+                    Console.WriteLine("-------------------------------------");
+
+                    for (int i = 0; i < server.rooms.Count; i++)
+                    {
+                        Console.WriteLine("Room: " + server.rooms[i].roomId);
+                        Console.WriteLine("        Users");
+                        for (int x = 0; x < server.rooms[i].usersInRoomIds.Count; x++)
+                        {
+                            Console.WriteLine("            User " + (x + 1) + ": " + server.rooms[i].usersInRoomIds[x].ToString());
+                        }
+                        Console.WriteLine("---------");
+                    }
+
+                    Console.WriteLine("-------------------------------------");
+                }
+
+                if (command.Equals("ListUsers"))
+                {
+                    Console.WriteLine("-------------------------------------");
+
+                    for (int i = 0; i < server.clientSockets.Count; i++)
+                    {
+                        Console.WriteLine("User: " + server.clientSockets.Values.ElementAt(i).id);
+                        Console.WriteLine("Username: " + server.clientSockets.Values.ElementAt(i).username);
+                        Console.WriteLine("Playfab Id: " + server.clientSockets.Values.ElementAt(i).playfabId);
+                        Console.WriteLine("---------");
+                    }
+
+                    Console.WriteLine("-------------------------------------");
+                }
 
                 if (command.Equals("Stop"))
                 {

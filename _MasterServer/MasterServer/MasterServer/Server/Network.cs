@@ -8,6 +8,10 @@ namespace SNetwork
         {
             try
             {
+                if (socket == null)
+                {
+                    return false;
+                }
                 var connected = !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
 
                 return connected;

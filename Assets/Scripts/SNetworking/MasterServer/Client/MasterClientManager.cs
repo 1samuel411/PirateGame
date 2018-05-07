@@ -65,6 +65,11 @@ public class MasterClientManager : MonoBehaviour
         return _client.networkPlayers.FirstOrDefault(x => x.id == getId());
     }
 
+    public Room GetRoom()
+    {
+        return _client.room;
+    }
+
     public Socket getSocket()
     {
         return _client.clientSocket;

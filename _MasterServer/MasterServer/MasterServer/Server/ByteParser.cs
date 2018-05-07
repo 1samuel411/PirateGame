@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Newtonsoft.Json;
 using SNetwork;
+using SNetwork.Server;
 
 namespace SNetwork
 {
@@ -68,6 +69,19 @@ namespace SNetwork
         {
             string jsonString = ConvertToASCII(data);
             return JsonConvert.DeserializeObject<KeyValuePairs>(jsonString);
+        }
+
+        public static Room ConvertDataToRoom(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            return JsonConvert.DeserializeObject<Room>(jsonString);
+        }
+
+        public static byte[] ConvertRoomToData(Room room)
+        {
+            room.Refresh();
+            string jsonString = JsonConvert.SerializeObject(room);
+            return ConvertASCIIToBytes(jsonString);
         }
 
         public static object[] ConvertDataToObjects(byte[] data)

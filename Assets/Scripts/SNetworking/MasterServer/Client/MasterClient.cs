@@ -23,6 +23,8 @@ namespace SNetwork.Client
 
         public int ourId = 0;
 
+        public Room room;
+
         public MasterNetworkPlayer[] networkPlayers;
         public KeyValuePairs[] serverData;
 
