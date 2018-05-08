@@ -24,7 +24,7 @@ namespace SNetwork.Client
         public int ourId = 0;
 
         public Room room;
-
+        public Invite[] invites;
         public MasterNetworkPlayer[] networkPlayers;
         public KeyValuePairs[] serverData;
 

@@ -21,6 +21,13 @@ namespace SNetwork
             }
         }
 
+        // Header: 71
+        public void SendInvites(List<Invite> invites, int sendCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
+        {
+            var data = ByteParser.ConvertInvitesToData(invites);
+            SendFinal(data, 71, sendCode, 0, 0, sockets);
+        }
+
         // Header: 70
         public void SendRoom(Room room, int sendCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
         {

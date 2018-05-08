@@ -23,6 +23,9 @@ namespace SNetwork
             }
         }
 
+        // Header: 72
+        public void SendInvite(string playFabId)
+
         // Header: 50
         public void SendMasterNetworkPlayer(MasterNetworkPlayer player, int sendCode, int fromCode, int customCode,
             Socket sockets)

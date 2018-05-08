@@ -5,6 +5,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using Sirenix.Utilities;
 using SNetwork;
+using SNetwork.Client;
 using UnityEngine;
 
 namespace PirateGame.Managers
@@ -30,6 +31,15 @@ namespace PirateGame.Managers
             get
             {
                 if (loggedIn) return MasterClientManager.instance.GetRoom();
+                else return null;
+            }
+        }
+
+        public Invite[] invites
+        {
+            get
+            {
+                if (loggedIn) return MasterClientManager.instance.GetInvites();
                 else return null;
             }
         }

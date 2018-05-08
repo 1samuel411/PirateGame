@@ -85,6 +85,21 @@ namespace SNetwork.Server
                     Console.WriteLine("-------------------------------------");
                 }
 
+                if (command.Equals("ListInvites"))
+                {
+                    Console.WriteLine("-------------------------------------");
+
+                    for (int i = 0; i < server.invites.Count; i++)
+                    {
+                        Console.WriteLine("Invite: " + server.invites[i].id);
+                        Console.WriteLine("    Date: " + server.invites[i].timeSent);
+                        Console.WriteLine("    From: " + server.invites[i].userFrom);
+                        Console.WriteLine("    To: " + server.invites[i].userTo);
+                    }
+
+                    Console.WriteLine("-------------------------------------");
+                }
+
                 if (command.Equals("Stop"))
                 {
                     Console.WriteLine("Stopping");

@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Net.Sockets;
 using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ServerModels;
 
 namespace SNetwork.Server
 {
@@ -23,6 +25,7 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response3, 3);
             ResponseManager.instance.AddServerResponse(Response2, 2);
             ResponseManager.instance.AddServerResponse(Response50, 50);
+            ResponseManager.instance.AddServerResponse(Response72, 72);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -69,9 +72,18 @@ namespace SNetwork.Server
                 return;
             }
 
+            ServerManager.instance.server.SetLoggedIn(masterNetworkPlayer.playfabId);
             _server.clientSockets[fromSocket] = masterNetworkPlayer;
             _server.clientSockets[fromSocket].id = fromId;
+
+            
+
             Console.WriteLine("Users info: " + _server.clientSockets[fromSocket].id + ", " + _server.clientSockets[fromSocket].username + ", " + _server.clientSockets[fromSocket].playfabId);
+        }
+
+        public void Response72(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using PlayFab;
+using PlayFab.ServerModels;
 
 namespace SNetwork.Server
 {
@@ -22,6 +24,7 @@ namespace SNetwork.Server
         public List<KeyValuePairs> serverData = new List<KeyValuePairs>();
 
         public List<Room> rooms = new List<Room>();
+        public List<Invite> invites = new List<Invite>();
 
         public Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -45,6 +48,8 @@ namespace SNetwork.Server
         public void SetupServer(string ip = "127.0.0.1", int port = 100, int bufferSize = 50000,
             float userSyncTime = 0.5f, int maxUsers = 2000, string serverName = "")
         {
+            PlayFabSettings.DeveloperSecretKey = "Z55WT3R953WFW1Z14RT1UBH3R4DXCDCHMAA8UTKG1NWRIDK6IJ";
+            PlayFabSettings.TitleId = "1BE9";
             _userSyncTime = userSyncTime;
             _bufferSize = bufferSize;
             this.maxUsers = maxUsers;
@@ -69,7 +74,7 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (_userSyncTime * 1000)/3);
+                Thread.Sleep((int) (_userSyncTime * 1000) / 4);
 
                 SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
 
@@ -77,7 +82,7 @@ namespace SNetwork.Server
                 Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()),
                     clientSockets, 2);
 
-                Thread.Sleep((int)(_userSyncTime * 1000) / 3);
+                Thread.Sleep((int)(_userSyncTime * 1000) / 4);
 
                 // Send User Id
                 for (int i = 0; i < uniqueIdsToSync.Count; i++)
@@ -87,7 +92,7 @@ namespace SNetwork.Server
                 }
 
 
-                Thread.Sleep((int) (_userSyncTime * 1000) /3);
+                Thread.Sleep((int) (_userSyncTime * 1000) /4);
 
                 // TODO: Optimize this
                 // Send Room data
@@ -99,11 +104,25 @@ namespace SNetwork.Server
                         // Send room 
                         Messaging.instance.SendRoom(room, clientSockets.Values.ElementAt(i).id, clientSockets);
                     }
-                    else
+                }
+
+                Thread.Sleep((int)(_userSyncTime * 1000) / 4);
+
+                // Send invites
+                for (int i = 0; i < clientSockets.Count; i++)
+                {
+                    // Find invite relevant to user
+                    List<Invite> invitesToSend = invites.FindAll(
+                        x => x.userFrom == clientSockets.Values.ElementAt(i).id ||
+                             x.userTo == clientSockets.Values.ElementAt(i).id);
+                    if (invites != null)
                     {
-                        
+                        // Send invite 
+                        Messaging.instance.SendInvites(invitesToSend, clientSockets.Values.ElementAt(i).id, clientSockets);
                     }
                 }
+
+                CleanInvite();
             }
         }
 
@@ -239,6 +258,7 @@ namespace SNetwork.Server
                 var socketRetrieved = clientSockets.FirstOrDefault(t => t.Key == socket);
                 Console.WriteLine("[SNetworking] MasterNetworkPlayer: " + socketRetrieved.Value.id +
                                   ", has been lost.");
+                SetLoggedOut(socketRetrieved.Value.playfabId);
                 LeaveRoom(socketRetrieved.Key, true);
                 RemoveSocket(socket);
             }
@@ -266,7 +286,7 @@ namespace SNetwork.Server
             return newRoom.roomId;
         }
 
-        public void JoinRoom(Socket clientSocket, string id)
+        public void JoinRoom(int userId, string id)
         {
             Room room = rooms.FirstOrDefault(x => x.roomId == id);
             if (room == null)
@@ -274,8 +294,14 @@ namespace SNetwork.Server
                 // TODO: No room found, send message
                 return;
             }
-            
-            room.usersInRoomIds.Add(clientSockets[clientSocket].id);
+            else
+            {
+                // remove from current room
+                Socket clientSocket = clientSockets.FirstOrDefault(x => x.Value.id == userId).Key;
+                LeaveRoom(clientSocket, true);
+            }
+
+            room.usersInRoomIds.Add(userId);
         }
 
         public void LeaveRoom(Socket clientSocket, bool forever = false)
@@ -297,6 +323,101 @@ namespace SNetwork.Server
             {
                 rooms.Remove(room);
             }
+        }
+
+        public void InviteToRoom(string playfabIdFrom, string playfabIdTo)
+        {
+            Invite invite = new Invite();
+            invite.timeSent = DateTime.UtcNow;
+            var uniqueId = new Random().Next(0, 90000);
+            bool unique = false;
+            while (!unique)
+            {
+                uniqueId = new Random().Next(0, 90000);
+                for (int i = 0; i < invites.Count; i++)
+                {
+                    if (invites[i].id == uniqueId)
+                        unique = false;
+                }
+                unique = true;
+            }
+            invite.id = uniqueId;
+            MasterNetworkPlayer playerFrom = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playfabIdFrom));
+            if (playerFrom == null)
+                return;
+            MasterNetworkPlayer playerTo = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playfabIdTo));
+            if (playerTo == null)
+                return;
+            invite.userFrom = playerFrom.id;
+            invite.userTo = playerTo.id;
+
+            invites.Add(invite);
+        }
+
+        public void AcceptInvite(int inviteId)
+        {
+            Invite invite = invites.FirstOrDefault(x => x.id == inviteId);
+
+            if (invite == null)
+            {
+                // timed out or doesn't exist
+                return;
+            }
+            else
+            {
+                // exists, complete invite
+                Room fromUserRoom = null;
+                for (int i = 0; i < rooms.Count; i++)
+                {
+                    for (int x = 0; x < rooms[i].usersInRoomIds.Count; x++)
+                    {
+                        if (rooms[i].usersInRoomIds[x].Equals(invite.userFrom))
+                            fromUserRoom = rooms[i];
+                    }
+                }
+                if (fromUserRoom == null)
+                {
+                    Console.WriteLine("Could not accept invite, room not found");
+                    return;
+                }
+                JoinRoom(invite.userTo, fromUserRoom.roomId);
+            }
+        }
+
+        void CleanInvite()
+        {
+            // Remove after 2 minutes
+            for (int i = 0; i < invites.Count; i++)
+            {
+                if ((DateTime.UtcNow - invites[i].timeSent).Minutes >= 2)
+                {
+                    invites.RemoveAt(i);
+                }
+            }
+        }
+
+        public async void SetLoggedIn(string playfabId)
+        {
+            if (string.IsNullOrEmpty(playfabId))
+                return;
+
+            var response = await PlayFabServerAPI.UpdateUserDataAsync(new UpdateUserDataRequest()
+            {
+                PlayFabId = playfabId,
+                Data = new Dictionary<string, string>() { { "LoggedIn", "true" } }
+            });
+        }
+
+        public async void SetLoggedOut(string playfabId)
+        {
+            if (string.IsNullOrEmpty(playfabId))
+                return;
+
+            var response = await PlayFabServerAPI.UpdateUserDataAsync(new UpdateUserDataRequest()
+            {
+                PlayFabId = playfabId,
+                Data = new Dictionary<string, string>() { { "LoggedIn", "false" } }
+            });
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Newtonsoft.Json;
 using SNetwork;
+using SNetwork.Client;
 
 namespace SNetwork
 {
@@ -79,6 +80,18 @@ namespace SNetwork
         public static byte[] ConvertRoomToData(Room room)
         {
             string jsonString = JsonConvert.SerializeObject(room);
+            return ConvertASCIIToBytes(jsonString);
+        }
+
+        public static List<Invite> ConvertDataToInvites(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            return JsonConvert.DeserializeObject<List<Invite>>(jsonString);
+        }
+
+        public static byte[] ConvertInvitesToData(List<Invite> invites)
+        {
+            string jsonString = JsonConvert.SerializeObject(invites);
             return ConvertASCIIToBytes(jsonString);
         }
 

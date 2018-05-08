@@ -70,6 +70,11 @@ public class MasterClientManager : MonoBehaviour
         return _client.room;
     }
 
+    public Invite[] GetInvites()
+    {
+        return _client.invites;
+    }
+
     public Socket getSocket()
     {
         return _client.clientSocket;

@@ -243,6 +243,16 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: friends.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: friends.Array.data[0].Tags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4095403747723528, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -424,6 +434,41 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: loggedIn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: user.playfabId
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: user.username
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: friends.Array.data[0].FriendPlayFabId
+      value: 9FB89B9B3BC7B92C
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: friends.Array.data[0].Tags.Array.data[0]
+      value: Requester
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: friends.Array.data[0].TitleDisplayName
+      value: samuel
+      objectReference: {fileID: 0}
+    - target: {fileID: 114468627147966104, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: friends.Array.data[0].Username
+      value: samuel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
