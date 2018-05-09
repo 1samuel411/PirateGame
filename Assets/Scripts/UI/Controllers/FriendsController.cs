@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PirateGame.Managers;
 using PirateGame.UI.Views;
+using SNetwork.Client;
 using UnityEngine;
 
 namespace PirateGame.UI.Controllers
@@ -33,12 +34,41 @@ namespace PirateGame.UI.Controllers
 
             friendUserController.Clear();
 
+            if (PlayerManager.instance.loggedIn == false)
+                return;
+
             for (int i = 0; i < PlayerManager.instance.friends.Count; i++)
             {
                 FriendUserController controller = CreateFriendUserController();
 
                 controller.tags = PlayerManager.instance.friends[i].Tags;
-                controller.online = false;
+                controller.online = "false";
+                for (int x = 0; x < PlayerManager.instance.friendsData.Count; x++)
+                {
+                    if (PlayerManager.instance.friendsData[x].playerId ==
+                        PlayerManager.instance.friends[i].FriendPlayFabId)
+                    {
+                        controller.online = PlayerManager.instance.friendsData[x].loggedIn;
+                        break;
+                    }
+                }
+
+                List<Invite> invites = new List<Invite>();
+                if (PlayerManager.instance.invites != null)
+                {
+                    for (int x = 0; x < PlayerManager.instance.invites.Length; x++)
+                    {
+                        // found a relevant invite
+                        if (PlayerManager.instance.invites[x].userFrom == MasterClientManager.instance.getId() ||
+                            PlayerManager.instance.invites[x].userTo == MasterClientManager.instance.getId())
+                        {
+                            // add it
+                            invites.Add(PlayerManager.instance.invites[x]);
+                        }
+                    }
+                }
+                controller.inviteData = invites.ToArray();
+
                 controller.playfabId = PlayerManager.instance.friends[i].FriendPlayFabId;
                 controller.username = PlayerManager.instance.friends[i].TitleDisplayName;
 

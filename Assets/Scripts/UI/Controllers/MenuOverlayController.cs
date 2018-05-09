@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PirateGame.Managers;
 using PlayFab;
+using SNetwork.Client;
 using UnityEngine;
 
 namespace PirateGame.UI.Controllers
@@ -35,7 +37,7 @@ namespace PirateGame.UI.Controllers
                                                           MasterClientManager.instance.GetServerData("UserCount");
             }
 
-            // Check friend requests, requestee
+            // Check friend requests, requestee, and invites
             int requests = 0;
             for (int i = 0; i < PlayerManager.instance.friends.Count; i++)
             {
@@ -45,8 +47,23 @@ namespace PirateGame.UI.Controllers
                             requests++;
             }
 
+            if (PlayerManager.instance.invites != null)
+            {
+                for (int x = 0; x < PlayerManager.instance.invites.Length; x++)
+                {
+                    // found a relevant invite
+                    if (PlayerManager.instance.invites[x].userTo == MasterClientManager.instance.getId())
+                    {
+                        // add it
+                        requests++;
+                    }
+                }
+            }
+
             overlayView.notificationsGameObject.SetActive(requests != 0);
             overlayView.notificationsText.text = requests.ToString();
+
+            overlayView.friendsText.text = PlayerManager.instance.friends.Count.ToString();
         }
 
 

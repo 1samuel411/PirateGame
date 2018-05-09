@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace PirateGame.UI.Views
@@ -11,6 +12,11 @@ namespace PirateGame.UI.Views
     {
 
         public Text roomInfoText;
+
+        public GameObject character1;
+        public GameObject character2;
+        public GameObject character3;
+        public GameObject character4;
 
     }
 }

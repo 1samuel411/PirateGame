@@ -23,8 +23,14 @@ namespace PirateGame.UI.Controllers
 		public string username;
 		public string password;
 		public string passwordConfirm;
+	    public string region;
 
 	    private float passwordInfoBoxTime;
+
+	    void Start()
+	    {
+	        OnEnable();
+	    }
 
 		void OnEnable()
 		{
@@ -42,15 +48,21 @@ namespace PirateGame.UI.Controllers
 			SetRegisterMessage("Please enter your information to register");
 		    SetForgotPasswordMessage("Please enter your email to reset your password");
 
+		    region = "NA";
+
 		    if (PlayerPrefs.HasKey("Username"))
 		    {
 		        rememberMe = true;
 		        username = PlayerPrefs.GetString("Username");
 		        password = PlayerPrefs.GetString("Password");
-		        accountView.rememberMeToggle.isOn = rememberMe;
+		        region = PlayerPrefs.GetString("Region");
+                accountView.rememberMeToggle.isOn = rememberMe;
 		        accountView.usernameFieldLogin.text = username;
 		        accountView.passwordFieldLogin.text = password;
-		    }
+
+		        accountView.regionSelectableLogin.value = RegionToInt(region);
+		        accountView.regionSelectableRegister.value = RegionToInt(region);
+            }
         }
 
         void Update()
@@ -64,6 +76,38 @@ namespace PirateGame.UI.Controllers
 		        accountView.passwordInfoBox.SetActive(false);
 		    }
 		}
+
+	    int RegionToInt(string region)
+	    {
+	        if (region.Equals("NA"))
+	            return 0;
+	        else if (region.Equals("SA"))
+	            return 1;
+	        else if (region.Equals("AS"))
+	            return 2;
+	        else if (region.Equals("EU"))
+	            return 3;
+	        else if (region.Equals("AU"))
+	            return 4;
+
+            return 0;
+        }
+
+	    string IntToRegion(int region)
+	    {
+	        if (region == 0)
+	            return "NA";
+            else if (region == 1)
+	            return "SA";
+            else if (region == 2)
+	            return "AS";
+            else if (region == 3)
+	            return "EU";
+            else if (region == 4)
+	            return "AU";
+
+            return "NA";
+	    }
 
 	    public void SetForgotPasswordMessage(string message)
 	    {
@@ -114,6 +158,11 @@ namespace PirateGame.UI.Controllers
 		{
 			passwordConfirm = value;
 		}
+
+	    public void SetRegion(int value)
+	    {
+	        region = IntToRegion(value);
+	    }
 
 	    public bool passwordValid;
 	    public void UpdatePasswordCheck()
@@ -212,6 +261,7 @@ namespace PirateGame.UI.Controllers
 	        Debug.Log("Login success!");
 	        SetLoginMessage("Success!");
 
+	        PlayerManager.instance.region = region;
 	        PlayerManager.instance.PlayerLogin(result);
 
 	        // Save Login Data
@@ -219,13 +269,15 @@ namespace PirateGame.UI.Controllers
 	        {
 	            PlayerPrefs.SetString("Username", username);
 	            PlayerPrefs.SetString("Password", password);
-	        }
+	            PlayerPrefs.SetString("Region", region);
+            }
 	        else
 	        {
 	            // Delete
                 PlayerPrefs.DeleteKey("Username");
                 PlayerPrefs.DeleteKey("Password");
-	        }
+                PlayerPrefs.DeleteKey("Region");
+            }
 	    }
 
 	    void OnLoginError(PlayFabError error)

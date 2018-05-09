@@ -27,20 +27,22 @@ namespace SNetwork.Server
 
             instance = this;
 
-            Create("127.0.0.1", 1525, 50000, 1000);
-            ListenForCommands();
-            return;
+            //Create("127.0.0.1", 1525, 50000, 1000, "", "NA");
+            //ListenForCommands();
+            //return;
 
             Console.WriteLine("Enter the server's ip");
             var ip = Console.ReadLine();
             Console.WriteLine("Enter the server's port");
             var port = Console.ReadLine();
+            Console.WriteLine("Enter the server's region (NA, SA, AS, EU, AU)");
+            var region = Console.ReadLine();
 
             var bufferSize = 50000;
             var maxUsers = 1000000;
             var name = "MasterServer";
 
-            Create(ip, int.Parse(port), bufferSize, maxUsers, name);
+            Create(ip, int.Parse(port), bufferSize, maxUsers, name, region);
             ListenForCommands();
         }
 
@@ -103,15 +105,21 @@ namespace SNetwork.Server
                 if (command.Equals("Stop"))
                 {
                     Console.WriteLine("Stopping");
+
+                    for (int i = 0; i < server.clientSockets.Count; i++)
+                    {
+                        server.RemoveSocket(server.clientSockets.Keys.ElementAt(i));
+                    }
+
                     Close();
                 }
             }
         }
 
         public void Create(string ip = "127.0.0.1", int port = 100, int bufferSize = 50000, int maxUsers = 2,
-            string name = "")
+            string name = "", string region = "")
         {
-            server.SetupServer(ip, port, bufferSize, 0.5f, maxUsers, name);
+            server.SetupServer(ip, port, bufferSize, 0.5f, maxUsers, name, region);
         }
 
         public void Close()
@@ -166,9 +174,16 @@ namespace SNetwork.Server
             Console.WriteLine(
                 "[SNetworking] MasterNetworkPlayer: " + server.clientSockets[fromSocket].id + " has left.");
             server.RemoveSocket(fromSocket);
-            fromSocket.Disconnect(false);
-            fromSocket.Shutdown(SocketShutdown.Both);
-            fromSocket.Close();
+            try
+            {
+                fromSocket.Disconnect(false);
+                fromSocket.Shutdown(SocketShutdown.Both);
+                fromSocket.Close();
+            }
+            catch (ObjectDisposedException e)
+            {
+                
+            }
         }
     }
 }

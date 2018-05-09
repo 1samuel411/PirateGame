@@ -26,6 +26,8 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response2, 2);
             ResponseManager.instance.AddServerResponse(Response50, 50);
             ResponseManager.instance.AddServerResponse(Response72, 72);
+            ResponseManager.instance.AddServerResponse(Response73, 73);
+            ResponseManager.instance.AddServerResponse(Response74, 74);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -83,7 +85,26 @@ namespace SNetwork.Server
 
         public void Response72(byte[] responseBytes, Socket fromSocket, int fromId)
         {
-            
+            // Recieve playfabId to send invite to
+            string playfabTarget = ByteParser.ConvertToASCII(responseBytes);
+            Console.WriteLine("Recieved invite request to: " + playfabTarget);
+            ServerManager.instance.server.InviteToRoom(ServerManager.instance.server.clientSockets[fromSocket].playfabId, playfabTarget);
+        }
+
+        public void Response73(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            // Recieve invite Id to accept
+            int inviteTarget = int.Parse(ByteParser.ConvertToASCII(responseBytes));
+            Console.WriteLine("Recieved accept invite request to: " + inviteTarget);
+            ServerManager.instance.server.AcceptInvite(inviteTarget);
+        }
+
+        public void Response74(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            // Recieve invite Id to decline
+            int inviteTarget = int.Parse(ByteParser.ConvertToASCII(responseBytes));
+            Console.WriteLine("Recieved decline invite request to: " + inviteTarget);
+            ServerManager.instance.server.DeclineInvite(inviteTarget);
         }
     }
 }

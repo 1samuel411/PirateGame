@@ -212,7 +212,7 @@ namespace SNetwork
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine(e.ToString());
+                    //Console.WriteLine(e.ToString());
                 }
             } );
         }

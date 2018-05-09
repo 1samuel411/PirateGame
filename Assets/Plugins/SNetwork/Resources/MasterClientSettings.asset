@@ -13,5 +13,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxConnAttempts: 5
   retryTime: 0.5
-  ipAddress: 127.0.0.1
-  port: 1525
+  ipAddressNA: 206.189.186.55
+  portNA: 1525
+  ipAddressSA: 0.0.0.0
+  portSA: 1000
+  ipAddressAS: 0.0.0.0
+  portAS: 1000
+  ipAddressEU: 0.0.0.0
+  portEU: 1000
+  ipAddressAU: 0.0.0.0
+  portAU: 1000

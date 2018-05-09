@@ -14,10 +14,13 @@ namespace PirateGame.UI.Views
         public GameObject onlineIndicator;
 
         public Text usernameText;
+        public Text serverText;
 
         public GameObject requestedHolder;
         public GameObject acceptRequestHolder;
         public GameObject friendsHolder;
+        public GameObject inviteButtonGameObject;
         public GameObject joinHolder;
+        public GameObject inLobbyHolder;
     }
 }

@@ -23,8 +23,32 @@ namespace SNetwork
             }
         }
 
+        // Header: 74
+        public void SendDecline(int inviteId, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send inviteId
+            byte[] data = ByteParser.ConvertASCIIToBytes(inviteId.ToString());
+            SendFinal(data, 74, sendCode, fromCode, 0, sockets);
+        }
+
+        // Header: 73
+        public void SendAccept(int inviteId, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send inviteId
+            byte[] data = ByteParser.ConvertASCIIToBytes(inviteId.ToString());
+            SendFinal(data, 73, sendCode, fromCode, 0, sockets);
+        }
+
         // Header: 72
-        public void SendInvite(string playFabId)
+        public void SendInvite(string playFabId, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send playfabid
+            byte[] data = ByteParser.ConvertASCIIToBytes(playFabId);
+            SendFinal(data, 72, sendCode, fromCode, 0, sockets);
+        }
 
         // Header: 50
         public void SendMasterNetworkPlayer(MasterNetworkPlayer player, int sendCode, int fromCode, int customCode,

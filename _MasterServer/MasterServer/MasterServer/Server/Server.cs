@@ -11,6 +11,8 @@ namespace SNetwork.Server
 {
     public class Server
     {
+        public string serverRegion;
+
         private byte[] _buffer = new byte[50000];
         private int _bufferSize;
 
@@ -46,13 +48,15 @@ namespace SNetwork.Server
         }
 
         public void SetupServer(string ip = "127.0.0.1", int port = 100, int bufferSize = 50000,
-            float userSyncTime = 0.5f, int maxUsers = 2000, string serverName = "")
+            float userSyncTime = 0.5f, int maxUsers = 2000, string serverName = "", string serverRegion = "NA")
         {
             PlayFabSettings.DeveloperSecretKey = "Z55WT3R953WFW1Z14RT1UBH3R4DXCDCHMAA8UTKG1NWRIDK6IJ";
             PlayFabSettings.TitleId = "1BE9";
+
             _userSyncTime = userSyncTime;
             _bufferSize = bufferSize;
             this.maxUsers = maxUsers;
+            this.serverRegion = serverRegion;
             _buffer = new byte[_bufferSize];
             Console.WriteLine("[SNetworking] Creating and seting up the server...");
             serverSocket.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
@@ -74,7 +78,7 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (_userSyncTime * 1000) / 4);
+                Thread.Sleep((int) (_userSyncTime * 2000) / 4);
 
                 SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
 
@@ -82,7 +86,7 @@ namespace SNetwork.Server
                 Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()),
                     clientSockets, 2);
 
-                Thread.Sleep((int)(_userSyncTime * 1000) / 4);
+                Thread.Sleep((int)(_userSyncTime * 2000) / 4);
 
                 // Send User Id
                 for (int i = 0; i < uniqueIdsToSync.Count; i++)
@@ -92,7 +96,7 @@ namespace SNetwork.Server
                 }
 
 
-                Thread.Sleep((int) (_userSyncTime * 1000) /4);
+                Thread.Sleep((int) (_userSyncTime * 2000) /4);
 
                 // TODO: Optimize this
                 // Send Room data
@@ -106,7 +110,7 @@ namespace SNetwork.Server
                     }
                 }
 
-                Thread.Sleep((int)(_userSyncTime * 1000) / 4);
+                Thread.Sleep((int)(_userSyncTime * 2000) / 4);
 
                 // Send invites
                 for (int i = 0; i < clientSockets.Count; i++)
@@ -115,6 +119,7 @@ namespace SNetwork.Server
                     List<Invite> invitesToSend = invites.FindAll(
                         x => x.userFrom == clientSockets.Values.ElementAt(i).id ||
                              x.userTo == clientSockets.Values.ElementAt(i).id);
+
                     if (invites != null)
                     {
                         // Send invite 
@@ -258,7 +263,6 @@ namespace SNetwork.Server
                 var socketRetrieved = clientSockets.FirstOrDefault(t => t.Key == socket);
                 Console.WriteLine("[SNetworking] MasterNetworkPlayer: " + socketRetrieved.Value.id +
                                   ", has been lost.");
-                SetLoggedOut(socketRetrieved.Value.playfabId);
                 LeaveRoom(socketRetrieved.Key, true);
                 RemoveSocket(socket);
             }
@@ -267,9 +271,21 @@ namespace SNetwork.Server
 
         public void RemoveSocket(Socket socket)
         {
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            var socketRetrieved = clientSockets.FirstOrDefault(t => t.Key == socket);
+            try
+            {
+                if(socketRetrieved.Value != null)
+                    SetLoggedOut(socketRetrieved.Value.playfabId);
+
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (SocketException e)
+            {
+                
+            }
             LeaveRoom(socket, true);
+
             clientSockets.Remove(socket);
         }
 
@@ -301,18 +317,37 @@ namespace SNetwork.Server
                 LeaveRoom(clientSocket, true);
             }
 
+            // Clear user's invites
+            for (int i = 0; i < invites.Count; i++)
+            {
+                if (invites[i].userFrom == userId || invites[i].userTo == userId)
+                {
+                    invites.RemoveAt(i);
+                }
+            }
             room.usersInRoomIds.Add(userId);
         }
 
         public void LeaveRoom(Socket clientSocket, bool forever = false)
         {
             Room room = rooms.FirstOrDefault(x => x.roomId == clientSockets[clientSocket].roomId);
+
+            // Clear user's invites
+            for (int i = 0; i < invites.Count; i++)
+            {
+                if (invites[i].userFrom == clientSockets[clientSocket].id || invites[i].userTo == clientSockets[clientSocket].id)
+                {
+                    invites.RemoveAt(i);
+                }
+            }
+
             if (room == null)
             {
                 // No room found, CreateRoom
                 if (forever)
+                {
                     return;
-
+                }
                 CreateRoom(clientSockets[clientSocket].id);
                 return;
             }
@@ -327,6 +362,22 @@ namespace SNetwork.Server
 
         public void InviteToRoom(string playfabIdFrom, string playfabIdTo)
         {
+            MasterNetworkPlayer playerFrom = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playfabIdFrom));
+            if (playerFrom == null)
+                return;
+            MasterNetworkPlayer playerTo = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playfabIdTo));
+            if (playerTo == null)
+                return;
+
+            for (int i = 0; i < invites.Count; i++)
+            {
+                if (invites[i].userFrom == playerFrom.id && invites[i].userTo == playerTo.id)
+                {
+                    Console.WriteLine("Invite To Room Error 1");
+                    return;
+                }
+            }
+
             Invite invite = new Invite();
             invite.timeSent = DateTime.UtcNow;
             var uniqueId = new Random().Next(0, 90000);
@@ -342,12 +393,7 @@ namespace SNetwork.Server
                 unique = true;
             }
             invite.id = uniqueId;
-            MasterNetworkPlayer playerFrom = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playfabIdFrom));
-            if (playerFrom == null)
-                return;
-            MasterNetworkPlayer playerTo = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playfabIdTo));
-            if (playerTo == null)
-                return;
+            
             invite.userFrom = playerFrom.id;
             invite.userTo = playerTo.id;
 
@@ -380,7 +426,25 @@ namespace SNetwork.Server
                     Console.WriteLine("Could not accept invite, room not found");
                     return;
                 }
+
+                invites.Remove(invite);
                 JoinRoom(invite.userTo, fromUserRoom.roomId);
+            }
+        }
+
+        public void DeclineInvite(int inviteId)
+        {
+            Invite invite = invites.FirstOrDefault(x => x.id == inviteId);
+
+            if (invite == null)
+            {
+                // timed out or doesn't exist
+                return;
+            }
+            else
+            {
+                // exists, complete decline
+                invites.Remove(invite);
             }
         }
 
@@ -404,7 +468,8 @@ namespace SNetwork.Server
             var response = await PlayFabServerAPI.UpdateUserDataAsync(new UpdateUserDataRequest()
             {
                 PlayFabId = playfabId,
-                Data = new Dictionary<string, string>() { { "LoggedIn", "true" } }
+                Permission = UserDataPermission.Public,
+                Data = new Dictionary<string, string>() { { "LoggedIn", serverRegion } }
             });
         }
 
@@ -416,6 +481,7 @@ namespace SNetwork.Server
             var response = await PlayFabServerAPI.UpdateUserDataAsync(new UpdateUserDataRequest()
             {
                 PlayFabId = playfabId,
+                Permission = UserDataPermission.Public,
                 Data = new Dictionary<string, string>() { { "LoggedIn", "false" } }
             });
         }

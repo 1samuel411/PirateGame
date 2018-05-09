@@ -17,6 +17,9 @@ namespace PirateGame.UI.Views
 		public InputField passwordConfirmFieldRegister;
 	    public InputField emailFieldForgotPassword;
 
+	    public Dropdown regionSelectableLogin;
+	    public Dropdown regionSelectableRegister;
+
 	    public Toggle rememberMeToggle;
 
         public GameObject loginViewObject;

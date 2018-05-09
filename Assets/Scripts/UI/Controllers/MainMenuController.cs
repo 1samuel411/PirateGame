@@ -25,6 +25,31 @@ namespace PirateGame.UI.Controllers
                 {
                     mainMenuView.roomInfoText.text += "\nUser " + (i + 1) + ": " + PlayerManager.instance.roomInfo.usersInRoom[i].username;
                 }
+
+                mainMenuView.character1.SetActive(false);
+                mainMenuView.character2.SetActive(false);
+                mainMenuView.character3.SetActive(false);
+                mainMenuView.character4.SetActive(false);
+                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 1)
+                    mainMenuView.character1.SetActive(true);
+                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 2)
+                {
+                    mainMenuView.character1.SetActive(true);
+                    mainMenuView.character2.SetActive(true);
+                }
+                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 3)
+                {
+                    mainMenuView.character1.SetActive(true);
+                    mainMenuView.character2.SetActive(true);
+                    mainMenuView.character3.SetActive(true);
+                }
+                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 4)
+                {
+                    mainMenuView.character1.SetActive(true);
+                    mainMenuView.character2.SetActive(true);
+                    mainMenuView.character3.SetActive(true);
+                    mainMenuView.character4.SetActive(true);
+                }
             }
             else
             {

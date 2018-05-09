@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PirateGame.Entity;
 using PirateGame.Networking;
 using PlayFab;
@@ -25,6 +26,8 @@ namespace PirateGame.Managers
 
         public User user;
         public List<FriendInfo> friends = new List<FriendInfo>();
+        public List<FriendData> friendsData = new List<FriendData>();
+        public string region;
 
         public Room roomInfo
         {
@@ -93,7 +96,6 @@ namespace PirateGame.Managers
                 lastRefresh = Time.time + 5f;
 
                 // Refresh friends
-                Debug.Log("[PlayerManager] Refreshing Friends List");
                 GetFriendsListRequest request = new GetFriendsListRequest();
                 PlayFabClientAPI.GetFriendsList(request, GetFriendsRequest, PlayfabError);
             }
@@ -102,16 +104,50 @@ namespace PirateGame.Managers
         void GetFriendsRequest(GetFriendsListResult result)
         {
             friends = result.Friends;
+            // Get Friends Tags
+            List<string> keysRequestList = new List<string>();
+            keysRequestList.Add("PlayFabId");
+            keysRequestList.Add("LoggedIn");
 
-            if(refreshFriendsDelegate != null)
-                refreshFriendsDelegate.Invoke();
+            friendsData.Clear();
+            for (int i = 0; i < friends.Count; i++)
+            {
+                GetUserDataRequest getUserDataRequest = new GetUserDataRequest();
+                getUserDataRequest.PlayFabId = friends[i].FriendPlayFabId;
+                //getUserDataRequest.Keys = keysRequestList;
+                PlayFabClientAPI.GetUserData(getUserDataRequest, GetFriendUserDataResponse, PlayfabError);
+            }
+        }
+
+        void GetFriendUserDataResponse(GetUserDataResult result)
+        {
+            for (int i = 0; i < friends.Count; i++)
+            {
+                if (result.Data.ContainsKey("PlayFabId"))
+                {
+                    if (friends[i].FriendPlayFabId == result.Data["PlayFabId"].Value)
+                    {
+                        FriendData data = new FriendData();
+                        data.loggedIn = result.Data["LoggedIn"].Value;
+                        data.playerId = result.Data["PlayFabId"].Value;
+                        friendsData.Add(data);
+
+                        if (refreshFriendsDelegate != null)
+                            refreshFriendsDelegate.Invoke();
+
+                        return;
+                    }
+                }
+                else
+                {
+
+                }
+            }
         }
 
 
         void RefreshUserData()
         {
-            Debug.Log("[PlayerManager] Refreshing our User's Data");
-
             if (user.playfabId.IsNullOrWhitespace())
                 return;
 
@@ -128,6 +164,11 @@ namespace PirateGame.Managers
         {
             user.username = result.InfoResultPayload.PlayerProfile.DisplayName;
             user.playfabId = result.PlayFabId;
+
+            UpdateUserDataRequest request = new UpdateUserDataRequest();
+            request.Data = new Dictionary<string, string>() { { "PlayFabId", result.PlayFabId } };
+            request.Permission = UserDataPermission.Public;
+            PlayFabClientAPI.UpdateUserData(request, x => { Debug.Log("Successfully updated playfab Id"); }, PlayfabError);
 
             UIManager.instance.loading = true;
             RefreshUserData();
@@ -269,5 +310,12 @@ namespace PirateGame.Managers
         public string playerId;
         public string email;
         public string secret;
+    }
+
+    [System.Serializable]
+    public class FriendData
+    {
+        public string loggedIn;
+        public string playerId;
     }
 }

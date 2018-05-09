@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
+using PirateGame.Managers;
 using Sirenix.Utilities;
 using SNetwork;
 using SNetwork.Client;
@@ -45,7 +46,6 @@ public class MasterClientManager : MonoBehaviour
             Destroy(this.gameObject);
 	        throw new Exception("ClientSettings Missing... Go to Tools/SNetworking/Client Settings to create and configure ClientSettings");
         }
-        Debug.Log("Client Settings: " + _client.clientSettings.ipAddress);
         _clientResponseHandler = new MasterClientResponseHandler(_client);
 
 	    _clientResponseHandler.Initialize();
@@ -79,7 +79,7 @@ public class MasterClientManager : MonoBehaviour
     {
         return _client.clientSocket;
     }
-
+    
     public bool isConnected()
 	{
 		return _client.IsConnectedClient();
@@ -115,6 +115,24 @@ public class MasterClientManager : MonoBehaviour
         return _client.networkPlayers.FirstOrDefault(x => x.id.Equals(client)).data.FirstOrDefault(x=> x.Key.Equals(key)).Value;
     }
 
+    public void SendInvite(string playfabIdTarget)
+    {
+        if (playfabIdTarget.IsNullOrWhitespace())
+            return;
+
+        MasterMessaging.instance.SendInvite(playfabIdTarget, 2, getId(), 0, _client.clientSocket);
+    }
+
+    public void SendInviteAccept(int inviteId)
+    {
+        MasterMessaging.instance.SendAccept(inviteId, 2, getId(), 0, _client.clientSocket);
+    }
+
+    public void SendInviteDecline(int inviteId)
+    {
+        MasterMessaging.instance.SendDecline(inviteId, 2, getId(), 0, _client.clientSocket);
+    }
+
     public delegate void OnConnectedDelegate(ResponseMessage message);
     public OnConnectedDelegate onConnectDelegate;
     public delegate void OnCloseDelegate();
@@ -125,11 +143,37 @@ public class MasterClientManager : MonoBehaviour
     public void Connect(string ip = "", int port = 0)
     {
         if (ip.IsNullOrWhitespace())
-            ip = _client.clientSettings.ipAddress;
+        {
+            if(PlayerManager.instance.region == "NA")
+                ip = _client.clientSettings.ipAddressNA;
+            else if(PlayerManager.instance.region == "SA")
+                ip = _client.clientSettings.ipAddressSA;
+            else if (PlayerManager.instance.region == "AS")
+                ip = _client.clientSettings.ipAddressAS;
+            else if (PlayerManager.instance.region == "EU")
+                ip = _client.clientSettings.ipAddressEU;
+            else if (PlayerManager.instance.region == "AU")
+                ip = _client.clientSettings.ipAddressAU;
+            else
+                ip = _client.clientSettings.ipAddressNA;
+        }
         if (port <= 0)
-            port = _client.clientSettings.port;
+        {
+            if(PlayerManager.instance.region == "NA")
+                port = _client.clientSettings.portNA;
+            else if (PlayerManager.instance.region == "SA")
+                port = _client.clientSettings.portSA;
+            else if (PlayerManager.instance.region == "AS")
+                port = _client.clientSettings.portAS;
+            else if (PlayerManager.instance.region == "EU")
+                port = _client.clientSettings.portEU;
+            else if (PlayerManager.instance.region == "AU")
+                port = _client.clientSettings.portAU;
+            else
+                port = _client.clientSettings.portNA;
 
-		_client.Connect(ip, port, OnConnected, OnClose);
+        }
+        _client.Connect(ip, port, OnConnected, OnClose);
 	}
 
 	public void OnConnected(ResponseMessage response)
