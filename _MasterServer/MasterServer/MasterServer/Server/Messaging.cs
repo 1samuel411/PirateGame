@@ -79,16 +79,16 @@ namespace SNetwork
             var data = ByteParser.ConvertObjectToBytes(message);
             byte headerByte = 7;
             var sendCodeByte = (byte) target;
-            byte customCodeByte = 0;
 
             var newData = new byte[data.Length + 5];
             for (var i = 0; i < data.Length; i++)
                 newData[i + 5] = data[i];
             newData[0] = headerByte;
             newData[1] = sendCodeByte;
-            newData[2] = 0;
-            newData[3] = customCodeByte;
-            newData[4] = customCodeByte;
+
+            var customCodeByte = BitConverter.GetBytes(data.Length);
+            newData[3] = customCodeByte[0];
+            newData[4] = customCodeByte[1];
 
             sockets.BeginSend(newData, 0, newData.Length, SocketFlags.None, SendCallback, sockets);
         }
@@ -99,7 +99,6 @@ namespace SNetwork
             var data = ByteParser.ConvertObjectToBytes("Failed");
             byte headerByte = 6;
             var sendCodeByte = (byte) target;
-            byte customCodeByte = 0;
 
             var newData = new byte[data.Length + 5];
             for (var i = 0; i < data.Length; i++)
@@ -107,8 +106,10 @@ namespace SNetwork
             newData[0] = headerByte;
             newData[1] = sendCodeByte;
             newData[2] = 0;
-            newData[3] = customCodeByte;
-            newData[4] = customCodeByte;
+
+            var customCodeByte = BitConverter.GetBytes(data.Length);
+            newData[3] = customCodeByte[0];
+            newData[4] = customCodeByte[1];
 
             sockets.BeginSend(newData, 0, newData.Length, SocketFlags.None, SendCallback, sockets);
         }
@@ -119,7 +120,6 @@ namespace SNetwork
             var data = ByteParser.ConvertObjectToBytes("Invalid");
             byte headerByte = 5;
             var sendCodeByte = (byte) target;
-            byte customCodeByte = 0;
 
             var newData = new byte[data.Length + 5];
             for (var i = 0; i < data.Length; i++)
@@ -127,8 +127,10 @@ namespace SNetwork
             newData[0] = headerByte;
             newData[1] = sendCodeByte;
             newData[2] = 0;
-            newData[3] = customCodeByte;
-            newData[4] = customCodeByte;
+
+            var customCodeByte = BitConverter.GetBytes(data.Length);
+            newData[3] = customCodeByte[0];
+            newData[4] = customCodeByte[1];
 
             sockets.BeginSend(newData, 0, newData.Length, SocketFlags.None, SendCallback, sockets);
         }
@@ -193,7 +195,6 @@ namespace SNetwork
 
             var headerByte = (byte) header;
             var sendCodeByte = (byte) sendCode;
-            var customCodeByte = BitConverter.GetBytes(customCode);
 
             var newData = new byte[data.Length + 5];
             for (var i = 0; i < data.Length; i++)
@@ -201,6 +202,8 @@ namespace SNetwork
             newData[0] = headerByte;
             newData[1] = sendCodeByte;
             newData[2] = 0;
+
+            var customCodeByte = BitConverter.GetBytes(data.Length);
             newData[3] = customCodeByte[0];
             newData[4] = customCodeByte[1];
 
@@ -223,7 +226,6 @@ namespace SNetwork
 
             var headerByte = (byte) header;
             var sendCodeByte = (byte) sendCode;
-            var customCodeByte = BitConverter.GetBytes(customCode);
 
             var newData = new byte[data.Length + 5];
             for (var i = 0; i < data.Length; i++)
@@ -231,6 +233,8 @@ namespace SNetwork
             newData[0] = headerByte;
             newData[1] = sendCodeByte;
             newData[2] = 0;
+
+            var customCodeByte = BitConverter.GetBytes(data.Length);
             newData[3] = customCodeByte[0];
             newData[4] = customCodeByte[1];
 

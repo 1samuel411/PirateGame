@@ -13,6 +13,8 @@ namespace PirateGame.UI.Views
 
         public Text roomInfoText;
 
+        public Button leaveButton;
+
         public GameObject character1;
         public GameObject character2;
         public GameObject character3;

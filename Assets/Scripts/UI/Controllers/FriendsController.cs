@@ -21,14 +21,14 @@ namespace PirateGame.UI.Controllers
 
         void OnEnable()
         {
-            RefreshFriends();
+            RespawnFriends();
         }
 
-        void RefreshFriends()
+        void RespawnFriends()
         {
             for (int i = 0; i < friendUserController.Count; i++)
             {
-                if(friendUserController[i] != null)
+                if (friendUserController[i] != null)
                     GameObject.Destroy(friendUserController[i].gameObject);
             }
 
@@ -39,44 +39,21 @@ namespace PirateGame.UI.Controllers
 
             for (int i = 0; i < PlayerManager.instance.friends.Count; i++)
             {
-                FriendUserController controller = CreateFriendUserController();
+                friendUserController.Add(CreateFriendUserController(PlayerManager.instance.friends[i].FriendPlayFabId));
+            }
 
-                controller.tags = PlayerManager.instance.friends[i].Tags;
-                controller.online = "false";
-                for (int x = 0; x < PlayerManager.instance.friendsData.Count; x++)
-                {
-                    if (PlayerManager.instance.friendsData[x].playerId ==
-                        PlayerManager.instance.friends[i].FriendPlayFabId)
-                    {
-                        controller.online = PlayerManager.instance.friendsData[x].loggedIn;
-                        break;
-                    }
-                }
+            RefreshFriends();
+        }
 
-                List<Invite> invites = new List<Invite>();
-                if (PlayerManager.instance.invites != null)
-                {
-                    for (int x = 0; x < PlayerManager.instance.invites.Length; x++)
-                    {
-                        // found a relevant invite
-                        if (PlayerManager.instance.invites[x].userFrom == MasterClientManager.instance.getId() ||
-                            PlayerManager.instance.invites[x].userTo == MasterClientManager.instance.getId())
-                        {
-                            // add it
-                            invites.Add(PlayerManager.instance.invites[x]);
-                        }
-                    }
-                }
-                controller.inviteData = invites.ToArray();
-
-                controller.playfabId = PlayerManager.instance.friends[i].FriendPlayFabId;
-                controller.username = PlayerManager.instance.friends[i].TitleDisplayName;
-
-                friendUserController.Add(controller);
+        void RefreshFriends()
+        {
+            for(int i = 0; i < friendUserController.Count; i++)
+            {
+                friendUserController[i].Refresh();
             }
         }
 
-        FriendUserController CreateFriendUserController()
+        FriendUserController CreateFriendUserController(string playfabId)
         {
             GameObject friendPrefab = Instantiate(friendsView.friendUserPrefab);
             friendPrefab.transform.SetParent(friendsView.friendsListHolder);
@@ -85,6 +62,7 @@ namespace PirateGame.UI.Controllers
             friendPrefab.transform.rotation = Quaternion.identity;
 
             FriendUserController friendUserController = friendPrefab.GetComponent<FriendUserController>();
+            friendUserController.playfabId = playfabId;
             return friendUserController;
         }
 

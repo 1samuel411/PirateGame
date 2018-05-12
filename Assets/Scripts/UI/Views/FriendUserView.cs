@@ -11,16 +11,16 @@ namespace PirateGame.UI.Views
     [Serializable]
     public class FriendUserView : View
     {
-        public GameObject onlineIndicator;
-
         public Text usernameText;
         public Text serverText;
 
-        public GameObject requestedHolder;
-        public GameObject acceptRequestHolder;
-        public GameObject friendsHolder;
-        public GameObject inviteButtonGameObject;
-        public GameObject joinHolder;
-        public GameObject inLobbyHolder;
+        public Button inviteButton;
+        public Button acceptButton;
+        public Button declineButton;
+        public Button removeFriendButton;
+
+        public GameObject onlineIndicator;
+        public GameObject offlineIndicator;
+        public GameObject unacceptedIndicator;
     }
 }

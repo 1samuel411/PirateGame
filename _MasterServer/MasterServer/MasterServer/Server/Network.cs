@@ -6,20 +6,20 @@ namespace SNetwork
     {
         public static bool IsConnected(Socket socket)
         {
+            bool connected;
             try
             {
-                if (socket == null)
-                {
-                    return false;
-                }
-                var connected = !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
-
-                return connected;
+                connected = !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
-                return false;
+                connected = false;
             }
+
+            if (socket == null)
+                return connected;
+
+            return connected;
         }
     }
 }

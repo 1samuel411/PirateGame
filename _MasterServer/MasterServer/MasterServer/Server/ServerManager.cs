@@ -38,7 +38,7 @@ namespace SNetwork.Server
             Console.WriteLine("Enter the server's region (NA, SA, AS, EU, AU)");
             var region = Console.ReadLine();
 
-            var bufferSize = 50000;
+            var bufferSize = 256000;
             var maxUsers = 1000000;
             var name = "MasterServer";
 

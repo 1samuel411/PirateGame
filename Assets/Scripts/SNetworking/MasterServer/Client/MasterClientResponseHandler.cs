@@ -60,6 +60,7 @@ namespace SNetwork.Client
 
         public void Response9(byte[] responseBytes, Socket fromSocket, int fromId)
         {
+            Logging.CreateLog("Hello: " + ByteParser.ConvertToASCII(responseBytes));
             _client.ourId = int.Parse(ByteParser.ConvertToASCII(responseBytes));
             Logging.CreateLog("Recieved the id: " + _client.ourId);
         }

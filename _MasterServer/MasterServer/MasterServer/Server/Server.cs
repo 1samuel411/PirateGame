@@ -47,7 +47,7 @@ namespace SNetwork.Server
             }
         }
 
-        public void SetupServer(string ip = "127.0.0.1", int port = 100, int bufferSize = 50000,
+        public void SetupServer(string ip = "127.0.0.1", int port = 100, int bufferSize = 256000,
             float userSyncTime = 0.5f, int maxUsers = 2000, string serverName = "", string serverRegion = "NA")
         {
             PlayFabSettings.DeveloperSecretKey = "Z55WT3R953WFW1Z14RT1UBH3R4DXCDCHMAA8UTKG1NWRIDK6IJ";
@@ -78,7 +78,7 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (_userSyncTime * 2000) / 4);
+                Thread.Sleep((int) (250));
 
                 SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
 
@@ -86,7 +86,7 @@ namespace SNetwork.Server
                 Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()),
                     clientSockets, 2);
 
-                Thread.Sleep((int)(_userSyncTime * 2000) / 4);
+                //Thread.Sleep((int)(_userSyncTime * 5) / 4);
 
                 // Send User Id
                 for (int i = 0; i < uniqueIdsToSync.Count; i++)
@@ -96,13 +96,13 @@ namespace SNetwork.Server
                 }
 
 
-                Thread.Sleep((int) (_userSyncTime * 2000) /4);
+                //Thread.Sleep((int) (250) /4);
 
                 // TODO: Optimize this
                 // Send Room data
                 for (int i = 0; i < clientSockets.Count; i++)
                 {
-                    Room room = rooms.First(x => x.usersInRoomIds.Contains(clientSockets.Values.ElementAt(i).id));
+                    Room room = rooms.FirstOrDefault(x => x.usersInRoomIds.Contains(clientSockets.Values.ElementAt(i).id));
                     if (room != null)
                     {
                         // Send room 
@@ -110,7 +110,7 @@ namespace SNetwork.Server
                     }
                 }
 
-                Thread.Sleep((int)(_userSyncTime * 2000) / 4);
+                //Thread.Sleep((int)(_userSyncTime * 5) / 4);
 
                 // Send invites
                 for (int i = 0; i < clientSockets.Count; i++)
@@ -120,7 +120,7 @@ namespace SNetwork.Server
                         x => x.userFrom == clientSockets.Values.ElementAt(i).id ||
                              x.userTo == clientSockets.Values.ElementAt(i).id);
 
-                    if (invites != null)
+                    if (invites != null && invites.Count > 0)
                     {
                         // Send invite 
                         Messaging.instance.SendInvites(invitesToSend, clientSockets.Values.ElementAt(i).id, clientSockets);
@@ -218,11 +218,11 @@ namespace SNetwork.Server
             customCode[1] = dataBuffer[4];
             var sendCode = Convert.ToInt32(dataBuffer[1]);
             if (headerCode == 0)
-                Messaging.instance.Send(dataBuffer.Skip(5).ToArray(), headerCode, sendCode, clientSockets[socket].id,
+                Messaging.instance.Send(dataBuffer.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), headerCode, sendCode, clientSockets[socket].id,
                     BitConverter.ToInt16(customCode, 0), clientSockets);
             else
-                ResponseManager.instance.HandleResponse(dataBuffer.Skip(5).ToArray(), headerCode, sendCode,
-                    BitConverter.ToInt16(customCode, 0), socket, clientSockets[socket].id);
+                ResponseManager.instance.HandleResponse(dataBuffer.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), headerCode, sendCode,
+                    0, socket, clientSockets[socket].id);
 
             if(socket.Connected)
                 BeginReceiving(socket);
@@ -312,8 +312,14 @@ namespace SNetwork.Server
             }
             else
             {
-                // remove from current room
                 Socket clientSocket = clientSockets.FirstOrDefault(x => x.Value.id == userId).Key;
+                if (room.usersInRoomIds.Count >= 4)
+                {
+                    // No Room found, send error
+                    Messaging.instance.SendInfoMessage(clientSocket, "Room Full", 0);
+                    return;
+                }
+                // remove from current room
                 LeaveRoom(clientSocket, true);
             }
 
@@ -358,6 +364,13 @@ namespace SNetwork.Server
             {
                 rooms.Remove(room);
             }
+
+            // CreateRoom if its not forever
+            if (forever)
+            {
+                return;
+            }
+            CreateRoom(clientSockets[clientSocket].id);
         }
 
         public void InviteToRoom(string playfabIdFrom, string playfabIdTo)

@@ -26,7 +26,6 @@ namespace PirateGame.Managers
 
         public User user;
         public List<FriendInfo> friends = new List<FriendInfo>();
-        public List<FriendData> friendsData = new List<FriendData>();
         public string region;
 
         public Room roomInfo
@@ -63,7 +62,7 @@ namespace PirateGame.Managers
             // Ignore master server
             if (Input.GetKeyDown(KeyCode.P))
             {
-                masterServerNeeded = false;
+                //masterServerNeeded = false;
             }
 
             RefreshFriends();
@@ -104,47 +103,7 @@ namespace PirateGame.Managers
         void GetFriendsRequest(GetFriendsListResult result)
         {
             friends = result.Friends;
-            // Get Friends Tags
-            List<string> keysRequestList = new List<string>();
-            keysRequestList.Add("PlayFabId");
-            keysRequestList.Add("LoggedIn");
-
-            friendsData.Clear();
-            for (int i = 0; i < friends.Count; i++)
-            {
-                GetUserDataRequest getUserDataRequest = new GetUserDataRequest();
-                getUserDataRequest.PlayFabId = friends[i].FriendPlayFabId;
-                //getUserDataRequest.Keys = keysRequestList;
-                PlayFabClientAPI.GetUserData(getUserDataRequest, GetFriendUserDataResponse, PlayfabError);
-            }
         }
-
-        void GetFriendUserDataResponse(GetUserDataResult result)
-        {
-            for (int i = 0; i < friends.Count; i++)
-            {
-                if (result.Data.ContainsKey("PlayFabId"))
-                {
-                    if (friends[i].FriendPlayFabId == result.Data["PlayFabId"].Value)
-                    {
-                        FriendData data = new FriendData();
-                        data.loggedIn = result.Data["LoggedIn"].Value;
-                        data.playerId = result.Data["PlayFabId"].Value;
-                        friendsData.Add(data);
-
-                        if (refreshFriendsDelegate != null)
-                            refreshFriendsDelegate.Invoke();
-
-                        return;
-                    }
-                }
-                else
-                {
-
-                }
-            }
-        }
-
 
         void RefreshUserData()
         {
@@ -202,12 +161,15 @@ namespace PirateGame.Managers
             user.xp = int.Parse(GetValue("XP", "0", response.Data));
         }
 
-        public string GetValue(string id, string defaultValue, Dictionary<string, UserDataRecord> data)
+        public string GetValue(string id, string defaultValue , Dictionary<string, UserDataRecord> data, bool sendData = true )
         {
             if (data.ContainsKey(id))
                 return data[id].Value;
             else
             {
+                if (sendData == false)
+                    return defaultValue;
+
                 UpdateUserDataRequest request = new UpdateUserDataRequest();
                 request.Data = new Dictionary<string, string>() { { id, defaultValue } };
                 request.Permission = UserDataPermission.Public;

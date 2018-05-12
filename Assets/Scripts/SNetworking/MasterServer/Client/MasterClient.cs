@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using SNetwork;
+using PirateGame.Managers;
 
 namespace SNetwork.Client
 {
@@ -18,7 +19,7 @@ namespace SNetwork.Client
         public Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public bool connecting;
         public bool disconnecting;
-        private int bufferSize = 50000;
+        private int bufferSize = 256000;
         private int timeOut = 5000;
 
         public int ourId = 0;
@@ -170,7 +171,16 @@ namespace SNetwork.Client
                     byte[] customCode = new byte[2];
                     customCode[0] = dataByte[3];
                     customCode[1] = dataByte[4];
-                    ResponseManager.instance.HandleResponse(dataByte.Skip(5).ToArray(), Convert.ToInt32(dataByte[0]), Convert.ToInt32(dataByte[1]), BitConverter.ToInt16(customCode, 0), clientSocket, id);
+
+                    if (UIManager.instance)
+                    {
+                        if(UIManager.instance.autoStopTimer != 0)
+                        {
+                            UIManager.instance.autoStopTimer = 0.001f;
+                        }
+                    }
+
+                    ResponseManager.instance.HandleResponse(dataByte.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), Convert.ToInt32(dataByte[0]), Convert.ToInt32(dataByte[1]), 0, clientSocket, id);
                 }
                 yield return null;
             }

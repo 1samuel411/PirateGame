@@ -15,12 +15,12 @@ namespace SNetwork
     {
         public static string ConvertToASCII(byte[] data)
         {
-            return Encoding.ASCII.GetString(data);
+            return Encoding.UTF8.GetString(data);
         }
 
         public static byte[] ConvertASCIIToBytes(string data)
         {
-            return Encoding.ASCII.GetBytes(data);
+            return Encoding.UTF8.GetBytes(data);
         }
 
         public static MasterNetworkPlayer[] ConvertToNetworkPlayers(byte[] data)

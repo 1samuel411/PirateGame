@@ -133,6 +133,11 @@ public class MasterClientManager : MonoBehaviour
         MasterMessaging.instance.SendDecline(inviteId, 2, getId(), 0, _client.clientSocket);
     }
 
+    public void SendLeave()
+    {
+        MasterMessaging.instance.SendLeave(2, getId(), 0, _client.clientSocket);
+    }
+
     public delegate void OnConnectedDelegate(ResponseMessage message);
     public OnConnectedDelegate onConnectDelegate;
     public delegate void OnCloseDelegate();

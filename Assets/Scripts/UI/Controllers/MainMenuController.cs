@@ -16,14 +16,25 @@ namespace PirateGame.UI.Controllers
             UIManager.instance.ScreenSwitch(playMenuController);
         }
 
+        public void Leave()
+        {
+            MasterClientManager.instance.SendLeave();
+        }
+
         void Update()
         {
+            mainMenuView.leaveButton.gameObject.SetActive(false);
             if (PlayerManager.instance.roomInfo != null)
             {
                 mainMenuView.roomInfoText.text = "Room: " + PlayerManager.instance.roomInfo.roomId;
                 for (int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
                 {
                     mainMenuView.roomInfoText.text += "\nUser " + (i + 1) + ": " + PlayerManager.instance.roomInfo.usersInRoom[i].username;
+                }
+
+                if(PlayerManager.instance.roomInfo.usersInRoom.Count > 1)
+                {
+                    mainMenuView.leaveButton.gameObject.SetActive(true);
                 }
 
                 mainMenuView.character1.SetActive(false);

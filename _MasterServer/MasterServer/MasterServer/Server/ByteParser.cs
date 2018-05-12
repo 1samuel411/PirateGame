@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 using System.Text;
 using Newtonsoft.Json;
 using SNetwork;
@@ -15,12 +16,13 @@ namespace SNetwork
     {
         public static string ConvertToASCII(byte[] data)
         {
-            return Encoding.ASCII.GetString(data);
+            return Encoding.UTF8.GetString(data);
         }
 
         public static byte[] ConvertASCIIToBytes(string data)
         {
-            return Encoding.ASCII.GetBytes(data);
+            Regex.Replace(data, @"\s+", "");
+            return Encoding.UTF8.GetBytes(data);
         }
 
         public static MasterNetworkPlayer[] ConvertToNetworkPlayers(byte[] data)

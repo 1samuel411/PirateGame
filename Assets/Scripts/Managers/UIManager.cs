@@ -71,12 +71,28 @@ namespace PirateGame.Managers
             }
         }
 
+        public float autoStopTimer = 0;
         void UpdateLoading()
         {
+            if(autoStopTimer != 0)
+            {
+                if(Time.time >= autoStopTimer)
+                {
+                    loading = false;
+                    autoStopTimer = 0;
+                }
+            }
+
             if(loading)
                 loadingController.ToggleOn();
             else
                 loadingController.ToggleOff();
+        }
+
+        public void LoadMasterServerCall()
+        {
+            loading = true;
+            autoStopTimer = Time.time + .5f;
         }
 
         void Reload()

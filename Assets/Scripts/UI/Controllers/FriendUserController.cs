@@ -21,96 +21,120 @@ namespace PirateGame.UI.Controllers
         public string username;
         public string online;
         public List<string> tags = new List<string>();
-        public Invite[] inviteData;
-        public Invite acceptedInvite;
+        public Invite inviteData;
+
+        private string lastOnlineValue;
 
         void Awake()
         {
+            InvokeRepeating("RefreshInvites", 0.5f, 0.5f);
             Update();
         }
 
         void Update()
         {
+            friendView.onlineIndicator.SetActive(false);
+            friendView.offlineIndicator.SetActive(false);
+            friendView.unacceptedIndicator.SetActive(false);
+
+            friendView.inviteButton.gameObject.SetActive(false);
+            friendView.acceptButton.gameObject.SetActive(false);
+            friendView.declineButton.gameObject.SetActive(false);
+
+            friendView.removeFriendButton.gameObject.SetActive(true);
+
             friendView.usernameText.text = username;
 
-            friendView.onlineIndicator.SetActive(online != "false");
+            if (tags.Count <= 0)
+                return;
 
-            friendView.inviteButtonGameObject.SetActive(false);
-
-            if (online == "false")
-                friendView.serverText.text = "";
+            if (tags.Contains("Friend"))
+            {
+                switch (online)
+                {
+                    case "false":
+                        friendView.offlineIndicator.SetActive(true);
+                        friendView.serverText.text = "Logged off";
+                        break;
+                    case "NA":
+                        friendView.onlineIndicator.SetActive(true);
+                        friendView.serverText.text = "North American Server";
+                        break;
+                    case "SA":
+                        friendView.onlineIndicator.SetActive(true);
+                        friendView.serverText.text = "South American Servers";
+                        break;
+                    case "AS":
+                        friendView.onlineIndicator.SetActive(true);
+                        friendView.serverText.text = "Asian Servers";
+                        break;
+                    case "EU":
+                        friendView.onlineIndicator.SetActive(true);
+                        friendView.serverText.text = "European Servers";
+                        break;
+                    case "AU":
+                        friendView.onlineIndicator.SetActive(true);
+                        friendView.serverText.text = "Australian Servers";
+                        break;
+                }
+            }
             else
             {
-                friendView.inviteButtonGameObject.SetActive(true);
-                friendView.serverText.text = online + " Server";
+                friendView.unacceptedIndicator.SetActive(true);
+                friendView.serverText.text = "Pending";
             }
+        }
 
-            friendView.acceptRequestHolder.SetActive(false);
-            friendView.requestedHolder.SetActive(false);
-            friendView.friendsHolder.SetActive(false);
-            friendView.joinHolder.SetActive(false);
-            friendView.inLobbyHolder.gameObject.SetActive(false);
+        public void RefreshPlayfab()
+        {
+            // Get online status
+            GetUserDataRequest request = new GetUserDataRequest();
+            request.PlayFabId = playfabId;
+            request.Keys = new List<string> { "LoggedIn" };
+            PlayFabClientAPI.GetUserData(request, GetUserDataSucceed, PlayFabError);
+        }
 
-            for (int i = 0; i < tags.Count; i++)
+        public void RefreshInvites()
+        {
+            // Get invites
+            for (int i = 0; i < PlayerManager.instance.invites.Length; i++)
             {
-                if (tags[i].Contains("Requestee"))
+                // Invite to me
+                if (PlayerManager.instance.invites[i].userTo == MasterClientManager.instance.getId())
                 {
-                    friendView.acceptRequestHolder.SetActive(true);
-                    return;
+
                 }
 
-                if (tags[i].Contains("Requester"))
+                // Invite sent
+                if (PlayerManager.instance.invites[i].userFrom == MasterClientManager.instance.getId())
                 {
-                    friendView.requestedHolder.SetActive(true);
-                    return;
+
                 }
             }
+        }
 
-            if (online != PlayerManager.instance.region)
+        void PlayFabError(PlayFabError error)
+        {
+            Debug.Log("[FriendUserController] PlayFab Error: " + error.ErrorMessage);
+        }
+
+        void GetUserDataSucceed(GetUserDataResult result)
+        {
+            online = PlayerManager.instance.GetValue("LoggedIn", "false", result.Data, false);
+
+            if (lastOnlineValue != online)
             {
-                return;
-            }
+                lastOnlineValue = online;
 
-            friendView.friendsHolder.SetActive(true);
-
-            for (int i = 0; i < inviteData.Length; i++)
-            {
-                if (inviteData[i].userFrom == MasterClientManager.instance.getId())
+                // Set sibling index 1st if online is true
+                if (online.Equals("false") == false)
                 {
-                    // We sent one to this friend
-                    friendView.friendsHolder.SetActive(false);
-                    friendView.joinHolder.SetActive(false);
-                    friendView.acceptRequestHolder.gameObject.SetActive(false);
-                    friendView.inLobbyHolder.gameObject.SetActive(false);
-                    friendView.requestedHolder.gameObject.SetActive(true);
-
-                    acceptedInvite = inviteData[i];
-                    return;
+                    transform.SetAsFirstSibling();
                 }
-
-                if (inviteData[i].userTo == MasterClientManager.instance.getId())
+                // Set sibling index last if online is false
+                else
                 {
-                    // We recieved one from this friend
-                    friendView.acceptRequestHolder.SetActive(false);
-                    friendView.requestedHolder.SetActive(false);
-                    friendView.friendsHolder.SetActive(false);
-                    friendView.inLobbyHolder.gameObject.SetActive(false);
-                    friendView.joinHolder.gameObject.SetActive(true);
-
-                    acceptedInvite = inviteData[i];
-                }
-            }
-
-            for (int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
-            {
-                if (playfabId == PlayerManager.instance.roomInfo.usersInRoom[i].playfabId)
-                {
-                    // Playfab Ids match, they're in the room
-                    friendView.acceptRequestHolder.SetActive(false);
-                    friendView.requestedHolder.SetActive(false);
-                    friendView.friendsHolder.SetActive(false);
-                    friendView.joinHolder.SetActive(false);
-                    friendView.inLobbyHolder.gameObject.SetActive(true);
+                    transform.SetAsLastSibling();
                 }
             }
         }
@@ -177,20 +201,23 @@ namespace PirateGame.UI.Controllers
 
         public void JoinParty()
         {
-            Debug.Log("Accepting invite: " + acceptedInvite.id);
-            MasterClientManager.instance.SendInviteAccept(acceptedInvite.id);
+            UIManager.instance.LoadMasterServerCall();
+            Debug.Log("Accepting invite: " + inviteData.id);
+            MasterClientManager.instance.SendInviteAccept(inviteData.id);
         }
 
         public void InviteParty()
         {
+            UIManager.instance.LoadMasterServerCall();
             Debug.Log("Inviting: " + playfabId);
             MasterClientManager.instance.SendInvite(playfabId);
         }
 
         public void DeclineParty ()
         {
-            Debug.Log("Declining invite: " + acceptedInvite.id);
-            MasterClientManager.instance.SendInviteDecline(acceptedInvite.id);
+            UIManager.instance.LoadMasterServerCall();
+            Debug.Log("Declining invite: " + inviteData.id);
+            MasterClientManager.instance.SendInviteDecline(inviteData.id);
         }
 
     }

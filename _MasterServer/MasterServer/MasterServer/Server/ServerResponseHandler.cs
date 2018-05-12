@@ -28,6 +28,7 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response72, 72);
             ResponseManager.instance.AddServerResponse(Response73, 73);
             ResponseManager.instance.AddServerResponse(Response74, 74);
+            ResponseManager.instance.AddServerResponse(Response75, 75);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -105,6 +106,13 @@ namespace SNetwork.Server
             int inviteTarget = int.Parse(ByteParser.ConvertToASCII(responseBytes));
             Console.WriteLine("Recieved decline invite request to: " + inviteTarget);
             ServerManager.instance.server.DeclineInvite(inviteTarget);
+        }
+
+        public void Response75(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            // Leave
+            Console.WriteLine("Recieved leave request from: " + fromId);
+            ServerManager.instance.server.LeaveRoom(fromSocket);
         }
     }
 }
