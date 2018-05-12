@@ -434,8 +434,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 172.03497, y: 0}
-  m_SizeDelta: {x: 344.06995, y: 0}
+  m_AnchoredPosition: {x: 171.42798, y: 0}
+  m_SizeDelta: {x: 342.85596, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &835302023
 GameObject:
@@ -953,15 +953,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   friendView:
-    onlineIndicator: {fileID: 0}
     usernameText: {fileID: 255416642}
     serverText: {fileID: 1821867960}
-    requestedHolder: {fileID: 0}
-    acceptRequestHolder: {fileID: 0}
-    friendsHolder: {fileID: 0}
-    inviteButtonGameObject: {fileID: 0}
-    joinHolder: {fileID: 0}
-    inLobbyHolder: {fileID: 0}
+    inviteButton: {fileID: 0}
+    acceptButton: {fileID: 0}
+    declineButton: {fileID: 0}
+    removeFriendButton: {fileID: 0}
+    onlineIndicator: {fileID: 0}
+    offlineIndicator: {fileID: 0}
+    unacceptedIndicator: {fileID: 0}
   playfabId: 
   username: 
   online: 
@@ -1760,7 +1760,7 @@ Prefab:
     - target: {fileID: 224831149086849758, guid: f43f8e2a6d52df446a4fa10f0221dea1,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000030412439
+      value: 0.00004559051
       objectReference: {fileID: 0}
     - target: {fileID: 114811147362247072, guid: f43f8e2a6d52df446a4fa10f0221dea1,
         type: 2}
