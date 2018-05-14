@@ -13,14 +13,18 @@ namespace PirateGame.UI.Views
     {
         public Text usernameText;
         public Text serverText;
+        public Text lastOnlineText;
 
         public Button inviteButton;
         public Button acceptButton;
         public Button declineButton;
+        public Button joinButton;
+        public Button dontJoinButton;
         public Button removeFriendButton;
 
         public GameObject onlineIndicator;
         public GameObject offlineIndicator;
         public GameObject unacceptedIndicator;
+        public GameObject notificationIndicator;
     }
 }

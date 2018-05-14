@@ -18,6 +18,8 @@ namespace PirateGame.UI.Views
         public Text rankText;
         public Text xpText;
 
+        public Text coinText;
+
         public Text connectedUsersText;
 
         public GameObject notificationsGameObject;

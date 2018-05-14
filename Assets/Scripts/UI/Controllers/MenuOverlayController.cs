@@ -23,6 +23,7 @@ namespace PirateGame.UI.Controllers
 
             overlayView.rankText.text = PlayerManager.instance.user.rank.ToString();
             overlayView.usernameText.text = PlayerManager.instance.user.username;
+            overlayView.coinText.text = PlayerManager.instance.user.coins.ToString();
 
             overlayView.xpBarImage.fillAmount =
                 (float) (PlayerManager.instance.user.xp - PlayerManager.instance.user.xpToLevel) /
@@ -52,7 +53,7 @@ namespace PirateGame.UI.Controllers
                 for (int x = 0; x < PlayerManager.instance.invites.Length; x++)
                 {
                     // found a relevant invite
-                    if (PlayerManager.instance.invites[x].userTo == MasterClientManager.instance.getId())
+                    if (PlayerManager.instance.invites[x].userTo == PlayerManager.instance.user.playfabId)
                     {
                         // add it
                         requests++;

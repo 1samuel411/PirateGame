@@ -78,7 +78,7 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (250));
+                Thread.Sleep((int) (500)/4);
 
                 SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
 
@@ -86,7 +86,7 @@ namespace SNetwork.Server
                 Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()),
                     clientSockets, 2);
 
-                //Thread.Sleep((int)(_userSyncTime * 5) / 4);
+                Thread.Sleep((int)(500) / 4);
 
                 // Send User Id
                 for (int i = 0; i < uniqueIdsToSync.Count; i++)
@@ -96,7 +96,7 @@ namespace SNetwork.Server
                 }
 
 
-                //Thread.Sleep((int) (250) /4);
+                Thread.Sleep((int) (500) /4);
 
                 // TODO: Optimize this
                 // Send Room data
@@ -110,21 +110,19 @@ namespace SNetwork.Server
                     }
                 }
 
-                //Thread.Sleep((int)(_userSyncTime * 5) / 4);
+                Thread.Sleep((int)(500) / 4);
 
                 // Send invites
                 for (int i = 0; i < clientSockets.Count; i++)
                 {
                     // Find invite relevant to user
                     List<Invite> invitesToSend = invites.FindAll(
-                        x => x.userFrom == clientSockets.Values.ElementAt(i).id ||
-                             x.userTo == clientSockets.Values.ElementAt(i).id);
+                        x => x.userFrom == clientSockets.Values.ElementAt(i).playfabId ||
+                             x.userTo == clientSockets.Values.ElementAt(i).playfabId);
 
-                    if (invites != null && invites.Count > 0)
-                    {
-                        // Send invite 
-                        Messaging.instance.SendInvites(invitesToSend, clientSockets.Values.ElementAt(i).id, clientSockets);
-                    }
+                    
+                    // Send invite 
+                    Messaging.instance.SendInvites(invitesToSend, clientSockets.Values.ElementAt(i).id, clientSockets);
                 }
 
                 CleanInvite();
@@ -305,6 +303,7 @@ namespace SNetwork.Server
         public void JoinRoom(int userId, string id)
         {
             Room room = rooms.FirstOrDefault(x => x.roomId == id);
+            Socket clientSocket = clientSockets.FirstOrDefault(x => x.Value.id == userId).Key;
             if (room == null)
             {
                 // TODO: No room found, send message
@@ -312,7 +311,6 @@ namespace SNetwork.Server
             }
             else
             {
-                Socket clientSocket = clientSockets.FirstOrDefault(x => x.Value.id == userId).Key;
                 if (room.usersInRoomIds.Count >= 4)
                 {
                     // No Room found, send error
@@ -326,7 +324,7 @@ namespace SNetwork.Server
             // Clear user's invites
             for (int i = 0; i < invites.Count; i++)
             {
-                if (invites[i].userFrom == userId || invites[i].userTo == userId)
+                if (invites[i].userFrom == clientSockets[clientSocket].playfabId || invites[i].userTo == clientSockets[clientSocket].playfabId)
                 {
                     invites.RemoveAt(i);
                 }
@@ -341,7 +339,7 @@ namespace SNetwork.Server
             // Clear user's invites
             for (int i = 0; i < invites.Count; i++)
             {
-                if (invites[i].userFrom == clientSockets[clientSocket].id || invites[i].userTo == clientSockets[clientSocket].id)
+                if (invites[i].userFrom == clientSockets[clientSocket].playfabId || invites[i].userTo == clientSockets[clientSocket].playfabId)
                 {
                     invites.RemoveAt(i);
                 }
@@ -384,7 +382,7 @@ namespace SNetwork.Server
 
             for (int i = 0; i < invites.Count; i++)
             {
-                if (invites[i].userFrom == playerFrom.id && invites[i].userTo == playerTo.id)
+                if (invites[i].userFrom == playerFrom.playfabId && invites[i].userTo == playerTo.playfabId)
                 {
                     Console.WriteLine("Invite To Room Error 1");
                     return;
@@ -407,8 +405,8 @@ namespace SNetwork.Server
             }
             invite.id = uniqueId;
             
-            invite.userFrom = playerFrom.id;
-            invite.userTo = playerTo.id;
+            invite.userFrom = playerFrom.playfabId;
+            invite.userTo = playerTo.playfabId;
 
             invites.Add(invite);
         }
@@ -426,11 +424,17 @@ namespace SNetwork.Server
             {
                 // exists, complete invite
                 Room fromUserRoom = null;
+                MasterNetworkPlayer playerFrom = clientSockets.Values.FirstOrDefault(x => x.playfabId == invite.userFrom);
+                if(playerFrom == null)
+                {
+                    // player from doesn't exist, return
+                    return;
+                }
                 for (int i = 0; i < rooms.Count; i++)
                 {
                     for (int x = 0; x < rooms[i].usersInRoomIds.Count; x++)
                     {
-                        if (rooms[i].usersInRoomIds[x].Equals(invite.userFrom))
+                        if (rooms[i].usersInRoomIds[x].Equals(playerFrom.id))
                             fromUserRoom = rooms[i];
                     }
                 }
@@ -443,6 +447,13 @@ namespace SNetwork.Server
                 invites.Remove(invite);
                 JoinRoom(invite.userTo, fromUserRoom.roomId);
             }
+        }
+
+        public void JoinRoom(string userPlayfabId, string id)
+        {
+            MasterNetworkPlayer player = clientSockets.FirstOrDefault(x => x.Value.playfabId == userPlayfabId).Value;
+            if (player != null)
+                JoinRoom(player.id, id);
         }
 
         public void DeclineInvite(int inviteId)
@@ -495,7 +506,7 @@ namespace SNetwork.Server
             {
                 PlayFabId = playfabId,
                 Permission = UserDataPermission.Public,
-                Data = new Dictionary<string, string>() { { "LoggedIn", "false" } }
+                Data = new Dictionary<string, string>() { { "LoggedIn", "false" }, { "LastLogin", DateTime.UtcNow.ToString() } }
             });
         }
     }

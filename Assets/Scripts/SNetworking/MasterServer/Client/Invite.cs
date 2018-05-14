@@ -11,8 +11,8 @@ namespace SNetwork.Client
 
         public DateTime timeSent;
         public int id;
-        public int userFrom;
-        public int userTo;
+        public string userFrom;
+        public string userTo;
 
     }
 }

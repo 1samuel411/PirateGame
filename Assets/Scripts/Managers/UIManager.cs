@@ -53,6 +53,15 @@ namespace PirateGame.Managers
         private bool lastLoading;
         void Update()
         {
+            if (autoStopTimer > 0)
+            {
+                if (Time.time >= autoStopTimer)
+                {
+                    loading = false;
+                    autoStopTimer = -1;
+                }
+            }
+
             if (lastLoading != loading)
             {
                 lastLoading = loading;
@@ -71,18 +80,9 @@ namespace PirateGame.Managers
             }
         }
 
-        public float autoStopTimer = 0;
+        private float autoStopTimer = -1;
         void UpdateLoading()
         {
-            if(autoStopTimer != 0)
-            {
-                if(Time.time >= autoStopTimer)
-                {
-                    loading = false;
-                    autoStopTimer = 0;
-                }
-            }
-
             if(loading)
                 loadingController.ToggleOn();
             else
@@ -93,6 +93,11 @@ namespace PirateGame.Managers
         {
             loading = true;
             autoStopTimer = Time.time + .5f;
+        }
+
+        public void RecieveMasterServerCall()
+        {
+            autoStopTimer = 0.1f;
         }
 
         void Reload()
@@ -108,8 +113,13 @@ namespace PirateGame.Managers
             }
         }
 
-        public void ScreenSwitch(string controllerToSwitchTo)
+        public void ScreenSwitch(string controllerToSwitchTo, bool complete = true)
         {
+            if(complete)
+            {
+                activeScreens.Clear();
+            }
+
             if(activeScreens.Count > 0)
             {
                 activeScreens[0] = menuScreens.Find(x => x.name == controllerToSwitchTo);

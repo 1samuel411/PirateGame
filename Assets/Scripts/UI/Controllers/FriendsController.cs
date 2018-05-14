@@ -39,7 +39,7 @@ namespace PirateGame.UI.Controllers
 
             for (int i = 0; i < PlayerManager.instance.friends.Count; i++)
             {
-                friendUserController.Add(CreateFriendUserController(PlayerManager.instance.friends[i].FriendPlayFabId));
+                friendUserController.Add(CreateFriendUserController(PlayerManager.instance.friends[i].FriendPlayFabId, PlayerManager.instance.friends[i].TitleDisplayName, PlayerManager.instance.friends[i].Tags));
             }
 
             RefreshFriends();
@@ -47,13 +47,67 @@ namespace PirateGame.UI.Controllers
 
         void RefreshFriends()
         {
+            for(int i = 0; i < PlayerManager.instance.friends.Count; i++)
+            {
+                int found = 0;
+                for(int x = 0; x < friendUserController.Count; x++)
+                {
+                    if(PlayerManager.instance.friends[i].FriendPlayFabId == friendUserController[x].playfabId)
+                    {
+                        found++;
+                        break;
+                    }
+                }
+
+                // New user, create
+                if(found <= 0)
+                {
+                    FriendUserController controller = CreateFriendUserController(PlayerManager.instance.friends[i].FriendPlayFabId, PlayerManager.instance.friends[i].TitleDisplayName, PlayerManager.instance.friends[i].Tags);
+                    friendUserController.Add(controller);
+                }
+            }
+
             for(int i = 0; i < friendUserController.Count; i++)
             {
-                friendUserController[i].Refresh();
+                bool found = false;
+                for(int x = 0; x < PlayerManager.instance.friends.Count; x++)
+                {
+                    if(PlayerManager.instance.friends[x].FriendPlayFabId == friendUserController[i].playfabId)
+                    {
+                        // Load data again
+                        found = true;
+                        friendUserController[i].playfabId = PlayerManager.instance.friends[x].FriendPlayFabId;
+                        friendUserController[i].username = PlayerManager.instance.friends[x].TitleDisplayName;
+                        friendUserController[i].tags = PlayerManager.instance.friends[x].Tags;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    if (friendUserController[i] != null)
+                    {
+                        Destroy(friendUserController[i].gameObject);
+                        friendUserController.RemoveAt(i);
+                    }
+                    continue;
+                }
+
+                friendUserController[i].RefreshPlayfab();
             }
         }
 
-        FriendUserController CreateFriendUserController(string playfabId)
+        public void ExpandFriend(FriendUserController controller)
+        {
+            for(int i = 0; i < friendUserController.Count; i++)
+            {
+                friendUserController[i].expanded = false;
+            }
+
+            controller.expanded = true;
+        }
+
+        FriendUserController CreateFriendUserController(string playfabId, string username, List<string> tags)
         {
             GameObject friendPrefab = Instantiate(friendsView.friendUserPrefab);
             friendPrefab.transform.SetParent(friendsView.friendsListHolder);
@@ -63,6 +117,8 @@ namespace PirateGame.UI.Controllers
 
             FriendUserController friendUserController = friendPrefab.GetComponent<FriendUserController>();
             friendUserController.playfabId = playfabId;
+            friendUserController.username = username;
+            friendUserController.tags = tags;
             return friendUserController;
         }
 

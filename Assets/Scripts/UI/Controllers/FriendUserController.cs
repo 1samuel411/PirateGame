@@ -20,11 +20,13 @@ namespace PirateGame.UI.Controllers
         public string playfabId;
         public string username;
         public string online;
+        public DateTime lastOnlineTime;
         public List<string> tags = new List<string>();
-        public Invite inviteData;
+        public Invite inviteRecieved;
+        public Invite inviteSent;
 
-        private string lastOnlineValue;
-
+        public bool expanded;
+        
         void Awake()
         {
             InvokeRepeating("RefreshInvites", 0.5f, 0.5f);
@@ -36,15 +38,20 @@ namespace PirateGame.UI.Controllers
             friendView.onlineIndicator.SetActive(false);
             friendView.offlineIndicator.SetActive(false);
             friendView.unacceptedIndicator.SetActive(false);
+            friendView.notificationIndicator.SetActive(false);
 
             friendView.inviteButton.gameObject.SetActive(false);
             friendView.acceptButton.gameObject.SetActive(false);
             friendView.declineButton.gameObject.SetActive(false);
+            friendView.joinButton.gameObject.SetActive(false);
+            friendView.dontJoinButton.gameObject.SetActive(false);
+            friendView.removeFriendButton.gameObject.SetActive(false);
 
-            friendView.removeFriendButton.gameObject.SetActive(true);
+            if(expanded)
+                friendView.removeFriendButton.gameObject.SetActive(true);
 
             friendView.usernameText.text = username;
-
+            
             if (tags.Count <= 0)
                 return;
 
@@ -54,35 +61,100 @@ namespace PirateGame.UI.Controllers
                 {
                     case "false":
                         friendView.offlineIndicator.SetActive(true);
+                        if(lastOnlineTime == new DateTime())
+                            friendView.lastOnlineText.text = "Unkown";
+                        else
+                            friendView.lastOnlineText.text = GetRelativeTime.Get(lastOnlineTime);
+
                         friendView.serverText.text = "Logged off";
+                        transform.SetAsLastSibling();
                         break;
                     case "NA":
                         friendView.onlineIndicator.SetActive(true);
+                        friendView.lastOnlineText.text = "Now";
                         friendView.serverText.text = "North American Server";
                         break;
                     case "SA":
                         friendView.onlineIndicator.SetActive(true);
+                        friendView.lastOnlineText.text = "Now";
                         friendView.serverText.text = "South American Servers";
                         break;
                     case "AS":
                         friendView.onlineIndicator.SetActive(true);
+                        friendView.lastOnlineText.text = "Now";
                         friendView.serverText.text = "Asian Servers";
                         break;
                     case "EU":
                         friendView.onlineIndicator.SetActive(true);
+                        friendView.lastOnlineText.text = "Now";
                         friendView.serverText.text = "European Servers";
                         break;
                     case "AU":
                         friendView.onlineIndicator.SetActive(true);
+                        friendView.lastOnlineText.text = "Now";
                         friendView.serverText.text = "Australian Servers";
                         break;
+                }
+                
+                if (friendView.onlineIndicator.activeInHierarchy)
+                {
+                    if (!PlayerManager.instance.roomInfo.usersInRoom.Any(x => x.playfabId == playfabId))
+                    {
+                        friendView.inviteButton.gameObject.SetActive(true);
+                        if (inviteRecieved != null)
+                        {
+                            // Recieved invite
+                            friendView.notificationIndicator.SetActive(true);
+                            friendView.joinButton.gameObject.SetActive(true);
+                            friendView.dontJoinButton.gameObject.SetActive(true);
+                        }
+
+                        if (inviteSent != null)
+                        {
+                            // We sent
+                            friendView.inviteButton.gameObject.SetActive(false);
+                        }
+                    }
                 }
             }
             else
             {
+                friendView.lastOnlineText.text = "Unkown";
                 friendView.unacceptedIndicator.SetActive(true);
-                friendView.serverText.text = "Pending";
+                transform.SetAsFirstSibling();
+
+                if (tags.Contains("Requestee"))
+                {
+                    friendView.serverText.text = "Pending";
+                    friendView.acceptButton.gameObject.SetActive(true);
+                    friendView.declineButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    friendView.serverText.text = "Friend Request Sent";
+                    friendView.unacceptedIndicator.SetActive(true);
+                }
             }
+
+            if (expanded == false)
+            {
+                friendView.inviteButton.gameObject.SetActive(false);
+                friendView.acceptButton.gameObject.SetActive(false);
+                friendView.declineButton.gameObject.SetActive(false);
+                friendView.joinButton.gameObject.SetActive(false);
+                friendView.dontJoinButton.gameObject.SetActive(false);
+                friendView.removeFriendButton.gameObject.SetActive(false);
+            }
+        }
+
+        public void Expand()
+        {
+            if (expanded)
+            {
+                expanded = false;
+                return;
+            }
+            GetComponentInParent<FriendsController>().ExpandFriend(this);
         }
 
         public void RefreshPlayfab()
@@ -91,24 +163,31 @@ namespace PirateGame.UI.Controllers
             GetUserDataRequest request = new GetUserDataRequest();
             request.PlayFabId = playfabId;
             request.Keys = new List<string> { "LoggedIn" };
+            request.Keys = new List<string> { "LastLogin" };
             PlayFabClientAPI.GetUserData(request, GetUserDataSucceed, PlayFabError);
         }
 
         public void RefreshInvites()
         {
+            inviteRecieved = null;
+            inviteSent = null;
+
+            if (PlayerManager.instance.invites == null)
+                return;
+
             // Get invites
             for (int i = 0; i < PlayerManager.instance.invites.Length; i++)
             {
                 // Invite to me
-                if (PlayerManager.instance.invites[i].userTo == MasterClientManager.instance.getId())
+                if (PlayerManager.instance.invites[i].userTo == playfabId)
                 {
-
+                    inviteSent = PlayerManager.instance.invites[i];
                 }
 
                 // Invite sent
-                if (PlayerManager.instance.invites[i].userFrom == MasterClientManager.instance.getId())
+                if (PlayerManager.instance.invites[i].userFrom == playfabId)
                 {
-
+                    inviteRecieved = PlayerManager.instance.invites[i];
                 }
             }
         }
@@ -118,9 +197,22 @@ namespace PirateGame.UI.Controllers
             Debug.Log("[FriendUserController] PlayFab Error: " + error.ErrorMessage);
         }
 
+        private string lastOnlineValue;
         void GetUserDataSucceed(GetUserDataResult result)
         {
+            if (gameObject == null)
+                return;
+
             online = PlayerManager.instance.GetValue("LoggedIn", "false", result.Data, false);
+            string lastOnlineText = PlayerManager.instance.GetValue("LastLogin", "", result.Data, false);
+            if(lastOnlineText == "")
+            {
+                lastOnlineTime = new DateTime();
+            }
+            else
+            {
+                lastOnlineTime = DateTime.Parse(lastOnlineText);
+            }
 
             if (lastOnlineValue != online)
             {
@@ -162,6 +254,7 @@ namespace PirateGame.UI.Controllers
             Debug.Log((string)messageValue);
 
             tags.Remove("Requestee");
+            tags.Add("Friend");
             UIManager.instance.loading = false;
         }
 
@@ -190,6 +283,7 @@ namespace PirateGame.UI.Controllers
             Debug.Log((string)messageValue);
 
             Destroy(gameObject);
+            PlayerManager.instance.friends.RemoveAll(x => x.FriendPlayFabId == playfabId);
             UIManager.instance.loading = false;
         }
 
@@ -202,8 +296,8 @@ namespace PirateGame.UI.Controllers
         public void JoinParty()
         {
             UIManager.instance.LoadMasterServerCall();
-            Debug.Log("Accepting invite: " + inviteData.id);
-            MasterClientManager.instance.SendInviteAccept(inviteData.id);
+            Debug.Log("Accepting invite: " + inviteRecieved.id);
+            MasterClientManager.instance.SendInviteAccept(inviteRecieved.id);
         }
 
         public void InviteParty()
@@ -216,8 +310,8 @@ namespace PirateGame.UI.Controllers
         public void DeclineParty ()
         {
             UIManager.instance.LoadMasterServerCall();
-            Debug.Log("Declining invite: " + inviteData.id);
-            MasterClientManager.instance.SendInviteDecline(inviteData.id);
+            Debug.Log("Declining invite: " + inviteRecieved.id);
+            MasterClientManager.instance.SendInviteDecline(inviteRecieved.id);
         }
 
     }

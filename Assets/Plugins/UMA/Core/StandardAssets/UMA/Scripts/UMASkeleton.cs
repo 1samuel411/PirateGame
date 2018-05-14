@@ -612,7 +612,8 @@ namespace UMA
 			}
 			else
 			{
-				throw new Exception("Bone not found.");
+                return Quaternion.identity;
+				//throw new Exception("Bone not found.");
 			}
 		}
 

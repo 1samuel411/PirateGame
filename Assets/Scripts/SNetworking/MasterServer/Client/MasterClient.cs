@@ -174,10 +174,7 @@ namespace SNetwork.Client
 
                     if (UIManager.instance)
                     {
-                        if(UIManager.instance.autoStopTimer != 0)
-                        {
-                            UIManager.instance.autoStopTimer = 0.001f;
-                        }
+                        UIManager.instance.RecieveMasterServerCall();
                     }
 
                     ResponseManager.instance.HandleResponse(dataByte.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), Convert.ToInt32(dataByte[0]), Convert.ToInt32(dataByte[1]), 0, clientSocket, id);

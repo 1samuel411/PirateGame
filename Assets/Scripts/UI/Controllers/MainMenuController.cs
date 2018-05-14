@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using PirateGame.Managers;
 using PirateGame.UI.Views;
+using SNetwork;
 
 namespace PirateGame.UI.Controllers
 {
@@ -21,6 +22,15 @@ namespace PirateGame.UI.Controllers
             MasterClientManager.instance.SendLeave();
         }
 
+        private void Start()
+        {
+            mainMenuView.character1.SetActive(false);
+            mainMenuView.character2.SetActive(false);
+            mainMenuView.character3.SetActive(false);
+            mainMenuView.character4.SetActive(false);
+        }
+
+        public Room lastRoomInfo = new Room();
         void Update()
         {
             mainMenuView.leaveButton.gameObject.SetActive(false);
@@ -37,29 +47,33 @@ namespace PirateGame.UI.Controllers
                     mainMenuView.leaveButton.gameObject.SetActive(true);
                 }
 
-                mainMenuView.character1.SetActive(false);
-                mainMenuView.character2.SetActive(false);
-                mainMenuView.character3.SetActive(false);
-                mainMenuView.character4.SetActive(false);
-                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 1)
-                    mainMenuView.character1.SetActive(true);
-                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 2)
+                if (PlayerManager.instance.roomInfo.roomId != lastRoomInfo.roomId || PlayerManager.instance.roomInfo.usersInRoom.Count != lastRoomInfo.usersInRoom.Count)
                 {
-                    mainMenuView.character1.SetActive(true);
-                    mainMenuView.character2.SetActive(true);
-                }
-                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 3)
-                {
-                    mainMenuView.character1.SetActive(true);
-                    mainMenuView.character2.SetActive(true);
-                    mainMenuView.character3.SetActive(true);
-                }
-                if (PlayerManager.instance.roomInfo.usersInRoom.Count == 4)
-                {
-                    mainMenuView.character1.SetActive(true);
-                    mainMenuView.character2.SetActive(true);
-                    mainMenuView.character3.SetActive(true);
-                    mainMenuView.character4.SetActive(true);
+                    lastRoomInfo = PlayerManager.instance.roomInfo;
+                    mainMenuView.character1.SetActive(false);
+                    mainMenuView.character2.SetActive(false);
+                    mainMenuView.character3.SetActive(false);
+                    mainMenuView.character4.SetActive(false);
+                    if (PlayerManager.instance.roomInfo.usersInRoom.Count == 1)
+                        mainMenuView.character1.SetActive(true);
+                    if (PlayerManager.instance.roomInfo.usersInRoom.Count == 2)
+                    {
+                        mainMenuView.character1.SetActive(true);
+                        mainMenuView.character2.SetActive(true);
+                    }
+                    if (PlayerManager.instance.roomInfo.usersInRoom.Count == 3)
+                    {
+                        mainMenuView.character1.SetActive(true);
+                        mainMenuView.character2.SetActive(true);
+                        mainMenuView.character3.SetActive(true);
+                    }
+                    if (PlayerManager.instance.roomInfo.usersInRoom.Count == 4)
+                    {
+                        mainMenuView.character1.SetActive(true);
+                        mainMenuView.character2.SetActive(true);
+                        mainMenuView.character3.SetActive(true);
+                        mainMenuView.character4.SetActive(true);
+                    }
                 }
             }
             else

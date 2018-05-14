@@ -34,7 +34,7 @@ namespace PirateGame.UI.Controllers
 
         public void Search()
         {
-            if (nameToSearch.IsNullOrWhitespace())
+            if (nameToSearch.IsNullOrWhitespace() && nameToSearch != PlayerManager.instance.user.username)
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace PirateGame.UI.Controllers
             Debug.Log((string)messageValue);
             */
 
-            PlayerManager.instance.RefreshFriends();
+            PlayerManager.instance.RefreshFriends(true);
             Back();
             UIManager.instance.loading = false;
         }

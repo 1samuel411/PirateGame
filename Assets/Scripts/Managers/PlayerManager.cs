@@ -62,7 +62,7 @@ namespace PirateGame.Managers
             // Ignore master server
             if (Input.GetKeyDown(KeyCode.P))
             {
-                //masterServerNeeded = false;
+                masterServerNeeded = false;
             }
 
             RefreshFriends();
@@ -88,8 +88,11 @@ namespace PirateGame.Managers
         private float lastRefresh;
         public delegate void RefreshFriendsDelegate();
         public RefreshFriendsDelegate refreshFriendsDelegate;
-        public void RefreshFriends()
+        public void RefreshFriends(bool immediate = false)
         {
+            if (immediate)
+                lastRefresh = 0;
+
             if (Time.time >= lastRefresh && UIManager.instance.IsScreenOpen("Account") == false)
             {
                 lastRefresh = Time.time + 5f;
@@ -103,6 +106,8 @@ namespace PirateGame.Managers
         void GetFriendsRequest(GetFriendsListResult result)
         {
             friends = result.Friends;
+            if(refreshFriendsDelegate != null)
+                refreshFriendsDelegate.Invoke();
         }
 
         void RefreshUserData()
@@ -112,6 +117,7 @@ namespace PirateGame.Managers
 
             List<string> keysRequestList = new List<string>();
             keysRequestList.Add("XP");
+            keysRequestList.Add("Coins");
 
             GetUserDataRequest request = new GetUserDataRequest();
             request.PlayFabId = user.playfabId;
@@ -123,11 +129,6 @@ namespace PirateGame.Managers
         {
             user.username = result.InfoResultPayload.PlayerProfile.DisplayName;
             user.playfabId = result.PlayFabId;
-
-            UpdateUserDataRequest request = new UpdateUserDataRequest();
-            request.Data = new Dictionary<string, string>() { { "PlayFabId", result.PlayFabId } };
-            request.Permission = UserDataPermission.Public;
-            PlayFabClientAPI.UpdateUserData(request, x => { Debug.Log("Successfully updated playfab Id"); }, PlayfabError);
 
             UIManager.instance.loading = true;
             RefreshUserData();
@@ -159,6 +160,7 @@ namespace PirateGame.Managers
 
             // Update XP
             user.xp = int.Parse(GetValue("XP", "0", response.Data));
+            user.coins = int.Parse(GetValue("Coins", "0", response.Data));
         }
 
         public string GetValue(string id, string defaultValue , Dictionary<string, UserDataRecord> data, bool sendData = true )
@@ -225,7 +227,7 @@ namespace PirateGame.Managers
             UIManager.instance.loading = false;
 
             Debug.Log("Connection to Master Server lost...");
-            UIManager.instance.ScreenSwitch("Account");
+            UIManager.instance.ScreenSwitch("Account", true);
             loggedIn = false;
         }
     }
@@ -263,6 +265,7 @@ namespace PirateGame.Managers
             }
         }
         public int xp;
+        public int coins;
     }
 
     [System.Serializable]
