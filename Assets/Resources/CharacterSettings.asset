@@ -35,27 +35,6 @@ MonoBehaviour:
       - {r: 0.5176471, g: 0.34117648, b: 0.21176472, a: 1}
       - {r: 0.4431373, g: 0.3137255, b: 0.19215688, a: 1}
       - {r: 0.53333336, g: 0.3372549, b: 0.23137257, a: 1}
-    - description: Eyes
-      mainType: 1
-      genderRestriction: 0
-      type: 1
-      bodyParts:
-      - name: Eye 1
-        recipeMale: {fileID: 11400000, guid: 518535e4bd613dc458a460be75d97327, type: 2}
-        recipeFemale: {fileID: 11400000, guid: 518535e4bd613dc458a460be75d97327, type: 2}
-      - name: Eye 2
-        recipeMale: {fileID: 11400000, guid: 99f3dbcab03fba24badff7354f6f90c9, type: 2}
-        recipeFemale: {fileID: 11400000, guid: 99f3dbcab03fba24badff7354f6f90c9, type: 2}
-      - name: Eye 3
-        recipeMale: {fileID: 11400000, guid: 8ea99475ea1aac141b787fc5dc6cc824, type: 2}
-        recipeFemale: {fileID: 11400000, guid: 8ea99475ea1aac141b787fc5dc6cc824, type: 2}
-      - name: Eye 4
-        recipeMale: {fileID: 11400000, guid: 3735845fb23f58b4a8d264c47ca602dc, type: 2}
-        recipeFemale: {fileID: 11400000, guid: 3735845fb23f58b4a8d264c47ca602dc, type: 2}
-      - name: Eye 5
-        recipeMale: {fileID: 11400000, guid: 667840f679650844dbfbd6f3a4134998, type: 2}
-        recipeFemale: {fileID: 11400000, guid: 667840f679650844dbfbd6f3a4134998, type: 2}
-      colors: []
     - description: Eye Color
       mainType: 1
       genderRestriction: 0
@@ -335,12 +314,6 @@ MonoBehaviour:
   - descriptionName: Legs
     bodyComponents:
     - description: Legs Size
-      mainType: 0
-      genderRestriction: 0
-      type: 0
-      bodyParts: []
-      colors: []
-    - description: Legs Seperation
       mainType: 0
       genderRestriction: 0
       type: 0

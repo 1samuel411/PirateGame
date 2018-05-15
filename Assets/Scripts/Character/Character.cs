@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UMA.CharacterSystem;
+using UMA;
 using UnityEngine;
 
 namespace PirateGame.Character
@@ -10,8 +12,8 @@ namespace PirateGame.Character
     {
         public CharacterSettingsScriptableObject characterSettings;
 
-        public UMA.UMAData umaData;
-        public UMA.CharacterSystem.DynamicCharacterAvatar dynamicCharacterAvatar;
+        public UMAData umaData;
+        public DynamicCharacterAvatar dynamicCharacterAvatar;
 
         private void Awake()
         {
@@ -25,7 +27,19 @@ namespace PirateGame.Character
 
         public void ChangePart(string name, float value)
         {
-            // TODO
+            // Convert name
+            string newName = name.Replace(" ", "");
+            newName = name.First().ToString().ToLower() + newName.Substring(1);
+            // Apply
+            Dictionary<string, DnaSetter> dna = dynamicCharacterAvatar.GetDNA();
+            if(dna.ContainsKey(newName) == false)
+            {
+                Debug.Log("Key missing: " + newName);
+                return;
+            }
+
+            dna[newName].Set(value);
+            dynamicCharacterAvatar.BuildCharacter();
         }
 
         public int gender;

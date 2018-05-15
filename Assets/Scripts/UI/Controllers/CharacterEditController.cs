@@ -84,6 +84,7 @@ namespace PirateGame.UI.Controllers
                 for(int x = 0; x < characterSettings.bodyHolders[i].bodyComponents.Length; x++)
                 {
                     EditCharacterController controller = SpawnEditCharacterController(characterSettings.bodyHolders[i].bodyComponents[x]);
+                    controller.value = 0.5f;
                     controller.changedDelegate += BodyChange;
                 }
             }
