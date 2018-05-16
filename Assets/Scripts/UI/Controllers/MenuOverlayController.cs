@@ -19,7 +19,7 @@ namespace PirateGame.UI.Controllers
 
         void Update()
         {
-            //overlayView.rankImage.sprite = IconManager.instance.rankSprites[PlayerManager.instance.user.rank];
+            overlayView.rankImage.sprite = IconManager.instance.rankSprites[PlayerManager.instance.user.rank];
 
             overlayView.rankText.text = PlayerManager.instance.user.rank.ToString();
             overlayView.usernameText.text = PlayerManager.instance.user.username;

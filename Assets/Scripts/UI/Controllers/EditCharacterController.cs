@@ -25,6 +25,10 @@ namespace PirateGame.UI.Controllers
         public int selected;
         [ShowIf("mainType", BodyComponent.MainType.Slider)]
         public float value;
+        [ShowIf("mainType", BodyComponent.MainType.Slider)]
+        public float minValue;
+        [ShowIf("mainType", BodyComponent.MainType.Slider)]
+        public float maxValue;
 
         public string description;
 
@@ -82,6 +86,7 @@ namespace PirateGame.UI.Controllers
                 if (!initialized)
                 {
                     initialized = true;
+                    selected = (int)value;
                     changedDelegate(this);
                 }
             }
@@ -95,6 +100,8 @@ namespace PirateGame.UI.Controllers
                 {
                     initialized = true;
                     editCharacterView.slider.value = value;
+                    editCharacterView.slider.minValue = minValue;
+                    editCharacterView.slider.maxValue = maxValue;
                     changedDelegate(this);
                 }
             }

@@ -38,6 +38,16 @@ public class BodyComponent
     public enum GenderRestriction { none, maleOnly, femaleOnly };
     public GenderRestriction genderRestriction;
 
+    [ShowIf("mainType", MainType.Slider)]
+    public float defaultValue = 0.5f;
+    [ShowIf("mainType", MainType.Slider)]
+    public float maxValue = 0.6f;
+    [ShowIf("mainType", MainType.Slider)]
+    public float minValue = 0.4f;
+
+    [ShowIf("mainType", MainType.Selectable)]
+    public int defaultSelection = 0;
+
     [ShowIf("mainType", MainType.Selectable)]
     public Type type;
 

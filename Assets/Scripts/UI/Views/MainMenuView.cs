@@ -15,10 +15,18 @@ namespace PirateGame.UI.Views
 
         public Button leaveButton;
 
-        public GameObject character1;
-        public GameObject character2;
-        public GameObject character3;
-        public GameObject character4;
+        public MainMenuCharacter character1;
+        public MainMenuCharacter character2;
+        public MainMenuCharacter character3;
+        public MainMenuCharacter character4;
 
+        [System.Serializable]
+        public class MainMenuCharacter
+        {
+            public Character.Character character;
+            public Text nameText;
+            public Image rankImage;
+            public GameObject hoverParticle;
+        }
     }
 }

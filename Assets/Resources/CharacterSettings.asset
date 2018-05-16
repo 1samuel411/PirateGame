@@ -17,12 +17,20 @@ MonoBehaviour:
     - description: Gender
       mainType: 1
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 2
       bodyParts: []
       colors: []
     - description: Skin Color
       mainType: 1
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors:
@@ -38,6 +46,10 @@ MonoBehaviour:
     - description: Eye Color
       mainType: 1
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors:
@@ -52,6 +64,10 @@ MonoBehaviour:
     - description: Hair
       mainType: 1
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 1
       bodyParts:
       - name: Hair 1
@@ -67,6 +83,10 @@ MonoBehaviour:
     - description: Hair Color
       mainType: 1
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors:
@@ -81,6 +101,10 @@ MonoBehaviour:
     - description: Eyebrow
       mainType: 1
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 1
       bodyParts:
       - name: Brow 1
@@ -93,6 +117,10 @@ MonoBehaviour:
     - description: Beard
       mainType: 1
       genderRestriction: 1
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 1
       bodyParts:
       - name: Beard 1
@@ -110,18 +138,30 @@ MonoBehaviour:
     - description: Head Width
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Head Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Neck Thickness
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
@@ -130,108 +170,180 @@ MonoBehaviour:
     - description: Ears Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Ears Position
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Nose Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Nose Curve
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Chin Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Chin Position
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Mandible Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Jaws Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Jaws Position
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Cheek Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Cheek Position
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Low Cheek Position
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Forehead Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Forehead Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Lips Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Mouth Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Eye Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Eye Spacing
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
@@ -240,30 +352,50 @@ MonoBehaviour:
     - description: Arm Length
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Arm Width
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Forearm Length
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Forearm  Width
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Hands Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
@@ -272,42 +404,70 @@ MonoBehaviour:
     - description: Upper Muscle
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Upper Weight
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Lower Muscle
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Lower Weight
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Waist
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Belly
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Breast Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 1
+      minValue: 0
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
@@ -316,18 +476,30 @@ MonoBehaviour:
     - description: Legs Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Feet Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []
     - description: Gluteus Size
       mainType: 0
       genderRestriction: 0
+      defaultValue: 0.5
+      maxValue: 0.6
+      minValue: 0.4
+      defaultSelection: 0
       type: 0
       bodyParts: []
       colors: []

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using PirateGame.Entity;
 using PirateGame.Networking;
+using PirateGame.UI.Controllers;
 using PlayFab;
 using PlayFab.ClientModels;
 using Sirenix.Utilities;
@@ -60,7 +62,7 @@ namespace PirateGame.Managers
         void Update()
         {
             // Ignore master server
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.F8))
             {
                 masterServerNeeded = false;
             }
@@ -118,6 +120,7 @@ namespace PirateGame.Managers
             List<string> keysRequestList = new List<string>();
             keysRequestList.Add("XP");
             keysRequestList.Add("Coins");
+            keysRequestList.Add("Character");
 
             GetUserDataRequest request = new GetUserDataRequest();
             request.PlayFabId = user.playfabId;
@@ -161,6 +164,7 @@ namespace PirateGame.Managers
             // Update XP
             user.xp = int.Parse(GetValue("XP", "0", response.Data));
             user.coins = int.Parse(GetValue("Coins", "0", response.Data));
+            user.SetCharacterSettings(GetValue("Character", Character.Character.GetDefaultCharacter(), response.Data));
         }
 
         public string GetValue(string id, string defaultValue , Dictionary<string, UserDataRecord> data, bool sendData = true )
@@ -172,12 +176,17 @@ namespace PirateGame.Managers
                 if (sendData == false)
                     return defaultValue;
 
-                UpdateUserDataRequest request = new UpdateUserDataRequest();
-                request.Data = new Dictionary<string, string>() { { id, defaultValue } };
-                request.Permission = UserDataPermission.Public;
-                PlayFabClientAPI.UpdateUserData(request, result => { Debug.Log("Reset Key: " + id + ", with: " + defaultValue); }, PlayfabError);
+                SetValue(id, defaultValue);
                 return defaultValue;
             }
+        }
+
+        public void SetValue(string id, string data)
+        {
+            UpdateUserDataRequest request = new UpdateUserDataRequest();
+            request.Data = new Dictionary<string, string>() { { id, data } };
+            request.Permission = UserDataPermission.Public;
+            PlayFabClientAPI.UpdateUserData(request, result => { Debug.Log("Set Data: " + id + ", with: " + data); }, PlayfabError);
         }
 
         void PlayfabError(PlayFabError error)
@@ -230,6 +239,13 @@ namespace PirateGame.Managers
             UIManager.instance.ScreenSwitch("Account", true);
             loggedIn = false;
         }
+
+        public static int GetRank(int xp)
+        {
+            int rank = (int)(xp / 200.0f);
+            rank = Mathf.Clamp(rank, 0, IconManager.instance.rankSprites.Length);
+            return rank + 1;
+        }
     }
 
     [System.Serializable]
@@ -243,9 +259,7 @@ namespace PirateGame.Managers
         {
             get
             {
-                int rank = (int)(xp / 200.0f);
-                rank = Mathf.Clamp(rank, 0, IconManager.instance.rankSprites.Length);
-                return rank + 1;
+                return PlayerManager.GetRank(xp);
             }
         }
 
@@ -266,6 +280,17 @@ namespace PirateGame.Managers
         }
         public int xp;
         public int coins;
+
+        public Character.CharacterSettings character;
+
+        public void SetCharacterSettings(string settings)
+        {
+            character = JsonConvert.DeserializeObject<Character.CharacterSettings>(settings);
+        }
+        public float GetCharacterSetting(string name)
+        {
+            return character.bodySelections.FirstOrDefault(x => x.name == name).value;
+        }
     }
 
     [System.Serializable]

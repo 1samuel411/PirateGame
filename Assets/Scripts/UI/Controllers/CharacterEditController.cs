@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using PirateGame.Character;
+using PirateGame.Managers;
 using PirateGame.ScriptableObjects;
 using PirateGame.UI.Views;
 using UnityEngine;
@@ -28,6 +30,9 @@ namespace PirateGame.UI.Controllers
                 Debug.Log("Character Settings not found! " + CharacterSettingsScriptableObject.location);
                 return;
             }
+
+            character.SetCharacter(PlayerManager.instance.user.character);
+
             Refresh();
         }
 
@@ -84,7 +89,9 @@ namespace PirateGame.UI.Controllers
                 for(int x = 0; x < characterSettings.bodyHolders[i].bodyComponents.Length; x++)
                 {
                     EditCharacterController controller = SpawnEditCharacterController(characterSettings.bodyHolders[i].bodyComponents[x]);
-                    controller.value = 0.5f;
+                    controller.value = PlayerManager.instance.user.GetCharacterSetting(characterSettings.bodyHolders[i].bodyComponents[x].description);
+                    controller.maxValue = characterSettings.bodyHolders[i].bodyComponents[x].maxValue;
+                    controller.minValue = characterSettings.bodyHolders[i].bodyComponents[x].minValue;
                     controller.changedDelegate += BodyChange;
                 }
             }
@@ -98,11 +105,15 @@ namespace PirateGame.UI.Controllers
         IEnumerator BodyChangeWaitFrame(EditCharacterController controller)
         {
             yield return null;
-            // Gender
+            float value = 0;
+            if (controller.bodyComponent.mainType == BodyComponent.MainType.Selectable)
+                value = controller.selected;
+            else
+                value = controller.value;
+
+            character.ApplySetting(controller.bodyComponent, value);
             if (controller.bodyComponent.type == BodyComponent.Type.gender && controller.bodyComponent.mainType == BodyComponent.MainType.Selectable)
             {
-                character.ChangeGender(controller.selected);
-
                 // Gender changed, refresh
                 for (int i = 0; i < editCharacterControllers.Count; i++)
                 {
@@ -113,33 +124,18 @@ namespace PirateGame.UI.Controllers
                     editCharacterControllers[i].gameObject.SetActive(true);
                     if (editCharacterControllers[i].bodyComponent.genderRestriction == BodyComponent.GenderRestriction.maleOnly)
                     {
-                        if (controller.selected != 0)
+                        if (selected != 0)
                             editCharacterControllers[i].gameObject.SetActive(false);
                     }
                     else if (editCharacterControllers[i].bodyComponent.genderRestriction == BodyComponent.GenderRestriction.femaleOnly)
                     {
-                        if (controller.selected == 0)
+                        if (selected == 0)
                             editCharacterControllers[i].gameObject.SetActive(false);
                     }
 
                     if (editCharacterControllers[i].bodyComponent.type != BodyComponent.Type.gender)
                         editCharacterControllers[i].changedDelegate.Invoke(editCharacterControllers[i]);
                 }
-            }
-            // Color
-            if (controller.bodyComponent.type == BodyComponent.Type.color && controller.bodyComponent.mainType == BodyComponent.MainType.Selectable)
-            {
-                character.ChangeSelectionColor(controller.bodyComponent.description, controller.selected);
-            }
-            // Wardrobe Hair/Eyes/Beard
-            if (controller.bodyComponent.type == BodyComponent.Type.wardrobeRecipe && controller.bodyComponent.mainType == BodyComponent.MainType.Selectable)
-            {
-                character.ChangeSelectionWardrobe(controller.bodyComponent.description, controller.selected);
-            }
-            // Part
-            if (controller.bodyComponent.mainType == BodyComponent.MainType.Slider)
-            {
-                character.ChangePart(controller.bodyComponent.description, controller.value);
             }
         }
 
@@ -208,6 +204,12 @@ namespace PirateGame.UI.Controllers
         public void ShowEmotes()
         {
             selected = Selected.emotes;
+        }
+
+        public void Save()
+        {
+            PlayerManager.instance.SetValue("Character", JsonConvert.SerializeObject(character.characterSet));
+            UIManager.instance.ScreenSwitch("Menu");
         }
         #endregion
 
