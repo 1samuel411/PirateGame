@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace SNetwork
 {
@@ -12,6 +13,10 @@ namespace SNetwork
                 connected = !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
             }
             catch (SocketException e)
+            {
+                connected = false;
+            }
+            catch(ObjectDisposedException e)
             {
                 connected = false;
             }

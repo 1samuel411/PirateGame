@@ -21,18 +21,40 @@ namespace SNetwork.Server
         private Thread _userSyncThread;
         private float _userSyncTime;
         public Dictionary<Socket, MasterNetworkPlayer> clientSockets = new Dictionary<Socket, MasterNetworkPlayer>();
+        public Dictionary<Socket, Match> matchSockets = new Dictionary<Socket, Match>();
 
         public int maxUsers;
         public List<KeyValuePairs> serverData = new List<KeyValuePairs>();
 
         public List<Room> rooms = new List<Room>();
         public List<Invite> invites = new List<Invite>();
+        public List<Match> matches = new List<Match>();
+
+        public MatchMaking matchMaking;
 
         public Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public Socket matchServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         private void BeginAccepting()
         {
             serverSocket.BeginAccept(AcceptedConnection, null);
+        }
+
+        private void BeginAcceptingMatches()
+        {
+            matchServerSocket.BeginAccept(AcceptedMatchConnection, null);
+        }
+
+        private void BeginReceivingMatch(Socket socket)
+        {
+            try
+            {
+                socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, ReceiveMatchCallback, socket);
+            }
+            catch (ObjectDisposedException e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         private void BeginReceiving(Socket socket)
@@ -59,10 +81,18 @@ namespace SNetwork.Server
             this.serverRegion = serverRegion;
             _buffer = new byte[_bufferSize];
             Console.WriteLine("[SNetworking] Creating and seting up the server...");
+
             serverSocket.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
-            serverSocket.Listen(10);
+            serverSocket.Listen(90);
+
+            matchServerSocket.Bind(new IPEndPoint(IPAddress.Parse(ip), port + 1));
+            matchServerSocket.Listen(90);
+
             BeginAccepting();
+            BeginAcceptingMatches();
             Console.WriteLine("[SNetworking] Success!");
+
+            matchMaking = new MatchMaking();
 
             _opened = true;
 
@@ -137,9 +167,18 @@ namespace SNetwork.Server
                 clientSocket.Shutdown(SocketShutdown.Both);
                 clientSocket.Close();
             }
-            clientSockets.Clear();
 
+            for (var i = 0; i < clientSockets.Count; i++)
+            {
+                var clientSocket = clientSockets.Keys.ElementAt(i);
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
+            }
+
+            clientSockets.Clear();
+            matchSockets.Clear();
             serverSocket.Close();
+            matchServerSocket.Close();
 
             _opened = false;
 
@@ -148,7 +187,20 @@ namespace SNetwork.Server
 
         private void AcceptedConnection(IAsyncResult AR)
         {
-            var socket = serverSocket.EndAccept(AR);
+            if (serverSocket == null)
+                return;
+            Socket socket = null;
+            try
+            {
+                socket = serverSocket.EndAccept(AR);
+            }
+            catch (ObjectDisposedException e)
+            {
+
+            }
+            if (socket == null)
+                return;
+
             if (clientSockets.Count >= maxUsers)
             {
                 Console.WriteLine("[SNetworking] Max clients reached");
@@ -194,9 +246,61 @@ namespace SNetwork.Server
             BeginAccepting();
         }
 
+        private void AcceptedMatchConnection(IAsyncResult AR)
+        {
+            if (matchServerSocket == null)
+                return;
+
+            Socket socket = null;
+            try
+            {
+                socket = matchServerSocket.EndAccept(AR);
+            }
+            catch (ObjectDisposedException e)
+            {
+
+            }
+            if (matchServerSocket == null)
+                return;
+
+            Console.WriteLine("[SNetworking] Match connection received from: " + socket.LocalEndPoint);
+
+            Match match = new Match();
+
+            var uniqueId = new Random().Next(3, 80000);
+            if (matchSockets.Count > 0)
+            {
+                var unique = false;
+                var changed = false;
+                while (!unique)
+                {
+                    changed = false;
+                    // TODO: Make this more optimized
+                    foreach (var x in matchSockets.Values)
+                        if (x.id == uniqueId)
+                        {
+                            changed = true;
+                            uniqueId = new Random().Next(3, maxUsers + 5);
+                        }
+                    if (!changed)
+                        unique = true;
+                }
+            }
+
+            match.id = uniqueId;
+            match.ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
+
+            Console.WriteLine("[SNetworking] Added Match: " + match.id);
+
+            matchSockets.Add(socket, match);
+
+            BeginReceivingMatch(socket);
+            BeginAcceptingMatches();
+        }
+
         private void ReceiveCallback(IAsyncResult AR)
         {
-            var socket = (Socket) AR.AsyncState;
+            var socket = (Socket)AR.AsyncState;
             if (!IsConnectedServer(socket))
                 return;
 
@@ -222,8 +326,37 @@ namespace SNetwork.Server
                 ResponseManager.instance.HandleResponse(dataBuffer.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), headerCode, sendCode,
                     0, socket, clientSockets[socket].id);
 
-            if(socket.Connected)
+            if (socket.Connected)
                 BeginReceiving(socket);
+        }
+
+        private void ReceiveMatchCallback(IAsyncResult AR)
+        {
+            var socket = (Socket)AR.AsyncState;
+            if (!IsMatchConnectedServer(socket))
+                return;
+
+            var received = socket.EndReceive(AR);
+
+            var dataBuffer = new byte[received];
+            Array.Copy(_buffer, dataBuffer, received);
+
+            if (dataBuffer.Length == 1)
+            {
+                Console.WriteLine("Connected?");
+                return;
+            }
+            var headerCode = Convert.ToInt32(dataBuffer[0]);
+            var customCode = new byte[2];
+            customCode[0] = dataBuffer[3];
+            customCode[1] = dataBuffer[4];
+            var sendCode = Convert.ToInt32(dataBuffer[1]);
+
+            ResponseManager.instance.HandleResponse(dataBuffer.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), headerCode, sendCode,
+                0, socket, matchSockets[socket].id);
+
+            if (socket.Connected)
+                BeginReceivingMatch(socket);
         }
 
         public void SetServerData(KeyValuePairs data)
@@ -267,29 +400,68 @@ namespace SNetwork.Server
             return isConnected;
         }
 
+        public bool IsMatchConnectedServer(Socket socket)
+        {
+            var isConnected = Network.IsConnected(socket);
+            if (!isConnected)
+            {
+                var socketRetrieved = matchSockets.FirstOrDefault(t => t.Key == socket);
+                Console.WriteLine("[SNetworking] Match Server has been lost");
+                RemoveMatchSocket(socket);
+            }
+            return isConnected;
+        }
+
         public void RemoveSocket(Socket socket)
         {
             var socketRetrieved = clientSockets.FirstOrDefault(t => t.Key == socket);
             try
             {
-                if(socketRetrieved.Value != null)
+                if (socketRetrieved.Value != null)
                     SetLoggedOut(socketRetrieved.Value.playfabId);
 
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                try
+                {
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                }
+                catch (ObjectDisposedException e)
+                {
+
+                }
             }
             catch (SocketException e)
             {
-                
+
             }
             LeaveRoom(socket, true);
 
             clientSockets.Remove(socket);
         }
 
+        public void RemoveMatchSocket(Socket socket)
+        {
+            var socketRetrieved = matchSockets.FirstOrDefault(t => t.Key == socket);
+            try
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (SocketException e)
+            {
+
+            }
+            catch (ObjectDisposedException e)
+            {
+
+            }
+
+            matchSockets.Remove(socket);
+        }
+
         private static void SendCallback(IAsyncResult AR)
         {
-            var socket = (Socket) AR.AsyncState;
+            var socket = (Socket)AR.AsyncState;
             socket.EndSend(AR);
         }
 
@@ -361,6 +533,14 @@ namespace SNetwork.Server
             if (room.usersInRoomIds.Count <= 0)
             {
                 rooms.Remove(room);
+                room.Refresh();
+            }
+
+            // Delete match
+            MatchMaking.MatchMakingGroup group = matchMaking.matchMakingSockets.FirstOrDefault(x => x.roomId == room.roomId);
+            if(group != null)
+            {
+                matchMaking.matchMakingSockets.Remove(group);
             }
 
             // CreateRoom if its not forever

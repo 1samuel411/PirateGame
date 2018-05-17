@@ -15,6 +15,13 @@ namespace PirateGame.UI.Views
 
         public Button leaveButton;
 
+        public Button playButton;
+
+        public Text matchMakingText;
+        public GameObject matchMakingHolder;
+
+        public Text playButtonText;
+
         public MainMenuCharacter character1;
         public MainMenuCharacter character2;
         public MainMenuCharacter character3;
@@ -26,7 +33,10 @@ namespace PirateGame.UI.Views
             public Character.Character character;
             public Text nameText;
             public Image rankImage;
+            public Image playModeImage;
             public GameObject hoverParticle;
         }
+
+        public Dropdown playModeDropdown;
     }
 }

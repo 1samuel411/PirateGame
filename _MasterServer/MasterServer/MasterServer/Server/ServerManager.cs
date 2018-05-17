@@ -66,7 +66,6 @@ namespace SNetwork.Server
                         {
                             Console.WriteLine("            User " + (x + 1) + ": " + server.rooms[i].usersInRoomIds[x].ToString());
                         }
-                        Console.WriteLine("---------");
                     }
 
                     Console.WriteLine("-------------------------------------");
@@ -79,12 +78,35 @@ namespace SNetwork.Server
                     for (int i = 0; i < server.clientSockets.Count; i++)
                     {
                         Console.WriteLine("User: " + server.clientSockets.Values.ElementAt(i).id);
-                        Console.WriteLine("Username: " + server.clientSockets.Values.ElementAt(i).username);
-                        Console.WriteLine("Playfab Id: " + server.clientSockets.Values.ElementAt(i).playfabId);
-                        Console.WriteLine("---------");
+                        Console.WriteLine("    Username: " + server.clientSockets.Values.ElementAt(i).username);
+                        Console.WriteLine("    Playfab Id: " + server.clientSockets.Values.ElementAt(i).playfabId);
+                        Console.WriteLine("    XP: " + server.clientSockets.Values.ElementAt(i).xp);
+                        Console.WriteLine("    Elo: " + server.clientSockets.Values.ElementAt(i).elo);
                     }
 
                     Console.WriteLine("-------------------------------------");
+                }
+
+                if (command.Equals("ListMatches"))
+                {
+                    Console.WriteLine("-------------------------------------");
+
+                    for (int i = 0; i < server.matchSockets.Count; i++)
+                    {
+                        Console.WriteLine("Match: " + server.matchSockets.Values.ElementAt(i).id);
+                        Console.WriteLine("    IP: " + server.matchSockets.Values.ElementAt(i).ip);
+                        Console.WriteLine("    Port: " + server.matchSockets.Values.ElementAt(i).port);
+                        Console.WriteLine("    Rooms: " + server.matchSockets.Values.ElementAt(i).rooms.Count);
+                        for (int x = 0; x < server.matchSockets.Values.ElementAt(i).rooms.Count; x++)
+                        {
+                            Console.WriteLine("        Room: " + server.matchSockets.Values.ElementAt(i).rooms.ElementAt(x));
+                        }
+                        Console.WriteLine("    Elo Avg: " + server.matchSockets.Values.ElementAt(i).eloAvg);
+                        Console.WriteLine("    Started: " + server.matchSockets.Values.ElementAt(i).started);
+                        Console.WriteLine("    Open: " + server.matchSockets.Values.ElementAt(i).open);
+                        Console.WriteLine("    Start Time: " + server.matchSockets.Values.ElementAt(i).startTime.ToString());
+                        Console.WriteLine("-------------------------------------");
+                    }
                 }
 
                 if (command.Equals("ListInvites"))
@@ -97,6 +119,20 @@ namespace SNetwork.Server
                         Console.WriteLine("    Date: " + server.invites[i].timeSent);
                         Console.WriteLine("    From: " + server.invites[i].userFrom);
                         Console.WriteLine("    To: " + server.invites[i].userTo);
+                    }
+
+                    Console.WriteLine("-------------------------------------");
+                }
+
+                if (command.Equals("ListMatchMaking"))
+                {
+                    Console.WriteLine("-------------------------------------");
+
+                    for (int i = 0; i < server.matchMaking.matchMakingSockets.Count; i++)
+                    {
+                        Console.WriteLine("Room Waiting: " + server.rooms.FirstOrDefault(x => x.roomId == server.matchMaking.matchMakingSockets[i].roomId));
+                        Console.WriteLine("    Elo: " + server.matchMaking.matchMakingSockets[i].elo);
+                        Console.WriteLine("    Time Waiting: " + (DateTime.UtcNow - server.matchMaking.matchMakingSockets[i].joinTime).ToString());
                     }
 
                     Console.WriteLine("-------------------------------------");

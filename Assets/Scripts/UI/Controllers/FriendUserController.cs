@@ -101,7 +101,7 @@ namespace PirateGame.UI.Controllers
                     if (!PlayerManager.instance.roomInfo.usersInRoom.Any(x => x.playfabId == playfabId))
                     {
                         friendView.inviteButton.gameObject.SetActive(true);
-                        if (inviteRecieved != null)
+                        if (inviteSent != null && !string.IsNullOrEmpty(inviteRecieved.userFrom))
                         {
                             // Recieved invite
                             friendView.notificationIndicator.SetActive(true);
@@ -109,7 +109,7 @@ namespace PirateGame.UI.Controllers
                             friendView.dontJoinButton.gameObject.SetActive(true);
                         }
 
-                        if (inviteSent != null)
+                        if (inviteSent != null && !string.IsNullOrEmpty(inviteSent.userFrom))
                         {
                             // We sent
                             friendView.inviteButton.gameObject.SetActive(false);
@@ -162,8 +162,7 @@ namespace PirateGame.UI.Controllers
             // Get online status
             GetUserDataRequest request = new GetUserDataRequest();
             request.PlayFabId = playfabId;
-            request.Keys = new List<string> { "LoggedIn" };
-            request.Keys = new List<string> { "LastLogin" };
+            request.Keys = new List<string> { "LoggedIn", "LastLogin" };
             PlayFabClientAPI.GetUserData(request, GetUserDataSucceed, PlayFabError);
         }
 

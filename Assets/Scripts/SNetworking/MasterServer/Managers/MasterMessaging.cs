@@ -23,6 +23,24 @@ namespace SNetwork
             }
         }
 
+        // Header: 77
+        public void SendMatchMakeLeave(int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send Match make Leave
+            byte[] data = ByteParser.ConvertASCIIToBytes("a");
+            SendFinal(data, 77, sendCode, fromCode, 0, sockets);
+        }
+
+        // Header: 76
+        public void SendMatchMake(int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send Matchmake
+            byte[] data = ByteParser.ConvertASCIIToBytes("a");
+            SendFinal(data, 76, sendCode, fromCode, 0, sockets);
+        }
+
         // Header: 75
         public void SendLeave(int sendCode, int fromCode, int customCode,
             Socket sockets)

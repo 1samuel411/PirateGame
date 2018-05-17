@@ -29,6 +29,17 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response73, 73);
             ResponseManager.instance.AddServerResponse(Response74, 74);
             ResponseManager.instance.AddServerResponse(Response75, 75);
+            ResponseManager.instance.AddServerResponse(Response76, 76);
+            ResponseManager.instance.AddServerResponse(Response77, 77);
+
+            ResponseManager.instance.AddServerResponse(Response200, 200);
+        }
+
+        public void Response200(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            int newPort = int.Parse(ByteParser.ConvertToASCII(responseBytes));
+            Console.WriteLine("Recieved a 200: " + fromId + ": " + newPort);
+            ServerManager.instance.server.matchSockets[fromSocket].port = newPort;
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -113,6 +124,20 @@ namespace SNetwork.Server
             // Leave
             Console.WriteLine("Recieved leave request from: " + fromId);
             ServerManager.instance.server.LeaveRoom(fromSocket);
+        }
+
+        public void Response76(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            // Leave
+            Console.WriteLine("Recieved match make request from: " + fromId);
+            ServerManager.instance.server.matchMaking.AddToMatchMaking(fromSocket);
+        }
+
+        public void Response77(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            // Leave
+            Console.WriteLine("Recieved leave match making request from: " + fromId);
+            ServerManager.instance.server.matchMaking.RemoveFromMatchMaking(fromSocket);
         }
     }
 }

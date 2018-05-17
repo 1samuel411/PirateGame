@@ -15,6 +15,8 @@ namespace SNetwork
         public string playfabId = "";
         public string username = "";
         public string roomId = "";
+        public int elo = 0;
+        public int xp = 0;
 
         public MasterNetworkPlayer(int id, string username)
         {

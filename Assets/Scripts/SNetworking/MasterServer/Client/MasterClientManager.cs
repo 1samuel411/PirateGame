@@ -11,7 +11,7 @@ using SNetwork;
 using SNetwork.Client;
 using UnityEngine;
 
-public class MasterClientManager : MonoBehaviour 
+public class MasterClientManager : MonoBehaviour
 {
 
     private MasterClient _client;
@@ -35,26 +35,26 @@ public class MasterClientManager : MonoBehaviour
         set { _instance = value; }
     }
 
-	void Awake()
-	{
+    void Awake()
+    {
         ResponseManager.instance.Clear();
-		_client = gameObject.AddComponent<MasterClient>();
+        _client = gameObject.AddComponent<MasterClient>();
         _client.clientSettings = Resources.Load<MasterClientSettingsScriptableObject>(MasterClientSettingsScriptableObject.location);
-	    if (_client.clientSettings == null)
-	    {
-	        instance = null;
+        if (_client.clientSettings == null)
+        {
+            instance = null;
             Destroy(this.gameObject);
-	        throw new Exception("ClientSettings Missing... Go to Tools/SNetworking/Client Settings to create and configure ClientSettings");
+            throw new Exception("ClientSettings Missing... Go to Tools/SNetworking/Client Settings to create and configure ClientSettings");
         }
         _clientResponseHandler = new MasterClientResponseHandler(_client);
 
-	    _clientResponseHandler.Initialize();
+        _clientResponseHandler.Initialize();
 
         ResponseManager.instance.AddServerResponse(MessageResponse, 7);
 
         DontDestroyOnLoad(this.gameObject);
     }
-    
+
     public MasterClientSettingsScriptableObject GetClientSettings()
     {
         return _client.clientSettings;
@@ -79,20 +79,20 @@ public class MasterClientManager : MonoBehaviour
     {
         return _client.clientSocket;
     }
-    
+
     public bool isConnected()
-	{
-		return _client.IsConnectedClient();
-	}
+    {
+        return _client.IsConnectedClient();
+    }
 
-	public bool isConnecting()
-	{
-		return _client.connecting;
-	}
+    public bool isConnecting()
+    {
+        return _client.connecting;
+    }
 
-	public bool isDisconnecting()
-	{
-		return _client.disconnecting;
+    public bool isDisconnecting()
+    {
+        return _client.disconnecting;
     }
 
     public int getId()
@@ -112,7 +112,7 @@ public class MasterClientManager : MonoBehaviour
     {
         if (client == -1)
             client = _client.ourId;
-        return _client.networkPlayers.FirstOrDefault(x => x.id.Equals(client)).data.FirstOrDefault(x=> x.Key.Equals(key)).Value;
+        return _client.networkPlayers.FirstOrDefault(x => x.id.Equals(client)).data.FirstOrDefault(x => x.Key.Equals(key)).Value;
     }
 
     public void SendInvite(string playfabIdTarget)
@@ -138,6 +138,16 @@ public class MasterClientManager : MonoBehaviour
         MasterMessaging.instance.SendLeave(2, getId(), 0, _client.clientSocket);
     }
 
+    public void SendMatchMake()
+    {
+        MasterMessaging.instance.SendMatchMake(2, getId(), 0, _client.clientSocket);
+    }
+
+    public void CancelMatchMake()
+    {
+        MasterMessaging.instance.SendMatchMakeLeave(2, getId(), 0, _client.clientSocket);
+    }
+
     public delegate void OnConnectedDelegate(ResponseMessage message);
     public OnConnectedDelegate onConnectDelegate;
     public delegate void OnCloseDelegate();
@@ -149,9 +159,9 @@ public class MasterClientManager : MonoBehaviour
     {
         if (ip.IsNullOrWhitespace())
         {
-            if(PlayerManager.instance.region == "NA")
+            if (PlayerManager.instance.region == "NA")
                 ip = _client.clientSettings.ipAddressNA;
-            else if(PlayerManager.instance.region == "SA")
+            else if (PlayerManager.instance.region == "SA")
                 ip = _client.clientSettings.ipAddressSA;
             else if (PlayerManager.instance.region == "AS")
                 ip = _client.clientSettings.ipAddressAS;
@@ -164,7 +174,7 @@ public class MasterClientManager : MonoBehaviour
         }
         if (port <= 0)
         {
-            if(PlayerManager.instance.region == "NA")
+            if (PlayerManager.instance.region == "NA")
                 port = _client.clientSettings.portNA;
             else if (PlayerManager.instance.region == "SA")
                 port = _client.clientSettings.portSA;
@@ -179,60 +189,60 @@ public class MasterClientManager : MonoBehaviour
 
         }
         _client.Connect(ip, port, OnConnected, OnClose);
-	}
+    }
 
-	public void OnConnected(ResponseMessage response)
-	{
-	    if (onConnectDelegate != null)
-	        onConnectDelegate(response);
-		if (response.type == ResponseMessage.ResponseType.Success)
-		{
+    public void OnConnected(ResponseMessage response)
+    {
+        if (onConnectDelegate != null)
+            onConnectDelegate(response);
+        if (response.type == ResponseMessage.ResponseType.Success)
+        {
             Debug.Log("Success!");
-			// Do something
-		}
-		else if (response.type == ResponseMessage.ResponseType.Failure)
-		{
-			Debug.Log("Failed!");
-			// Do something
-		}
+            // Do something
+        }
+        else if (response.type == ResponseMessage.ResponseType.Failure)
+        {
+            Debug.Log("Failed!");
+            // Do something
+        }
         else if (response.type == ResponseMessage.ResponseType.Full)
-		{
-		    Debug.Log("Server full!");
-		    // Do something
-		}
-	}
+        {
+            Debug.Log("Server full!");
+            // Do something
+        }
+    }
 
-	public void OnClose()
-	{
-	    if (onCloseDelegate != null) 
-	        onCloseDelegate();
+    public void OnClose()
+    {
+        if (onCloseDelegate != null)
+            onCloseDelegate();
 
         Debug.Log("Connection Closed!");
         // Do something
 
-	    Destroy(this.gameObject);
+        Destroy(this.gameObject);
     }
 
     public void Disconnect()
-	{
-	    if (onDisconnectDelegate != null)
-	        onDisconnectDelegate();
+    {
+        if (onDisconnectDelegate != null)
+            onDisconnectDelegate();
 
-		_client.Disconnect(OnDisconnected);
+        _client.Disconnect(OnDisconnected);
     }
 
     public void OnDisconnected()
-	{
-		Debug.Log("Disconnected!");
+    {
+        Debug.Log("Disconnected!");
 
         // Destroy client
         Destroy(this.gameObject);
-	}
+    }
 
     public void SendString(string message)
-	{
-		_client.SendString(message);
-	}
+    {
+        _client.SendString(message);
+    }
 
     public void SetServerData(KeyValuePairs data)
     {

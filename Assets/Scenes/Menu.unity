@@ -113,47 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &10156995 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1163369554980640, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
---- !u!223 &10156997
-Canvas:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 10156995}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &10156998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 10156995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &242912671
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,88 +178,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &334729235 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1252952332459914, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
---- !u!223 &334729237
-Canvas:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 334729235}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &334729238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 334729235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!1 &408173372 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1414946036254344, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
---- !u!223 &408173374
-Canvas:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 408173372}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &408173375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 408173372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &612722732
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,9 +279,14 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
         type: 2}
-      propertyPath: characterSet.bodySelections.Array.size
+      propertyPath: lastRoomInfo.usersInRoom.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: lastRoomInfo.usersInRoomIds.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4095403747723528, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
@@ -589,506 +471,48 @@ Prefab:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
         type: 2}
-      propertyPath: characterSettings
+      propertyPath: lastRoomInfo.roomId
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
         type: 2}
-      propertyPath: gender
+      propertyPath: lastRoomInfo.usersInRoomIds.Array.data[0]
+      value: 412097
+      objectReference: {fileID: 0}
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: lastRoomInfo.usersInRoom.Array.data[0].id
+      value: 412097
+      objectReference: {fileID: 0}
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: lastRoomInfo.usersInRoom.Array.data[0].playfabId
+      value: 9047D57926550805
+      objectReference: {fileID: 0}
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: lastRoomInfo.usersInRoom.Array.data[0].username
+      value: samuel2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: lastRoomInfo.usersInRoom.Array.data[0].roomId
+      value: a4be0688-ac1f-4246-81bf-f075d960526c640
+      objectReference: {fileID: 0}
+    - target: {fileID: 114679972900428414, guid: f43f8e2a6d52df446a4fa10f0221dea1,
+        type: 2}
+      propertyPath: lastRoomInfo.usersInRoom.Array.data[0].elo
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1909474950219558, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
+      propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[0].name
-      value: Gender
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[1].name
-      value: Skin Color
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[2].name
-      value: Eye Color
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[3].name
-      value: Hair
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[3].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[4].name
-      value: Hair Color
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[5].name
-      value: Eyebrow
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[6].name
-      value: Beard
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[7].name
-      value: Head Width
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[7].value
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[8].name
-      value: Head Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[8].value
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[9].name
-      value: Neck Thickness
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[9].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[10].name
-      value: Ears Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[10].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[11].name
-      value: Ears Position
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[11].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[12].name
-      value: Nose Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[12].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[13].name
-      value: Nose Curve
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[13].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[14].name
-      value: Chin Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[14].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[15].name
-      value: Chin Position
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[15].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[16].name
-      value: Mandible Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[16].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[17].name
-      value: Jaws Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[17].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[18].name
-      value: Jaws Position
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[18].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[19].name
-      value: Cheek Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[19].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[20].name
-      value: Cheek Position
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[20].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[21].name
-      value: Low Cheek Position
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[21].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[22].name
-      value: Forehead Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[22].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[23].name
-      value: Forehead Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[23].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[24].name
-      value: Lips Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[24].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[25].name
-      value: Mouth Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[25].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[26].name
-      value: Eye Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[26].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[27].name
-      value: Eye Spacing
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[27].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[28].name
-      value: Arm Length
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[28].value
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[29].name
-      value: Arm Width
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[29].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[30].name
-      value: Forearm Length
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[30].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[31].name
-      value: Forearm  Width
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[31].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[32].name
-      value: Hands Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[32].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[33].name
-      value: Upper Muscle
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[33].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[34].name
-      value: Upper Weight
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[34].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[35].name
-      value: Lower Muscle
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[35].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[36].name
-      value: Lower Weight
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[36].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[37].name
-      value: Waist
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[37].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[38].name
-      value: Belly
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[38].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[39].name
-      value: Breast Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[39].value
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[40].name
-      value: Legs Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[40].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[41].name
-      value: Feet Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[41].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[42].name
-      value: Gluteus Size
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[42].value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114274333059603930, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: umaData
-      value: 
-      objectReference: {fileID: 874311709}
-    - target: {fileID: 114618125767047738, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: umaData
-      value: 
-      objectReference: {fileID: 2009022260}
-    - target: {fileID: 114594762341538820, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: umaData
-      value: 
-      objectReference: {fileID: 2123905841}
-    - target: {fileID: 114197332263814564, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: umaData
-      value: 
-      objectReference: {fileID: 1703323525}
-    - target: {fileID: 114274333059603930, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: defaultChangeRaceOptions
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 114618125767047738, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: defaultChangeRaceOptions
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 114594762341538820, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: defaultChangeRaceOptions
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 114197332263814564, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: defaultChangeRaceOptions
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[2].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[4].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114341989352266012, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-        type: 2}
-      propertyPath: characterSet.bodySelections.Array.data[5].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4057743198824300, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -9.91
-      objectReference: {fileID: 0}
-    - target: {fileID: 4340274334660226, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1.11
-      objectReference: {fileID: 0}
-    - target: {fileID: 4340274334660226, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1.1099999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4340274334660226, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1.1099999
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f43f8e2a6d52df446a4fa10f0221dea1, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &874311709 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114809509023495070, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
-  m_Script: {fileID: 11500000, guid: 15ee0e75ac30e964b8dcd0ad5f953c15, type: 3}
 --- !u!1 &1090571112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1195,62 +619,3 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0aeafd6ca709b5449035c42f4e3879e, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1703323525 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114104425228613172, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
-  m_Script: {fileID: 11500000, guid: 15ee0e75ac30e964b8dcd0ad5f953c15, type: 3}
---- !u!1 &1787378351 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1909719205847252, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
---- !u!223 &1787378353
-Canvas:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1787378351}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &1787378354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1787378351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &2009022260 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114135276542445328, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
-  m_Script: {fileID: 11500000, guid: 15ee0e75ac30e964b8dcd0ad5f953c15, type: 3}
---- !u!114 &2123905841 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114033538747105252, guid: f43f8e2a6d52df446a4fa10f0221dea1,
-    type: 2}
-  m_PrefabInternal: {fileID: 794508371}
-  m_Script: {fileID: 11500000, guid: 15ee0e75ac30e964b8dcd0ad5f953c15, type: 3}

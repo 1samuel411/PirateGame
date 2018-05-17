@@ -13,6 +13,8 @@ namespace SNetwork
         public int id = -1;
         public string playfabId = "";
         public string username = "";
+        public int elo = 0;
+        public int xp = 0;
 
         public string roomId
         {
