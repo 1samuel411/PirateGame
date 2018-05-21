@@ -33,6 +33,8 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response77, 77);
 
             ResponseManager.instance.AddServerResponse(Response200, 200);
+            ResponseManager.instance.AddServerResponse(Response201, 201);
+            ResponseManager.instance.AddServerResponse(Response202, 202);
         }
 
         public void Response200(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -40,6 +42,21 @@ namespace SNetwork.Server
             int newPort = int.Parse(ByteParser.ConvertToASCII(responseBytes));
             Console.WriteLine("Recieved a 200: " + fromId + ": " + newPort);
             ServerManager.instance.server.matchSockets[fromSocket].port = newPort;
+        }
+
+        public void Response201(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            string newIp = (ByteParser.ConvertToASCII(responseBytes));
+            Console.WriteLine("Recieved a 201: " + fromId + ": " + newIp);
+            ServerManager.instance.server.matchSockets[fromSocket].ip = newIp;
+        }
+
+        public void Response202(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            Console.WriteLine("Recieved a 202: " + fromId);
+            ServerManager.instance.server.matchSockets[fromSocket].serverRunning = true;
+            ServerManager.instance.server.matchSockets[fromSocket].open = true;
+            ServerManager.instance.server.matchSockets[fromSocket].startTime = DateTime.UtcNow;
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)

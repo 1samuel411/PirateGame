@@ -21,7 +21,6 @@ namespace SNetwork.Client
 
         public void Initialize()
         {
-            ResponseManager.instance.Clear();
             ResponseManager.instance.AddServerResponse(Response1, 1);
             ResponseManager.instance.AddServerResponse(Response4, 4);
             ResponseManager.instance.AddServerResponse(Response5, 5);
@@ -31,6 +30,8 @@ namespace SNetwork.Client
             ResponseManager.instance.AddServerResponse(Response14, 14);
             ResponseManager.instance.AddServerResponse(Response70, 70);
             ResponseManager.instance.AddServerResponse(Response71, 71);
+            ResponseManager.instance.AddServerResponse(Response72, 72);
+            ResponseManager.instance.AddServerResponse(Response73, 73);
         }
 
         public void Response1(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -78,6 +79,19 @@ namespace SNetwork.Client
         public void Response71(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             _client.invites = ByteParser.ConvertDataToInvites(responseBytes).ToArray();
+        }
+
+        public void Response72(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            _client.match = ByteParser.ConvertDataToMatch(responseBytes);
+        }
+
+        public void Response73(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            // Recieved match callback!
+            Logging.CreateLog("Recieved Match!");
+            _client.match = ByteParser.ConvertDataToMatch(responseBytes);
+            MasterClientManager.instance.onMatchFound.Invoke();
         }
     }
 }

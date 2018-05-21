@@ -24,7 +24,8 @@ namespace PirateGame.UI.Controllers
             if (!networkedPlayer)
                 return;
 
-            canvasView.nameText.color = CrewManager.GetCrewColor(ServerManager.instance.networkUsers[networkedPlayer.networkId].crew);
+            if (ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false)
+                return;
 
             canvasView.nameText.text =
                 ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.rank +

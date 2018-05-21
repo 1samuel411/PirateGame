@@ -12,7 +12,7 @@ namespace SNetwork.Server
         public bool matchmaking;
         public DateTime matchmakingBegin;
         public bool inMatch;
-        public string matchId;
+        public int matchId;
         public List<int> usersInRoomIds = new List<int>();
         public List<MasterNetworkPlayer> usersInRoom = new List<MasterNetworkPlayer>();
 

@@ -20,12 +20,16 @@ namespace PirateGame.UI.Views
         public Text matchMakingText;
         public GameObject matchMakingHolder;
 
+        public GameObject matchMakingCancel;
+
         public Text playButtonText;
 
         public MainMenuCharacter character1;
         public MainMenuCharacter character2;
         public MainMenuCharacter character3;
         public MainMenuCharacter character4;
+
+        public GameObject taken;
 
         [System.Serializable]
         public class MainMenuCharacter
@@ -35,6 +39,7 @@ namespace PirateGame.UI.Views
             public Image rankImage;
             public Image playModeImage;
             public GameObject hoverParticle;
+            public int playMode = -1;
         }
 
         public Dropdown playModeDropdown;

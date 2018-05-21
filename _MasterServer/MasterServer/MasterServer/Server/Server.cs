@@ -28,7 +28,6 @@ namespace SNetwork.Server
 
         public List<Room> rooms = new List<Room>();
         public List<Invite> invites = new List<Invite>();
-        public List<Match> matches = new List<Match>();
 
         public MatchMaking matchMaking;
 
@@ -108,7 +107,7 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (500)/4);
+                Thread.Sleep((int) (500)/5);
 
                 SetServerData(new KeyValuePairs("UserCount", clientSockets.Count));
 
@@ -116,7 +115,7 @@ namespace SNetwork.Server
                 Messaging.instance.SendServerData(ByteParser.ConvertKeyValuePairsToData(serverData.ToArray()),
                     clientSockets, 2);
 
-                Thread.Sleep((int)(500) / 4);
+                Thread.Sleep((int)(500) / 5);
 
                 // Send User Id
                 for (int i = 0; i < uniqueIdsToSync.Count; i++)
@@ -126,7 +125,7 @@ namespace SNetwork.Server
                 }
 
 
-                Thread.Sleep((int) (500) /4);
+                Thread.Sleep((int) (500) /5);
 
                 // TODO: Optimize this
                 // Send Room data
@@ -140,7 +139,7 @@ namespace SNetwork.Server
                     }
                 }
 
-                Thread.Sleep((int)(500) / 4);
+                Thread.Sleep((int)(500) / 5);
 
                 // Send invites
                 for (int i = 0; i < clientSockets.Count; i++)
@@ -150,12 +149,30 @@ namespace SNetwork.Server
                         x => x.userFrom == clientSockets.Values.ElementAt(i).playfabId ||
                              x.userTo == clientSockets.Values.ElementAt(i).playfabId);
 
-                    
+
                     // Send invite 
                     Messaging.instance.SendInvites(invitesToSend, clientSockets.Values.ElementAt(i).id, clientSockets);
                 }
 
                 CleanInvite();
+
+                Thread.Sleep((int)(500) / 5);
+
+                // Send Matches
+                for(int i = 0; i < rooms.Count; i++)
+                {
+                    if(rooms[i].inMatch)
+                    {
+                        Match matchToSend = matchSockets.FirstOrDefault(x => x.Value.id == rooms[i].matchId).Value;
+                        if(matchToSend != null)
+                        {
+                            for(int x = 0; x < rooms[i].usersInRoomIds.Count; x++)
+                            {
+                                Messaging.instance.SendMatch(matchToSend, rooms[i].usersInRoomIds[x], clientSockets);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -288,7 +305,6 @@ namespace SNetwork.Server
             }
 
             match.id = uniqueId;
-            match.ip = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
 
             Console.WriteLine("[SNetworking] Added Match: " + match.id);
 
@@ -456,6 +472,9 @@ namespace SNetwork.Server
 
             }
 
+            List<Room> roomsWithMatch = rooms.FindAll(x => x.inMatch && x.matchId == matchSockets[socket].id);
+            roomsWithMatch.ForEach(x => x.inMatch = false);
+
             matchSockets.Remove(socket);
         }
 
@@ -536,11 +555,18 @@ namespace SNetwork.Server
                 room.Refresh();
             }
 
-            // Delete match
+            // Delete match making
             MatchMaking.MatchMakingGroup group = matchMaking.matchMakingSockets.FirstOrDefault(x => x.roomId == room.roomId);
             if(group != null)
             {
                 matchMaking.matchMakingSockets.Remove(group);
+            }
+
+            // Delete room from match
+            Match match = matchSockets.FirstOrDefault(x => x.Value.rooms.Contains(room.roomId)).Value;
+            if(match != null)
+            {
+                match.rooms.Remove(room.roomId);
             }
 
             // CreateRoom if its not forever

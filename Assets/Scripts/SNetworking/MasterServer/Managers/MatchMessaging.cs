@@ -25,9 +25,28 @@ namespace SNetwork.Client
         public void SendPort(int newPort, int sendCode, int fromCode, int customCode,
             Socket sockets)
         {
-            // Send Leave
+            // Send Port
             byte[] data = ByteParser.ConvertASCIIToBytes(newPort.ToString());
             SendFinal(data, 200, sendCode, fromCode, 0, sockets);
+        }
+
+        // Header: 201
+        public void SendIp(string newIp, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send IP
+            byte[] data = ByteParser.ConvertASCIIToBytes(newIp);
+            SendFinal(data, 201, sendCode, fromCode, 0, sockets);
+        }
+
+        // Header: 202
+        public void SendServerOpen(int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send Server Open
+            Logging.CreateLog("Sedning Server Opened");
+            byte[] data = ByteParser.ConvertASCIIToBytes("a");
+            SendFinal(data, 202, sendCode, fromCode, 0, sockets);
         }
 
         public void SendFinal(byte[] data, int header, int sendCode, int fromCode, int customCode, Socket socket)

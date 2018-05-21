@@ -9,8 +9,7 @@ namespace PirateGame.UI.Controllers
     public class MenuController : Controller
     {
 
-        public string disconnectedController = "Play";
-        public string connectedController = "Lobby";
+        public string disconnectedController = "Main";
 
         void Start()
         {
@@ -32,7 +31,6 @@ namespace PirateGame.UI.Controllers
         void OnConnect(NetworkConnection conn)
         {
             Debug.Log("Connected Menu displaying");
-            UIManager.instance.ScreenSwitch(connectedController);
         }
 
     }

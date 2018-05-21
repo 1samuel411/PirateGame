@@ -40,18 +40,20 @@ namespace SNetwork.Server
 
             roomFound.Refresh();
 
+
             MatchMakingGroup group = new MatchMakingGroup();
             group.roomId = roomFound.roomId;
             int avgElo = 0;
             for(int i = 0; i < roomFound.usersInRoom.Count; i++)
             {
-                group.elo += roomFound.usersInRoom[i].elo;
+                Console.WriteLine("Adding to Matchmaking: " + roomFound.usersInRoom[i].username + ", elo: " + roomFound.usersInRoom[i].elo);
+                avgElo += roomFound.usersInRoom[i].elo;
             }
             group.elo = avgElo / roomFound.usersInRoom.Count;
             group.joinTime = DateTime.UtcNow;
             group.lastExpandTime = DateTime.UtcNow;
-            group.minRange = ServerManager.instance.server.clientSockets[socketToAdd].elo - 100;
-            group.maxRange = ServerManager.instance.server.clientSockets[socketToAdd].elo + 100;
+            group.minRange = group.elo - 100;
+            group.maxRange = group.elo + 100;
             matchMakingSockets.Add(group);
 
             roomFound.matchmaking = true;
@@ -102,10 +104,10 @@ namespace SNetwork.Server
 
         void MatchMake()
         {
-            for(int i = 0; i < matchMakingSockets.Count; i++)
+            for (int i = 0; i < matchMakingSockets.Count; i++)
             {
                 // Expand
-                if((DateTime.Now - matchMakingSockets[i].lastExpandTime).TotalSeconds >= 15)
+                if((DateTime.Now - matchMakingSockets[i].lastExpandTime).Seconds >= 15)
                 {
                     matchMakingSockets[i].lastExpandTime = DateTime.Now;
                     matchMakingSockets[i].maxRange += 100;
@@ -113,35 +115,30 @@ namespace SNetwork.Server
                 }
             }
 
-            for(int i = 0; i < matchMakingSockets.Count; i++)
+            for (int i = 0; i < matchMakingSockets.Count; i++)
             {
-                /*
-                for(int x = 0; x < matchMakingSockets.Count; x++)
+                for(int x = 0; x < ServerManager.instance.server.matchSockets.Count; x++)
                 {
-                    if(matchMakingSockets[i].elo <= matchMakingSockets[x].maxRange && matchMakingSockets[i].elo >= matchMakingSockets[x].minRange)
+                    if (ServerManager.instance.server.matchSockets.Values.ElementAt(x).serverRunning == false)
+                        continue;
+
+                    if(ServerManager.instance.server.matchSockets.Values.ElementAt(x).rooms.Count <= 0 || ServerManager.instance.server.matchSockets.Values.ElementAt(x).eloAvg <= matchMakingSockets[i].maxRange || ServerManager.instance.server.matchSockets.Values.ElementAt(x).eloAvg >= matchMakingSockets[i].minRange)
                     {
-                        // match found
-                        matchMakingSockets.Remove(matchMakingSockets[i]);
-                        matchMakingSockets.Remove(matchMakingSockets[x]);
-
-                        Room roomA = ServerManager.instance.server.rooms.FirstOrDefault(p => p.roomId == matchMakingSockets[i].roomId);
-                        Room roomB = ServerManager.instance.server.rooms.FirstOrDefault(p => p.roomId == matchMakingSockets[x].roomId);
-
-                        if(roomA != null)
+                        ServerManager.instance.server.matchSockets.Values.ElementAt(x).rooms.Add(matchMakingSockets[i].roomId);
+                        Room roomFound = ServerManager.instance.server.rooms.FirstOrDefault(p => p.roomId == matchMakingSockets[i].roomId);
+                        if(roomFound != null)
                         {
-                            roomA.matchmaking = false;
-                            roomA.inMatch = true;
-                            roomA.matchIp = "";
-                        }
-                        if (roomB != null)
-                        {
-                            roomB.matchmaking = false;
-                            roomB.inMatch = true;
-                            roomB.matchIp = "";
+                            roomFound.matchId = ServerManager.instance.server.matchSockets.Values.ElementAt(x).id;
+                            roomFound.inMatch = true;
+                            for(int p = 0; p < roomFound.usersInRoomIds.Count; p++)
+                            {
+                                Console.WriteLine("Match found for match: " + ServerManager.instance.server.matchSockets.Values.ElementAt(x).id + ", for room: " + roomFound.roomId);
+                                Messaging.instance.SendMatchFound(ServerManager.instance.server.matchSockets.Values.ElementAt(x), roomFound.usersInRoomIds[p], ServerManager.instance.server.clientSockets);
+                            }
+                            matchMakingSockets.RemoveAt(i);
                         }
                     }
                 }
-                */
             }
         }
 

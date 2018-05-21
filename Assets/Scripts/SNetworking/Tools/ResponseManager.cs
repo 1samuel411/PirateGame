@@ -28,13 +28,16 @@ namespace SNetwork
             // TODO: Optimize this?s
             responses.ForEach(x =>
             {
-                if (x.headerCode == headerCode && headerCode != 0 && customCode == 0)
+                if (x.callback != null)
                 {
-                    x.callback(bytes, fromSocket, fromId);
-                }
-                if (x.customCode == customCode && customCode != 0 && headerCode == 0)
-                {
-                    x.callback(bytes, fromSocket, fromId);
+                    if (x.headerCode == headerCode && headerCode != 0 && customCode == 0)
+                    {
+                        x.callback(bytes, fromSocket, fromId);
+                    }
+                    if (x.customCode == customCode && customCode != 0 && headerCode == 0)
+                    {
+                        x.callback(bytes, fromSocket, fromId);
+                    }
                 }
             });
         }

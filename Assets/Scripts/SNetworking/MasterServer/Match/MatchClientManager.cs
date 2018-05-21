@@ -103,6 +103,16 @@ public class MatchClientManager : MonoBehaviour
         MatchMessaging.instance.SendPort(port, 2, getId(), 0, _client.clientSocket);
     }
 
+    public void SendIp(string ip)
+    {
+        MatchMessaging.instance.SendIp(ip, 2, getId(), 0, _client.clientSocket);
+    }
+
+    public void SendServerOpen()
+    {
+        MatchMessaging.instance.SendServerOpen(2, getId(), 0, _client.clientSocket);
+    }
+
     public void OnClose()
     {
         if (onCloseDelegate != null)

@@ -19,17 +19,30 @@ namespace PirateGame.UI.Controllers
 
         public void Play()
         {
+            MasterClientManager.instance.onMatchFound += OnMatchFound;
             MasterClientManager.instance.SendMatchMake();
         }
 
         public void CancelMatchmake()
         {
+            MasterClientManager.instance.onMatchFound -= OnMatchFound;
             MasterClientManager.instance.CancelMatchMake();
         }
 
         public void Leave()
         {
             MasterClientManager.instance.SendLeave();
+        }
+
+        void OnMatchFound()
+        {
+            // Open up UI Cover
+            UIManager.instance.loading = true;
+
+            // Connect
+            PNetworkManager.instance.networkAddress = MasterClientManager.instance.getMatch().ip;
+            PNetworkManager.instance.networkPort = MasterClientManager.instance.getMatch().port;
+            PNetworkManager.instance.PStartClient();
         }
 
         private void Start()
@@ -57,20 +70,51 @@ namespace PirateGame.UI.Controllers
             mainMenuView.playModeDropdown.gameObject.SetActive(true);
             mainMenuView.playButton.gameObject.SetActive(true);
             mainMenuView.playButton.interactable = false;
+            mainMenuView.matchMakingCancel.gameObject.SetActive(false);
             mainMenuView.playButtonText.text = "Not connected";
 
             if (PlayerManager.instance.roomInfo != null)
             {
+                bool taken = false;
                 mainMenuView.roomInfoText.text = "Room: " + PlayerManager.instance.roomInfo.roomId;
                 for (int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
                 {
                     mainMenuView.roomInfoText.text += "\nUser " + (i + 1) + ": " + PlayerManager.instance.roomInfo.usersInRoom[i].username;
+
+                    if (PlayerManager.instance.roomInfo.usersInRoom[i].playfabId != PlayerManager.instance.user.playfabId)
+                    {
+                        if(GetCharacter(i).playMode == PlayerManager.instance.user.playMode)
+                        {
+
+                        }
+                    }
                 }
+                mainMenuView.taken.gameObject.SetActive(taken);
 
                 if (PlayerManager.instance.roomInfo.usersInRoom[0].playfabId == PlayerManager.instance.user.playfabId)
                 {
-                    mainMenuView.playButton.interactable = true;
-                    mainMenuView.playButtonText.text = "Play";
+                    bool twoAlike = false;
+                    for (int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
+                    {
+                        for (int x = 0; x < PlayerManager.instance.roomInfo.usersInRoom.Count; x++)
+                        {
+                            if (GetCharacter(i).playMode == GetCharacter(x).playMode && PlayerManager.instance.roomInfo.usersInRoom[i].playfabId != PlayerManager.instance.roomInfo.usersInRoom[x].playfabId)
+                            {
+                                twoAlike = true;
+                            }
+                        }
+
+                    }
+                    if (twoAlike)
+                    {
+                        mainMenuView.playButton.interactable = false;
+                        mainMenuView.playButtonText.text = "Play Modes";
+                    }
+                    else
+                    {
+                        mainMenuView.playButton.interactable = true;
+                        mainMenuView.playButtonText.text = "Play";
+                    }
                 }
                 else
                 {
@@ -107,6 +151,24 @@ namespace PirateGame.UI.Controllers
                     mainMenuView.playModeDropdown.gameObject.SetActive(false);
                     DateTime newTime = new DateTime((DateTime.UtcNow - PlayerManager.instance.roomInfo.matchmakingBegin).Ticks);
                     mainMenuView.matchMakingText.text = "Waiting\n\n<b>" + newTime.ToString("mm:ss") + "</b>";
+
+                    if (PlayerManager.instance.roomInfo.usersInRoom[0].playfabId == PlayerManager.instance.user.playfabId)
+                    {
+                        mainMenuView.matchMakingCancel.gameObject.SetActive(true);
+                    }
+                }
+                else if(PlayerManager.instance.roomInfo.inMatch)
+                {
+                    if (MasterClientManager.instance.getMatch() != null)
+                    {
+                        // in match
+                        mainMenuView.matchMakingHolder.gameObject.SetActive(true);
+                        
+                        mainMenuView.leaveButton.gameObject.SetActive(false);
+                        mainMenuView.playButton.gameObject.SetActive(false);
+                        mainMenuView.playModeDropdown.gameObject.SetActive(false);
+                        mainMenuView.matchMakingText.text = "Found Match\n\n<b>Connecting...</b>";
+                    }
                 }
             }
             else
@@ -169,6 +231,7 @@ namespace PirateGame.UI.Controllers
             character.nameText.text = result.InfoResultPayload.AccountInfo.Username;
             character.rankImage.sprite = IconManager.instance.rankSprites[PlayerManager.GetRank(int.Parse(result.InfoResultPayload.UserData["XP"].Value))];
             character.playModeImage.sprite = IconManager.instance.playModeSprites[int.Parse(result.InfoResultPayload.UserData["PlayMode"].Value)];
+            character.playMode = int.Parse(result.InfoResultPayload.UserData["PlayMode"].Value);
         }
 
         public void PlayFabError(PlayFabError e)
@@ -213,7 +276,7 @@ namespace PirateGame.UI.Controllers
         {
             Debug.Log("Changing mode: " + selection);
             PlayerManager.instance.SetValue("PlayMode", selection.ToString());
-
+            PlayerManager.instance.RefreshUserData();
             //if (PlayerManager.instance.roomInfo == null)
                 return;
 
@@ -233,6 +296,20 @@ namespace PirateGame.UI.Controllers
                     break;
                 }
             }
+        }
+
+        public MainMenuView.MainMenuCharacter GetCharacter(int index)
+        {
+            if (index == 0)
+                return mainMenuView.character1;
+            else if (index == 1)
+                return mainMenuView.character2;
+            else if (index == 2)
+                return mainMenuView.character3;
+            else if (index == 3)
+                return mainMenuView.character4;
+            else
+                return null;
         }
     }
 }

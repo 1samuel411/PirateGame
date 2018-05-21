@@ -104,6 +104,7 @@ namespace SNetwork.Server
                         Console.WriteLine("    Elo Avg: " + server.matchSockets.Values.ElementAt(i).eloAvg);
                         Console.WriteLine("    Started: " + server.matchSockets.Values.ElementAt(i).started);
                         Console.WriteLine("    Open: " + server.matchSockets.Values.ElementAt(i).open);
+                        Console.WriteLine("    Server Running: " + server.matchSockets.Values.ElementAt(i).serverRunning);
                         Console.WriteLine("    Start Time: " + server.matchSockets.Values.ElementAt(i).startTime.ToString());
                         Console.WriteLine("-------------------------------------");
                     }
@@ -130,8 +131,10 @@ namespace SNetwork.Server
 
                     for (int i = 0; i < server.matchMaking.matchMakingSockets.Count; i++)
                     {
-                        Console.WriteLine("Room Waiting: " + server.rooms.FirstOrDefault(x => x.roomId == server.matchMaking.matchMakingSockets[i].roomId));
+                        Console.WriteLine("Room Waiting: " + server.rooms.FirstOrDefault(x => x.roomId == server.matchMaking.matchMakingSockets[i].roomId).roomId);
                         Console.WriteLine("    Elo: " + server.matchMaking.matchMakingSockets[i].elo);
+                        Console.WriteLine("    Max Elo: " + server.matchMaking.matchMakingSockets[i].maxRange);
+                        Console.WriteLine("    Min Elo: " + server.matchMaking.matchMakingSockets[i].minRange);
                         Console.WriteLine("    Time Waiting: " + (DateTime.UtcNow - server.matchMaking.matchMakingSockets[i].joinTime).ToString());
                     }
 

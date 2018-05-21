@@ -101,7 +101,7 @@ namespace PirateGame.UI.Controllers
                     if (!PlayerManager.instance.roomInfo.usersInRoom.Any(x => x.playfabId == playfabId))
                     {
                         friendView.inviteButton.gameObject.SetActive(true);
-                        if (inviteSent != null && !string.IsNullOrEmpty(inviteRecieved.userFrom))
+                        if (inviteRecieved != null && !string.IsNullOrEmpty(inviteRecieved.userFrom))
                         {
                             // Recieved invite
                             friendView.notificationIndicator.SetActive(true);

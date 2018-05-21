@@ -86,6 +86,18 @@ namespace SNetwork
             return ConvertASCIIToBytes(jsonString);
         }
 
+        public static Server.Match ConvertDataToMatch(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            return JsonConvert.DeserializeObject<Server.Match>(jsonString);
+        }
+
+        public static byte[] ConvertMatchToData(Server.Match match)
+        {
+            string jsonString = JsonConvert.SerializeObject(match);
+            return ConvertASCIIToBytes(jsonString);
+        }
+
         public static List<Invite> ConvertDataToInvites(byte[] data)
         {
             string jsonString = ConvertToASCII(data);

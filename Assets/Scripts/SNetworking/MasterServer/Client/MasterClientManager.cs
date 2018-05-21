@@ -34,6 +34,8 @@ public class MasterClientManager : MonoBehaviour
         }
         set { _instance = value; }
     }
+    public delegate void OnMatchFound();
+    public OnMatchFound onMatchFound;
 
     void Awake()
     {
@@ -78,6 +80,11 @@ public class MasterClientManager : MonoBehaviour
     public Socket getSocket()
     {
         return _client.clientSocket;
+    }
+
+    public Match getMatch()
+    {
+        return _client.match;
     }
 
     public bool isConnected()

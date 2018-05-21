@@ -21,6 +21,20 @@ namespace SNetwork
             }
         }
 
+        // Header: 73
+        public void SendMatchFound(Match match, int sendCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
+        {
+            var data = ByteParser.ConvertMatchToData(match);
+            SendFinal(data, 73, sendCode, 0, 0, sockets);
+        }
+
+        // Header: 72
+        public void SendMatch(Match match, int sendCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
+        {
+            var data = ByteParser.ConvertMatchToData(match);
+            SendFinal(data, 72, sendCode, 0, 0, sockets);
+        }
+
         // Header: 71
         public void SendInvites(List<Invite> invites, int sendCode, Dictionary<Socket, MasterNetworkPlayer> sockets)
         {
@@ -243,9 +257,18 @@ namespace SNetwork
 
         private void SendCallback(IAsyncResult AR)
         {
-            var socket = (Socket) AR.AsyncState;
-            if(socket.Connected)
-                socket.EndSend(AR);
+            var socket = (Socket)AR.AsyncState;
+            if (socket.Connected)
+            {
+                try
+                {
+                    socket.EndSend(AR);
+                }
+                catch (SocketException e)
+                {
+
+                }
+            }
         }
     }
 
