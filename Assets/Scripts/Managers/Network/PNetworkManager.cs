@@ -15,11 +15,10 @@ namespace PirateGame.Managers
 	    public static PNetworkManager instance;
 
 	    public Action networkUserChange;
-	    public Action crewsChange;
-		public Action chatChange;
 
+        public Action<NetworkConnection> serverStartAction;
         public Action<NetworkConnection> connectAction;
-	    public Action<NetworkConnection> disconnectAction;
+        public Action<NetworkConnection> disconnectAction;
 
 	    public GameObject playerGameObject;
 
@@ -38,11 +37,20 @@ namespace PirateGame.Managers
         {
             if (ServerManager.instance != null)
             {
-                ServerManager.instance.crews = ServerManager.instance.defaultCrews;
                 ServerManager.instance.networkUsers.Clear();
-				ServerManager.instance.chats.Clear();
             }
             StartHost();
+            UIManager.instance.loading = true;
+        }
+
+        public void PStartServer()
+        {
+            if (ServerManager.instance != null)
+            {
+                ServerManager.instance.networkUsers.Clear();
+            }
+            StartServer();
+            Debug.Log("Starting Server");
             UIManager.instance.loading = true;
         }
 
@@ -50,9 +58,7 @@ namespace PirateGame.Managers
         {
             if (ServerManager.instance != null)
             {
-                ServerManager.instance.crews = ServerManager.instance.defaultCrews;
                 ServerManager.instance.networkUsers.Clear();
-				ServerManager.instance.chats.Clear();
             }
             StartClient();
             UIManager.instance.loading = true;
@@ -60,9 +66,7 @@ namespace PirateGame.Managers
 
         public void Disconnect()
 	    {
-	        ServerManager.instance.crews = ServerManager.instance.defaultCrews;
 	        ServerManager.instance.networkUsers.Clear();
-	        ServerManager.instance.chats.Clear();
 
             StopClient();
             StopServer();
@@ -83,9 +87,20 @@ namespace PirateGame.Managers
             Debug.Log("LOCAL CLIENT - ID JOINED - " + con.connectionId);
             
 	        UIManager.instance.loading = false;
+
+            UIManager.instance.ScreenSwitch("LoadScene");
 	    }
 
-	    public override void OnServerConnect(NetworkConnection con)
+        public override void OnStartServer()
+        {
+            base.OnStartServer();
+
+            serverStartAction.Invoke(null);
+
+            PNetworkManager.instance.ServerChangeScene("Game");
+        }
+
+        public override void OnServerConnect(NetworkConnection con)
 	    {
 	        base.OnServerConnect(con);
 
@@ -96,6 +111,8 @@ namespace PirateGame.Managers
 	        networkUser.networkConnection = con.connectionId;
 
             ServerManager.instance.networkUsers.Add(con.connectionId, networkUser);
+
+            connectAction.Invoke(con);
 	    }
 
 	    public override void OnServerAddPlayer(NetworkConnection con, short playerControllerId)
@@ -138,7 +155,6 @@ namespace PirateGame.Managers
 	        {
 	            if (player.Value.networkConnection == con.connectionId)
 	            {
-                    ServerManager.instance.RemoveCrewMember(player.Key);
 	                ServerManager.instance.networkUsers.Remove(player.Key);
 
 	                if (networkUserChange != null)
@@ -147,9 +163,11 @@ namespace PirateGame.Managers
 	                break;
 	            }
 	        }
-	    }
 
-	    public override void ServerChangeScene(string newSceneName)
+            Destroy(con.playerControllers[0].gameObject);
+        }
+
+        public override void ServerChangeScene(string newSceneName)
 	    {
 	        base.ServerChangeScene(newSceneName);
 	    }
@@ -160,7 +178,6 @@ namespace PirateGame.Managers
 
             Debug.Log("GAME SCENE LOADED");
 
-	        UIManager.instance.ScreenSwitch("Lobby");
 	        UIManager.instance.FadeOut();
 
             conn.playerControllers[0].gameObject.GetComponent<NetworkedPlayer>().AddPlayer();

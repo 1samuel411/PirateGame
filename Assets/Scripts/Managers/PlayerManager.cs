@@ -112,7 +112,7 @@ namespace PirateGame.Managers
                 refreshFriendsDelegate.Invoke();
         }
 
-        void RefreshUserData()
+        public void RefreshUserData()
         {
             if (user.playfabId.IsNullOrWhitespace())
                 return;

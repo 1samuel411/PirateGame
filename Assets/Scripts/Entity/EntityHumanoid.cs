@@ -459,7 +459,9 @@ namespace PirateGame.Entity
             overrideForward = false;
 
             leftTarget.parent = null;
+            DontDestroyOnLoad(leftTarget);
             rightTarget.parent = null;
+            DontDestroyOnLoad(rightTarget);
             rightWeight = 0;
             leftWeight = 0;
 
@@ -664,5 +666,11 @@ namespace PirateGame.Entity
             }
         }
         #endregion
+
+        public virtual void OnDestroy()
+        {
+            Destroy(leftTarget);
+            Destroy(rightTarget);
+        }
     }
 }

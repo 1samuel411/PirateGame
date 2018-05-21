@@ -129,5 +129,14 @@ namespace PirateGame.Entity
 	            lookAtWeight = Mathf.Lerp(lookAtWeight, 0f, 5 * Time.deltaTime);
 	        }
 	    }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            Destroy(forwardTransform);
+            Destroy(fakeCamera);
+            Destroy(fakeCameraForward);
+        }
 	}
 }

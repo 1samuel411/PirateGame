@@ -29,12 +29,17 @@ namespace PirateGame.Entity.Animations
 
         void Update()
         {
+            if (!animator)
+                return;
             animator.SetFloat(velocityXParameterName, humanoid.velocityVectorDirectionInverse.x);
             animator.SetFloat(velocityYParameterName, humanoid.velocityVectorDirectionInverse.z);
         }
 
         private void InteractBeginSequence()
         {
+            if (!animator)
+                return;
+
             if (string.IsNullOrEmpty(humanoid.currentInteractable.GetInteractAnimation()))
             {
                 humanoid.InteractBeginInteractable();
@@ -45,6 +50,9 @@ namespace PirateGame.Entity.Animations
 
         private void InteractStopSequence()
         {
+            if (!animator)
+                return;
+
             if (string.IsNullOrEmpty(humanoid.currentInteractable.GetUnInteractAnimation()))
             {
                 humanoid.InteractStopInteractable();
@@ -61,6 +69,9 @@ namespace PirateGame.Entity.Animations
 
         private void StateChange(EntityEnums.HumanoidState state)
         {
+            if (!animator)
+                return;
+
             if (humanoid.interactingBegin)
                 return;
 
@@ -83,6 +94,9 @@ namespace PirateGame.Entity.Animations
 
         private void UnGround(bool jumping)
         {
+            if (!animator)
+                return;
+
             if (humanoid.interactingBegin)
                 return;
 
@@ -106,6 +120,9 @@ namespace PirateGame.Entity.Animations
 
         private void Land(bool jumping)
         {
+            if (!animator)
+                return;
+
             if (humanoid.interactingBegin)
                 return;
 

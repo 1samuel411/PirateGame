@@ -70,13 +70,17 @@ namespace PirateGame.Managers
 
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == menuScene)
             {
-                inGameCanvas.gameObject.SetActive(false);
-                mainMenuCanvas.gameObject.SetActive(true);
+                if(inGameCanvas)
+                    inGameCanvas.gameObject.SetActive(false);
+                if(mainMenuCanvas)
+                    mainMenuCanvas.gameObject.SetActive(true);
             }
             else
             {
-                inGameCanvas.gameObject.SetActive(true);
-                mainMenuCanvas.gameObject.SetActive(false);
+                if(inGameCanvas)
+                    inGameCanvas.gameObject.SetActive(true);
+                if(mainMenuCanvas)
+                    mainMenuCanvas.gameObject.SetActive(false);
             }
         }
 

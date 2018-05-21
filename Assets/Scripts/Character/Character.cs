@@ -213,7 +213,6 @@ namespace PirateGame.Character
 
         public void ChangeGender(int gender)
         {
-            Debug.Log("Changed gender" + " " + gender);
             this.gender = gender;
 
             if (gender == 0)

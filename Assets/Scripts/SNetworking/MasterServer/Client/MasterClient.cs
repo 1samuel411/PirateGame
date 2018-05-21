@@ -28,7 +28,8 @@ namespace SNetwork.Client
         public Invite[] invites;
         public MasterNetworkPlayer[] networkPlayers;
         public KeyValuePairs[] serverData;
-
+        public Match match;
+        
         private bool updating;
 
         public int port;
