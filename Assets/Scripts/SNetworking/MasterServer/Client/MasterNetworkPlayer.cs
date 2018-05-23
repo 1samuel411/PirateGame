@@ -17,6 +17,7 @@ namespace SNetwork
         public string roomId = "";
         public int elo = 0;
         public int xp = 0;
+        public int playMode = 0;
 
         public MasterNetworkPlayer(int id, string username)
         {

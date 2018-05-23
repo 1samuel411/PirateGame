@@ -91,7 +91,8 @@ namespace SNetwork.Client
             // Recieved match callback!
             Logging.CreateLog("Recieved Match!");
             _client.match = ByteParser.ConvertDataToMatch(responseBytes);
-            MasterClientManager.instance.onMatchFound.Invoke();
+            if(MasterClientManager.instance.onMatchFound != null)
+                MasterClientManager.instance.onMatchFound.Invoke();
         }
     }
 }

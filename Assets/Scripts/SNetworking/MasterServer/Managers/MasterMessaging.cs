@@ -23,6 +23,14 @@ namespace SNetwork
             }
         }
 
+        // Header: 90
+        public void SendNewPlayMode(int playMode, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            byte[] data = ByteParser.ConvertASCIIToBytes(playMode.ToString());
+            SendFinal(data, 90, sendCode, fromCode, customCode, sockets);
+        }
+
         // Header: 77
         public void SendMatchMakeLeave(int sendCode, int fromCode, int customCode,
             Socket sockets)

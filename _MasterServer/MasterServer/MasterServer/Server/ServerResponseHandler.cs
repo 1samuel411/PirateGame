@@ -24,7 +24,9 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response12, 12);
             ResponseManager.instance.AddServerResponse(Response3, 3);
             ResponseManager.instance.AddServerResponse(Response2, 2);
+
             ResponseManager.instance.AddServerResponse(Response50, 50);
+
             ResponseManager.instance.AddServerResponse(Response72, 72);
             ResponseManager.instance.AddServerResponse(Response73, 73);
             ResponseManager.instance.AddServerResponse(Response74, 74);
@@ -32,9 +34,17 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response76, 76);
             ResponseManager.instance.AddServerResponse(Response77, 77);
 
+            ResponseManager.instance.AddServerResponse(Response90, 90);
+
             ResponseManager.instance.AddServerResponse(Response200, 200);
             ResponseManager.instance.AddServerResponse(Response201, 201);
             ResponseManager.instance.AddServerResponse(Response202, 202);
+        }
+
+        public void Response90(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            int newPlayMode = int.Parse(ByteParser.ConvertToASCII(responseBytes));
+            ServerManager.instance.server.clientSockets[fromSocket].playMode = newPlayMode;
         }
 
         public void Response200(byte[] responseBytes, Socket fromSocket, int fromId)

@@ -121,7 +121,6 @@ namespace PirateGame.Managers
             keysRequestList.Add("XP");
             keysRequestList.Add("Coins");
             keysRequestList.Add("Character");
-            keysRequestList.Add("PlayMode");
             keysRequestList.Add("Elo");
 
             GetUserDataRequest request = new GetUserDataRequest();
@@ -167,8 +166,8 @@ namespace PirateGame.Managers
             user.xp = int.Parse(GetValue("XP", "0", response.Data));
             user.coins = int.Parse(GetValue("Coins", "0", response.Data));
             user.SetCharacterSettings(GetValue("Character", Character.Character.GetDefaultCharacter(), response.Data));
-            user.playMode = int.Parse(GetValue("PlayMode", "3", response.Data));
             user.elo = int.Parse(GetValue("Elo", "1000", response.Data));
+            user.playMode = 0;
         }
 
         public string GetValue(string id, string defaultValue , Dictionary<string, UserDataRecord> data, bool sendData = true )

@@ -36,7 +36,7 @@ public class MasterClientManager : MonoBehaviour
     }
     public delegate void OnMatchFound();
     public OnMatchFound onMatchFound;
-
+    
     void Awake()
     {
         ResponseManager.instance.Clear();
@@ -153,6 +153,11 @@ public class MasterClientManager : MonoBehaviour
     public void CancelMatchMake()
     {
         MasterMessaging.instance.SendMatchMakeLeave(2, getId(), 0, _client.clientSocket);
+    }
+
+    public void SendNewPlayMode(int playMode)
+    {
+        MasterMessaging.instance.SendNewPlayMode(playMode, 2, getId(), 0, _client.clientSocket);
     }
 
     public delegate void OnConnectedDelegate(ResponseMessage message);

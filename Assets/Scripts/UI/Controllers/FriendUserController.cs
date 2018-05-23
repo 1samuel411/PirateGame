@@ -98,7 +98,7 @@ namespace PirateGame.UI.Controllers
                 
                 if (friendView.onlineIndicator.activeInHierarchy)
                 {
-                    if (!PlayerManager.instance.roomInfo.usersInRoom.Any(x => x.playfabId == playfabId))
+                    if (!PlayerManager.instance.roomInfo.usersInRoom.Any(x => x.playfabId == playfabId) && PlayerManager.instance.region == online)
                     {
                         friendView.inviteButton.gameObject.SetActive(true);
                         if (inviteRecieved != null && !string.IsNullOrEmpty(inviteRecieved.userFrom))
