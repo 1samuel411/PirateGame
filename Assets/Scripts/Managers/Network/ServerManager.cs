@@ -16,7 +16,7 @@ namespace PirateGame.Managers
         public static ServerManager instance;
 
         public Dictionary<int, NetworkUser> networkUsers = new Dictionary<int, NetworkUser>();
-        public List<NetworkUser> networkUser = new List<NetworkUser>();
+        public List<NetworkUser> networkUsersList = new List<NetworkUser>();
 
         private NetworkedPlayer _myNetworkedPlayer;
         public NetworkedPlayer myNetworkPlayer
@@ -48,9 +48,9 @@ namespace PirateGame.Managers
             
         }
 
-        void Update()
+        private void Update()
         {
-            networkUser = networkUsers.Values.ToList();
+            networkUsersList = networkUsers.Values.ToList();
         }
 
         public void RefreshUsers()

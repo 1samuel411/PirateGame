@@ -6,6 +6,22 @@ namespace PirateGame
 {
 	public class NetworkingBase : NetworkBehaviour
     {
+
+        private NetworkIdentity _networkIdentity;
+        public NetworkIdentity networkIdentity
+        {
+            get
+            {
+                if (_networkIdentity == null)
+                    _networkIdentity = GetComponentInParent<NetworkIdentity>();
+
+                if (_networkIdentity == null)
+                    _networkIdentity = GetComponent<NetworkIdentity>();
+
+                return _networkIdentity;
+            }
+        }
+
         private Transform _transform;
         [HideInInspector]
         public new Transform transform

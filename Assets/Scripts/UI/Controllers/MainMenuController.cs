@@ -58,6 +58,17 @@ namespace PirateGame.UI.Controllers
                 return;
 
             mainMenuView.playModeDropdown.value = PlayerManager.instance.user.playMode;
+
+            if (PlayerManager.instance.roomInfo == null)
+                return;
+
+            for(int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
+            {
+                if(PlayerManager.instance.roomInfo.usersInRoom[i].playfabId == PlayerManager.instance.user.playfabId)
+                {
+                    GetCharacter(i).character.SetCharacter(PlayerManager.instance.user.character);
+                }
+            }
         }
 
         private float refreshTimer = 0;
@@ -84,7 +95,7 @@ namespace PirateGame.UI.Controllers
                     {
                         if(GetCharacter(i).playMode == PlayerManager.instance.user.playMode)
                         {
-
+                            taken = true;
                         }
                     }
                 }
@@ -178,6 +189,9 @@ namespace PirateGame.UI.Controllers
 
         void GetData(bool refresh)
         {
+            if (PlayerManager.instance.roomInfo == null)
+                return;
+
             if (PlayerManager.instance.roomInfo.usersInRoom.Count == 1)
             {
                 mainMenuView.character1.character.gameObject.SetActive(true);

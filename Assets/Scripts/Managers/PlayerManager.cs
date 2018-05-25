@@ -67,6 +67,27 @@ namespace PirateGame.Managers
                 masterServerNeeded = false;
             }
 
+            if (Input.GetKeyDown(KeyCode.F9))
+            {
+                PNetworkManager.instance.networkAddress = "127.0.0.1";
+                PNetworkManager.instance.networkPort = 1500;
+                PNetworkManager.instance.PStartHost();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F10))
+            {
+                PNetworkManager.instance.networkAddress = "127.0.0.1";
+                PNetworkManager.instance.networkPort = 1500;
+                PNetworkManager.instance.PStartServer();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F11))
+            {
+                PNetworkManager.instance.networkAddress = "127.0.0.1";
+                PNetworkManager.instance.networkPort = 1500;
+                PNetworkManager.instance.PStartClient();
+            }
+
             RefreshFriends();
 
             // Refresh Data

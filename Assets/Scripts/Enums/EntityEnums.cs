@@ -23,7 +23,8 @@ namespace PirateGame.Entity
 	    	Jumping,
 	    	CrouchWalk,
 	    	Falling,
-            Landing
+            Landing,
+            None
 	    }
     }
 }

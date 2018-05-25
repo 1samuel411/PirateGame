@@ -1,22 +1,38 @@
-﻿using System.Collections;
+﻿using PirateGame.Networking;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace PirateGame.Entity.Animations
 {
     [RequireComponent(typeof(EntityHumanoid))]
-    public class AnimateHumanoid : Base
+    public class AnimateHumanoid : NetworkingBase
     {
 
         public string velocityXParameterName = "velocityX";
         public string velocityYParameterName = "velocityY";
 
+        [SyncVar]
+        public float velocityX;
+        [SyncVar]
+        public float velocityY;
+
+        public float velocitySyncTime = 0.2f;
+        private float velocitySyncTimer;
+
         public new Animator animator;
 
         private EntityHumanoid humanoid;
 
+        public RuntimeAnimatorController animatorToUse;
+
+        private NetworkedPlayer networkedPlayer;
+
         void Awake()
         {
+            networkedPlayer = GetComponentInParent<NetworkedPlayer>();
+
             humanoid = GetComponent<EntityHumanoid>();
 
             humanoid.UnGroundAction += UnGround;
@@ -31,8 +47,30 @@ namespace PirateGame.Entity.Animations
         {
             if (!animator)
                 return;
-            animator.SetFloat(velocityXParameterName, humanoid.velocityVectorDirectionInverse.x);
-            animator.SetFloat(velocityYParameterName, humanoid.velocityVectorDirectionInverse.z);
+
+            animator.runtimeAnimatorController = animatorToUse;
+
+            animator.SetFloat(velocityXParameterName, velocityX);
+            animator.SetFloat(velocityYParameterName, velocityY);
+
+            if (isLocalPlayer)
+            {
+                velocityX = humanoid.velocityVectorDirectionInverse.x;
+                velocityY = humanoid.velocityVectorDirectionInverse.z;
+
+                if(Time.time >= velocitySyncTimer)
+                {
+                    velocitySyncTimer = Time.time + velocitySyncTime;
+                    CmdSyncVelocity(velocityX, velocityY);
+                }
+            }
+        }
+        
+        [Command]
+        void CmdSyncVelocity(float x, float y)
+        {
+            velocityX = x;
+            velocityY = y;
         }
 
         private void InteractBeginSequence()
@@ -67,6 +105,7 @@ namespace PirateGame.Entity.Animations
             timeSinceSprinting = Time.time;
         }
 
+        private bool sprinting;
         private void StateChange(EntityEnums.HumanoidState state)
         {
             if (!animator)
@@ -77,10 +116,12 @@ namespace PirateGame.Entity.Animations
 
             if (state == EntityEnums.HumanoidState.Walking)
             {
+                sprinting = false;
                 animator.CrossFadeInFixedTime(humanoid.aiming ? "Walk" : "WalkStart", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Sprinting)
             {
+                sprinting = true;
                 animator.CrossFadeInFixedTime("SprintStart", 0.3f);
             }
             if (state == EntityEnums.HumanoidState.Idle)
@@ -102,9 +143,9 @@ namespace PirateGame.Entity.Animations
 
             if (jumping)
             {
-                if (humanoid.velocityPlanarMagnitude > 0.5f)
+                if (new Vector2(velocityX, velocityY).magnitude >= 1f)
                 {
-                    if (humanoid.sprinting)
+                    if (sprinting)
                         animator.CrossFadeInFixedTime("JumpSprint", 0.2f);
                     else
                         animator.CrossFadeInFixedTime("JumpWalk", 0.2f);
@@ -126,9 +167,9 @@ namespace PirateGame.Entity.Animations
             if (humanoid.interactingBegin)
                 return;
 
-            if (humanoid.velocityPlanarMagnitude > 2f)
+            if (new Vector2(velocityX, velocityY).magnitude >= 1f)
             {
-                if (humanoid.sprinting)
+                if (sprinting)
                     animator.CrossFadeInFixedTime("LandSprint", 0.2f);
                 else
                     animator.CrossFadeInFixedTime("LandWalk", 0.2f);

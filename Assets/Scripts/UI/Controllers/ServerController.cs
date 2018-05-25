@@ -111,7 +111,7 @@ namespace PirateGame.UI.Controllers
 
         void Connected(NetworkConnection con)
         {
-            Debug.Log("Connected");
+            Debug.Log("Connected!");
             MatchClientManager.instance.SendServerOpen();
             UIManager.instance.loading = false;
 

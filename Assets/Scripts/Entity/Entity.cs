@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using Sirenix.OdinInspector;
 
 namespace PirateGame.Entity
@@ -18,7 +19,7 @@ namespace PirateGame.Entity
     /// </summary>
 
 	[RequireComponent(typeof(Collider))]
-    public class Entity : Base
+    public class Entity : NetworkingBase
     {
 
         [Header("Entity")]

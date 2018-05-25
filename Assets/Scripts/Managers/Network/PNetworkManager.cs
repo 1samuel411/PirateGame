@@ -31,6 +31,7 @@ namespace PirateGame.Managers
 
 	        instance = this;
             DontDestroyOnLoad(gameObject);
+
         }
 
         public void PStartHost()
@@ -39,6 +40,7 @@ namespace PirateGame.Managers
             {
                 ServerManager.instance.networkUsers.Clear();
             }
+
             StartHost();
             UIManager.instance.loading = true;
         }
@@ -95,7 +97,8 @@ namespace PirateGame.Managers
         {
             base.OnStartServer();
 
-            serverStartAction.Invoke(null);
+            if(serverStartAction != null)
+                serverStartAction.Invoke(null);
 
             PNetworkManager.instance.ServerChangeScene("Game");
         }
@@ -127,12 +130,14 @@ namespace PirateGame.Managers
 	        networkPlayer.networkId = con.connectionId;
         }
 
-	    public override void OnServerReady(NetworkConnection con)
+        public override void OnServerReady(NetworkConnection con)
 	    {
 	        base.OnServerReady(con);
 
 	        if (networkUserChange != null)
                 networkUserChange.Invoke();
+
+            Debug.Log("Ready");
         }
 
 	    public override void OnClientDisconnect(NetworkConnection con)
@@ -140,7 +145,8 @@ namespace PirateGame.Managers
 	        base.OnClientDisconnect(con);
 
             Debug.Log("LOCAL CLIENT - ID LEFT - " + con.connectionId);
-            if(con.connectionId == 0)
+
+            if(con.connectionId == ServerManager.instance.netId.Value)
 	            if (disconnectAction != null)
 	                disconnectAction.Invoke(con);
 
@@ -174,7 +180,8 @@ namespace PirateGame.Managers
 
 	    public override void OnClientSceneChanged(NetworkConnection conn)
 	    {
-	        base.OnClientSceneChanged(conn);
+            //if(hosting == false)
+	            //base.OnClientSceneChanged(conn);
 
             Debug.Log("GAME SCENE LOADED");
 

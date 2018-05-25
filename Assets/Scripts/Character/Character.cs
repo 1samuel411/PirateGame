@@ -69,13 +69,26 @@ namespace PirateGame.Character
 
         public void SetCharacter(CharacterSettings newSettings)
         {
+            if (newSettings == null)
+                return;
+            if (!gameObject.activeSelf)
+                return;
+
+            Debug.Log("Setting Character: " + transform.name);
+
             StartCoroutine(SetCharacterCoroutine(newSettings));
         }
         IEnumerator SetCharacterCoroutine(CharacterSettings newSettings)
         {
+            if (!gameObject.activeSelf)
+                yield break;
             yield return null;
+            if (!gameObject.activeSelf)
+                yield break;
 
             characterSet = newSettings;
+
+            yield return null;
 
             bool foundGender = false;
             for (int i = 0; i < characterSettings.bodyHolders.Length; i++)
@@ -88,6 +101,7 @@ namespace PirateGame.Character
                         if (newSettings.bodySelections[y].name == "Gender")
                         {
                             ApplySetting(characterSettings.bodyHolders[i].bodyComponents[x], newSettings.bodySelections[y].value);
+                            yield return null;
                             foundGender = true;
                             break;
                         }
@@ -99,6 +113,7 @@ namespace PirateGame.Character
                     break;
             }
 
+            yield return null;
             yield return null;
 
             for (int i = 0; i < characterSettings.bodyHolders.Length; i++)
@@ -213,10 +228,11 @@ namespace PirateGame.Character
 
         public void ChangeGender(int gender)
         {
+            Debug.Log("Changing race");
             this.gender = gender;
 
             if (gender == 0)
-                dynamicCharacterAvatar.ChangeRace("HumanMale");
+                dynamicCharacterAvatar.ChangeRace("HumanMaleDCS");
             else
             {
                 dynamicCharacterAvatar.ChangeRace("HumanFemaleHighPoly");

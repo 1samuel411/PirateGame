@@ -1700,6 +1700,7 @@ namespace UMA.CharacterSystem
         /// </summary>
         public void SetAnimatorController(bool addAnimator = false)
         {
+
             RuntimeAnimatorController controllerToUse = raceAnimationControllers.GetAnimatorForRace(activeRace.name);
 
             //changing the animationController in 5.6 resets the rotation of this game object

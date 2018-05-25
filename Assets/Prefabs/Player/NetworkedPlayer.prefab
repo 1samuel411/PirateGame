@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 114682329425048432}
   - component: {fileID: 114990200994265084}
   - component: {fileID: 114474932175223302}
+  - component: {fileID: 95654961591832402}
   m_Layer: 0
   m_Name: Char
   m_TagString: Untagged
@@ -153,7 +154,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1801956251790236}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0.006}
+  m_LocalPosition: {x: 0, y: -0.64, z: 0.006000042}
   m_LocalScale: {x: 1.5508099, y: 1.5508101, z: 1.5508101}
   m_Children: []
   m_Father: {fileID: 4543159596198304}
@@ -166,7 +167,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1394928186458460}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.24}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4178588159929874}
@@ -203,6 +204,24 @@ Transform:
   m_Father: {fileID: 4543159596198304}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &95654961591832402
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1801956251790236}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114005255552466666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -380,7 +399,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityXParameterName: velocityX
   velocityYParameterName: velocityY
-  animator: {fileID: 0}
+  velocityX: 0
+  velocityY: 0
+  animator: {fileID: 95654961591832402}
+  animatorToUse: {fileID: 9100000, guid: 1f1894533496b174ebb6e3c89664e3e6, type: 2}
 --- !u!114 &114366319217428766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -431,7 +453,7 @@ MonoBehaviour:
   hide: 0
   loadBlendShapes: 0
   activeRace:
-    name: HumanMaleDCS
+    name: 
   defaultChangeRaceOptions: 14
   cacheCurrentState: 1
   rebuildSkeleton: 0
@@ -560,7 +582,9 @@ MonoBehaviour:
     liftPelvisWeight: 0
     rootSphereCastRadius: 0.1
     quality: 2
-  legs: []
+  legs:
+  - {fileID: 0}
+  - {fileID: 0}
   pelvis: {fileID: 0}
   characterRoot: {fileID: 0}
   rootRotationWeight: 0
@@ -675,8 +699,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eda72b5838948d74988a814d2830f607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerEntity: {fileID: 114258594867460222}
+  animateHumanoid: {fileID: 114326330830197974}
   localOnlyComponents: []
   character: {fileID: 114990200994265084}
+  groundedLayerMask:
+    serializedVersion: 2
+    m_Bits: 5632
 --- !u!114 &114682329425048432
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -727,9 +756,9 @@ MonoBehaviour:
     slotDataList: []
     sharedColors: []
   animator: {fileID: 0}
-  characterHeight: 2
-  characterRadius: 0.25
-  characterMass: 50
+  characterHeight: 0
+  characterRadius: 0
+  characterMass: 2
 --- !u!114 &114715860354108122
 MonoBehaviour:
   m_ObjectHideFlags: 1

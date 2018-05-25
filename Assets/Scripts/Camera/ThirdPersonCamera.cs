@@ -44,15 +44,13 @@ namespace PirateGame
 
         void Update()
         {
+            GetMouseInput();
 
             GetAim();
-
-            GetMouseInput();
 
             GetScrollInput();
 
             SetPosition();
-
         }
 
         private bool lastAiming = false;
@@ -83,7 +81,7 @@ namespace PirateGame
             mouseMovement = InputManager.instance.player.GetAxis2D("Mouse Y", "Mouse X");
 
             Vector3 angle = transform.localRotation.eulerAngles;
-            angle += (new Vector3(mouseMovement.x, mouseMovement.y) * mouseMoveSpeed * Time.deltaTime);
+            angle += (new Vector3(mouseMovement.x, mouseMovement.y) * mouseMoveSpeed);
 
             angle.x = WrapAngle(angle.x);
             angle.x = ClampAngle(angle.x, clampXAmount.x, clampXAmount.y);

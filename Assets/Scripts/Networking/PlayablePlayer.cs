@@ -4,18 +4,25 @@ using PirateGame.Managers;
 using RootMotion.FinalIK;
 using UnityEngine;
 using UnityEngine.Networking;
+using PirateGame.Entity;
+using PirateGame.Entity.Animations;
 
 namespace PirateGame.Networking
 {
-    public class PlayablePlayer : Base
+    public class PlayablePlayer : NetworkingBase
     {
 
         public MonoBehaviour[] localOnlyComponents;
 
         public Character.Character character;
 
-        void Start()
+        public LayerMask groundedLayerMask;
+
+        private NetworkedPlayer networkedPlayer;
+
+        void OnEnable()
         {
+            networkedPlayer = GetComponentInParent<NetworkedPlayer>();
             StartCoroutine(WaitFrame());
         }
 
@@ -24,31 +31,29 @@ namespace PirateGame.Networking
             yield return null;
             yield return null;
             // Set up UMA Character
-            SetUpUMA();
+            StartCoroutine(SetUpUMA());
         }
 
-        void SetUpUMA()
+        IEnumerator SetUpUMA()
         {
-            Debug.Log("Setting up UMA");
             Entity.EntityPlayer entityPlayer = GetComponent<Entity.EntityPlayer>();
-            GrounderIK grounderIk = GetComponentInChildren<GrounderIK>();
 
             // Apply char settings
-            character.SetCharacter(PlayerManager.instance.user.character);
+            while(ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false || ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character == null)
+            {
+                Debug.Log("Not ready up UMA");
+                yield return null;
+            }
+            yield return null;
+            Debug.Log("Setting up UMA");
 
-            // Add char IK
-
-            // Add Left leg IK
-            LimbIK leftLimb = AddLimbIK("LeftUpLeg", "LeftLeg", "LeftFoot");
-            leftLimb.solver.goal = AvatarIKGoal.LeftFoot;
-            // Add Right leg IK
-            LimbIK rightLimb = AddLimbIK("RightUpLeg", "RightLeg", "RightFoot");
-            leftLimb.solver.goal = AvatarIKGoal.RightFoot;
-            // Set up grounder
-            grounderIk.legs = new LimbIK[] { leftLimb, rightLimb };
-            grounderIk.pelvis = GetCharacterChild("Hips");
-            grounderIk.characterRoot = GetCharacterChild("Position");
-
+            character.SetCharacter(ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character);
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+            
             // Add Left arm IK
             LimbIK leftArmLimb = AddLimbIK("LeftArm", "LeftForeArm", "LeftHand");
             leftArmLimb.solver.goal = AvatarIKGoal.LeftHand;
@@ -68,6 +73,16 @@ namespace PirateGame.Networking
             entityPlayer.rightArmIk = rightArmLimb;
 
             GetComponent<Entity.Animations.AnimateHumanoid>().animator = character.GetComponent<Animator>();
+
+            // Add char IK
+            LimbIKGrounderUMA2 grounder = gameObject.AddComponent<LimbIKGrounderUMA2>();
+            grounder.animator = character.GetComponent<Animator>();
+            grounder.layers = groundedLayerMask;
+            yield return null;
+            GrounderIK grounderIk = GetComponentInChildren<GrounderIK>();
+
+            if(!isLocalPlayer)
+                grounderIk.solver.quality = Grounding.Quality.Fastest;
         }
 
         void Update()
@@ -81,7 +96,6 @@ namespace PirateGame.Networking
         LimbIK AddLimbIK(string bone1, string bone2, string bone3)
         {
             LimbIK limbIk = null;
-
             Transform bone1Limb = GetCharacterChild(bone1);
             limbIk = bone1Limb.gameObject.AddComponent<LimbIK>();
             limbIk.solver.bone1.transform = bone1Limb;

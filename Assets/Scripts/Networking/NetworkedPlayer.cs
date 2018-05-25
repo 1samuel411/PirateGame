@@ -18,12 +18,21 @@ namespace PirateGame.Networking
         [SyncVar] public int networkId = 0;
 
         public GameObject player;
-        private PlayablePlayer playablePlayer;
+        private PlayablePlayer _playablePlayer;
+        public PlayablePlayer playablePlayer
+        {
+            get
+            {
+                if (_playablePlayer == null)
+                    _playablePlayer = player.GetComponent<PlayablePlayer>();
+
+                return _playablePlayer;
+            }
+        }
 
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            playablePlayer = player.GetComponent<PlayablePlayer>();
             CameraManager.instance.cameraObject.target = playablePlayer.transform;
 
             if (isLocalPlayer)
@@ -35,6 +44,19 @@ namespace PirateGame.Networking
             }
         }
 
+        private float sendRate = .09f;
+        private float curSendTimer = 0;
+        private void Update()
+        {
+            if (Time.time >= curSendTimer && isLocalPlayer)
+            {
+                curSendTimer = Time.time + sendRate;
+
+                // Sync 
+            }
+        }
+
+        #region Send User
         void SendData()
         {
             Byte[] myData = ObjectSerializer.Serialize(PlayerManager.instance.user);
@@ -53,13 +75,13 @@ namespace PirateGame.Networking
 
             ServerManager.instance.RefreshUsers();
         }
+        #endregion
 
         public void AddPlayer()
         {
             PlayerManager.instance.playerEntity = player.GetComponent<EntityPlayer>();
-
-            player.gameObject.transform.position = Vector3.zero;
-            player.gameObject.transform.rotation = Quaternion.identity;
+            player.transform.position = PNetworkManager.instance.GetStartPosition().position;
+            player.transform.rotation = PNetworkManager.instance.GetStartPosition().rotation;
         }
     }
 }
