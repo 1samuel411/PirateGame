@@ -225,6 +225,7 @@ MonoBehaviour:
   velocityYParameterName: velocityY
   velocityX: 0
   velocityY: 0
+  velocitySyncTime: 0.2
   animator: {fileID: 95730048149293814}
   animatorToUse: {fileID: 9100000, guid: 1f1894533496b174ebb6e3c89664e3e6, type: 2}
 --- !u!114 &114103076025653056
@@ -811,7 +812,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.43, z: 0}
+  m_Center: {x: 0, y: 1.64, z: 0}
 --- !u!222 &222439336392816304
 CanvasRenderer:
   m_ObjectHideFlags: 1

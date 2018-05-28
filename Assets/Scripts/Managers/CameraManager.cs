@@ -10,6 +10,7 @@ namespace PirateGame.Managers
         public static CameraManager instance;
 
         public ThirdPersonCamera cameraObject;
+        public GameObject mainMenuCamera;
 
         void Awake()
         {
@@ -37,6 +38,8 @@ namespace PirateGame.Managers
             {
                 cameraObject.gameObject.SetActive(false);
             }
+
+            mainMenuCamera.gameObject.SetActive(!cameraObject.gameObject.activeSelf);
         }
     }
 }

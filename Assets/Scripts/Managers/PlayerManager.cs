@@ -88,6 +88,11 @@ namespace PirateGame.Managers
                 PNetworkManager.instance.PStartClient();
             }
 
+            if (Input.GetKeyDown(KeyCode.F12))
+            {
+                PNetworkManager.instance.Disconnect();
+            }
+
             RefreshFriends();
 
             // Refresh Data

@@ -87,6 +87,8 @@ namespace PirateGame.UI.Controllers
             if(response.type == ResponseMessage.ResponseType.Success)
             {
                 connected = true;
+
+                StartServer();
             }
         }
 

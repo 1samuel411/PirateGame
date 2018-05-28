@@ -27,6 +27,9 @@ namespace PirateGame.UI.Controllers
             if (networkedPlayer.isLocalPlayer)
                 return;
 
+            if (CameraManager.instance == null)
+                return;
+
             if (ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false)
                 return;
 

@@ -209,6 +209,7 @@ namespace PirateGame.UI.Controllers
         public void Save()
         {
             PlayerManager.instance.SetValue("Character", JsonConvert.SerializeObject(character.characterSet));
+            PlayerManager.instance.user.character = character.characterSet;
             UIManager.instance.ScreenSwitch("Menu");
         }
         #endregion

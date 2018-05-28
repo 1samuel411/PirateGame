@@ -690,6 +690,45 @@ namespace SNetwork.Server
             }
         }
 
+        public void LeaveMatch(string playerIdLeft)
+        {
+            MasterNetworkPlayer playerLeaving = clientSockets.Values.FirstOrDefault(x => x.playfabId.Equals(playerIdLeft));
+            if(playerLeaving == null)
+                return;
+
+            playerLeaving.inMatch = false;
+
+            Room usersRoom = rooms.FirstOrDefault(x => x.usersInRoomIds.Contains(playerLeaving.id));
+
+            if (usersRoom == null)
+                return;
+
+
+            Match matchRoomIsIn = matchSockets.Values.FirstOrDefault(x => x.id == usersRoom.matchId);
+
+            if(matchRoomIsIn != null)
+            {
+                // remove room from match if all users are gone
+                usersRoom.Refresh();
+                bool anyLeft = false;
+                for(int i = 0; i < usersRoom.usersInRoom.Count; i++)
+                {
+                    if(usersRoom.usersInRoom[i].inMatch == false)
+                    {
+                        anyLeft = true;
+                        break;
+                    }
+                }
+                if(!anyLeft)
+                {
+                    matchRoomIsIn.rooms.Remove(usersRoom.roomId);
+                }
+            }
+
+            usersRoom.inMatch = false;
+            usersRoom.matchId = 0;
+        }
+
         public async void SetLoggedIn(string playfabId)
         {
             if (string.IsNullOrEmpty(playfabId))

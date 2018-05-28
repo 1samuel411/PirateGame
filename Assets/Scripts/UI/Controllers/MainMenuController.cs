@@ -82,21 +82,25 @@ namespace PirateGame.UI.Controllers
             mainMenuView.playButton.interactable = false;
             mainMenuView.matchMakingCancel.gameObject.SetActive(false);
             mainMenuView.playButtonText.text = "Not connected";
+            mainMenuView.taken.gameObject.SetActive(false);
 
             if (PlayerManager.instance.roomInfo != null)
             {
                 bool taken = false;
                 mainMenuView.roomInfoText.text = "Room: " + PlayerManager.instance.roomInfo.roomId;
+                int ourPlayMode = 0;
+                for (int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
+                {
+                    if (PlayerManager.instance.roomInfo.usersInRoom[i].playfabId == PlayerManager.instance.user.playfabId)
+                        ourPlayMode = i;
+                }
                 for (int i = 0; i < PlayerManager.instance.roomInfo.usersInRoom.Count; i++)
                 {
                     mainMenuView.roomInfoText.text += "\nUser " + (i + 1) + ": " + PlayerManager.instance.roomInfo.usersInRoom[i].username;
 
-                    if (PlayerManager.instance.roomInfo.usersInRoom[i].playfabId != PlayerManager.instance.user.playfabId)
+                    if(GetCharacter(i).playMode == ourPlayMode && PlayerManager.instance.roomInfo.usersInRoom[i].playfabId != PlayerManager.instance.user.playfabId)
                     {
-                        if(GetCharacter(i).playMode == PlayerManager.instance.user.playMode)
-                        {
-                            taken = true;
-                        }
+                        taken = true;
                     }
                 }
                 mainMenuView.taken.gameObject.SetActive(taken);
@@ -144,14 +148,16 @@ namespace PirateGame.UI.Controllers
                     mainMenuView.character3.character.gameObject.SetActive(false);
                     mainMenuView.character4.character.gameObject.SetActive(false);
                     // Get Data
-                    GetData(true);
+                    GetData(true, true);
                 }
 
                 if(Time.time >= refreshTimer)
                 {
-                    refreshTimer = Time.time + 2f;
-                    GetData(false);
+                    refreshTimer = Time.time + 5f;
+                    GetData(false, true);
                 }
+
+                GetData(false, false);
 
                 if(PlayerManager.instance.roomInfo.matchmaking)
                 {
@@ -159,7 +165,10 @@ namespace PirateGame.UI.Controllers
                     mainMenuView.leaveButton.gameObject.SetActive(false);
                     mainMenuView.playButton.gameObject.SetActive(false);
                     mainMenuView.playModeDropdown.gameObject.SetActive(false);
-                    DateTime newTime = new DateTime((DateTime.UtcNow - PlayerManager.instance.roomInfo.matchmakingBegin).Ticks);
+                    long ticks = (DateTime.UtcNow - PlayerManager.instance.roomInfo.matchmakingBegin).Ticks;
+                    if (ticks < 0)
+                        ticks = 0;
+                    DateTime newTime = new DateTime(ticks);
                     mainMenuView.matchMakingText.text = "Waiting\n\n<b>" + newTime.ToString("mm:ss") + "</b>";
 
                     if (PlayerManager.instance.roomInfo.usersInRoom[0].playfabId == PlayerManager.instance.user.playfabId)
@@ -167,7 +176,7 @@ namespace PirateGame.UI.Controllers
                         mainMenuView.matchMakingCancel.gameObject.SetActive(true);
                     }
                 }
-                else if(PlayerManager.instance.roomInfo.inMatch)
+                if(PlayerManager.instance.roomInfo.inMatch)
                 {
                     if (MasterClientManager.instance.getMatch() != null)
                     {
@@ -187,7 +196,7 @@ namespace PirateGame.UI.Controllers
             }
         }
 
-        void GetData(bool refresh)
+        void GetData(bool refresh, bool getData)
         {
             if (PlayerManager.instance.roomInfo == null)
                 return;
@@ -195,52 +204,62 @@ namespace PirateGame.UI.Controllers
             if (PlayerManager.instance.roomInfo.usersInRoom.Count == 1)
             {
                 mainMenuView.character1.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
                 mainMenuView.character1.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[0].playMode];
                 mainMenuView.character1.playMode = PlayerManager.instance.roomInfo.usersInRoom[0].playMode;
             }
             if (PlayerManager.instance.roomInfo.usersInRoom.Count == 2)
             {
                 mainMenuView.character1.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
                 mainMenuView.character1.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[0].playMode];
                 mainMenuView.character1.playMode = PlayerManager.instance.roomInfo.usersInRoom[0].playMode;
                 mainMenuView.character2.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character2, PlayerManager.instance.roomInfo.usersInRoom[1].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character2, PlayerManager.instance.roomInfo.usersInRoom[1].playfabId, refresh);
                 mainMenuView.character2.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[1].playMode];
                 mainMenuView.character2.playMode = PlayerManager.instance.roomInfo.usersInRoom[1].playMode;
             }
             if (PlayerManager.instance.roomInfo.usersInRoom.Count == 3)
             {
                 mainMenuView.character1.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
                 mainMenuView.character1.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[0].playMode];
                 mainMenuView.character1.playMode = PlayerManager.instance.roomInfo.usersInRoom[0].playMode;
                 mainMenuView.character2.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character2, PlayerManager.instance.roomInfo.usersInRoom[1].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character2, PlayerManager.instance.roomInfo.usersInRoom[1].playfabId, refresh);
                 mainMenuView.character2.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[1].playMode];
                 mainMenuView.character2.playMode = PlayerManager.instance.roomInfo.usersInRoom[1].playMode;
                 mainMenuView.character3.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character3, PlayerManager.instance.roomInfo.usersInRoom[2].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character3, PlayerManager.instance.roomInfo.usersInRoom[2].playfabId, refresh);
                 mainMenuView.character3.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[2].playMode];
                 mainMenuView.character3.playMode = PlayerManager.instance.roomInfo.usersInRoom[2].playMode;
             }
             if (PlayerManager.instance.roomInfo.usersInRoom.Count == 4)
             {
                 mainMenuView.character1.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character1, PlayerManager.instance.roomInfo.usersInRoom[0].playfabId, refresh);
                 mainMenuView.character1.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[0].playMode];
                 mainMenuView.character1.playMode = PlayerManager.instance.roomInfo.usersInRoom[0].playMode;
                 mainMenuView.character2.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character2, PlayerManager.instance.roomInfo.usersInRoom[1].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character2, PlayerManager.instance.roomInfo.usersInRoom[1].playfabId, refresh);
                 mainMenuView.character2.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[1].playMode];
                 mainMenuView.character2.playMode = PlayerManager.instance.roomInfo.usersInRoom[1].playMode;
                 mainMenuView.character3.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character3, PlayerManager.instance.roomInfo.usersInRoom[2].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character3, PlayerManager.instance.roomInfo.usersInRoom[2].playfabId, refresh);
                 mainMenuView.character3.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[2].playMode];
                 mainMenuView.character3.playMode = PlayerManager.instance.roomInfo.usersInRoom[2].playMode;
                 mainMenuView.character4.character.gameObject.SetActive(true);
-                GetCharacterData(mainMenuView.character4, PlayerManager.instance.roomInfo.usersInRoom[3].playfabId, refresh);
+                if(getData)
+                    GetCharacterData(mainMenuView.character4, PlayerManager.instance.roomInfo.usersInRoom[3].playfabId, refresh);
                 mainMenuView.character4.playModeImage.sprite = IconManager.instance.playModeSprites[PlayerManager.instance.roomInfo.usersInRoom[3].playMode];
                 mainMenuView.character4.playMode = PlayerManager.instance.roomInfo.usersInRoom[3].playMode;
             }

@@ -33,11 +33,13 @@ namespace PirateGame.Networking
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            CameraManager.instance.cameraObject.target = playablePlayer.transform;
 
             if (isLocalPlayer)
             {
-                if(PNetworkManager.instance.connectAction != null)
+                if(CameraManager.instance != null)
+                    CameraManager.instance.cameraObject.target = playablePlayer.transform;
+
+                if (PNetworkManager.instance.connectAction != null)
                     PNetworkManager.instance.connectAction.Invoke(null);
 
                 SendData();

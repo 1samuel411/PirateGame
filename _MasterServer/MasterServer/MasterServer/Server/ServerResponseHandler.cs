@@ -39,6 +39,7 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response200, 200);
             ResponseManager.instance.AddServerResponse(Response201, 201);
             ResponseManager.instance.AddServerResponse(Response202, 202);
+            ResponseManager.instance.AddServerResponse(Response203, 203);
         }
 
         public void Response90(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -50,23 +51,35 @@ namespace SNetwork.Server
         public void Response200(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             int newPort = int.Parse(ByteParser.ConvertToASCII(responseBytes));
-            Console.WriteLine("Recieved a 200: " + fromId + ": " + newPort);
+            Console.WriteLine("Recieved match's port: " + fromId + ": " + newPort);
             ServerManager.instance.server.matchSockets[fromSocket].port = newPort;
         }
 
         public void Response201(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             string newIp = (ByteParser.ConvertToASCII(responseBytes));
-            Console.WriteLine("Recieved a 201: " + fromId + ": " + newIp);
+            Console.WriteLine("Recieved match's ip: " + fromId + ": " + newIp);
             ServerManager.instance.server.matchSockets[fromSocket].ip = newIp;
+
+            Console.WriteLine("Recieved match ready to be joined: " + fromId);
+            ServerManager.instance.server.matchSockets[fromSocket].serverRunning = true;
+            ServerManager.instance.server.matchSockets[fromSocket].open = true;
+            ServerManager.instance.server.matchSockets[fromSocket].startTime = DateTime.UtcNow;
         }
 
         public void Response202(byte[] responseBytes, Socket fromSocket, int fromId)
         {
-            Console.WriteLine("Recieved a 202: " + fromId);
+            //Console.WriteLine("Recieved match ready to be joined: " + fromId);
             ServerManager.instance.server.matchSockets[fromSocket].serverRunning = true;
             ServerManager.instance.server.matchSockets[fromSocket].open = true;
             ServerManager.instance.server.matchSockets[fromSocket].startTime = DateTime.UtcNow;
+        }
+
+        public void Response203(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            string userPlayfabIdLeft = ByteParser.ConvertToASCII(responseBytes);
+            Console.WriteLine("User has left match: " + userPlayfabIdLeft + ", from match: " + ServerManager.instance.server.matchSockets[fromSocket].id);
+            ServerManager.instance.server.LeaveMatch(userPlayfabIdLeft);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)

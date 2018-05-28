@@ -113,6 +113,11 @@ public class MatchClientManager : MonoBehaviour
         MatchMessaging.instance.SendServerOpen(2, getId(), 0, _client.clientSocket);
     }
 
+    public void SendUserLeave(string playfabId)
+    {
+        MatchMessaging.instance.SendUserLeave(playfabId, 2, getId(), 0, _client.clientSocket);
+    }
+
     public void OnClose()
     {
         if (onCloseDelegate != null)

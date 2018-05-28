@@ -41,7 +41,6 @@ namespace PirateGame.Networking
             // Apply char settings
             while(ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false || ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character == null)
             {
-                Debug.Log("Not ready up UMA");
                 yield return null;
             }
             yield return null;

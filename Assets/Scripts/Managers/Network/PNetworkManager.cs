@@ -80,9 +80,11 @@ namespace PirateGame.Managers
 
 	        if (disconnectAction != null)
 	            disconnectAction.Invoke(null);
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
         }
 
-	    public override void OnClientConnect(NetworkConnection con)
+        public override void OnClientConnect(NetworkConnection con)
 	    {
 	        base.OnClientConnect(con);
 
@@ -113,9 +115,12 @@ namespace PirateGame.Managers
 
 	        networkUser.networkConnection = con.connectionId;
 
+            Debug.Log("Player Connected");
+
             ServerManager.instance.networkUsers.Add(con.connectionId, networkUser);
 
-            connectAction.Invoke(con);
+            if(connectAction != null)
+                connectAction.Invoke(con);
 	    }
 
 	    public override void OnServerAddPlayer(NetworkConnection con, short playerControllerId)
@@ -146,14 +151,17 @@ namespace PirateGame.Managers
 
             Debug.Log("LOCAL CLIENT - ID LEFT - " + con.connectionId);
 
-            if(con.connectionId == ServerManager.instance.netId.Value)
-	            if (disconnectAction != null)
-	                disconnectAction.Invoke(con);
+            if (con.connectionId == ServerManager.instance.netId.Value)
+            {
+                if (disconnectAction != null)
+                    disconnectAction.Invoke(con);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+            }
+            UIManager.instance.loading = false;
 
-	        UIManager.instance.loading = false;
-	    }
+        }
 
-	    public override void OnServerDisconnect(NetworkConnection con)
+        public override void OnServerDisconnect(NetworkConnection con)
 	    {
 	        base.OnServerDisconnect(con);
 
@@ -161,7 +169,12 @@ namespace PirateGame.Managers
 	        {
 	            if (player.Value.networkConnection == con.connectionId)
 	            {
-	                ServerManager.instance.networkUsers.Remove(player.Key);
+                    if (MatchClientManager.instance != null)
+                        MatchClientManager.instance.SendUserLeave(player.Value.userData.playfabId);
+
+                    if(ServerManager.instance.networkUsers != null)
+                        if(ServerManager.instance.networkUsers.ContainsKey(player.Key))
+	                        ServerManager.instance.networkUsers.Remove(player.Key);
 
 	                if (networkUserChange != null)
 	                    networkUserChange.Invoke();
@@ -170,7 +183,9 @@ namespace PirateGame.Managers
 	            }
 	        }
 
-            Destroy(con.playerControllers[0].gameObject);
+            if(con.playerControllers.Count > 0)
+                if(con.playerControllers[0].gameObject != null)
+                    Destroy(con.playerControllers[0].gameObject);
         }
 
         public override void ServerChangeScene(string newSceneName)

@@ -48,8 +48,13 @@ namespace PirateGame.Managers
             
         }
 
+        private float refreshTimer = 1f;
         private void Update()
         {
+            if(Time.time >= refreshTimer)
+            {
+                refreshTimer = Time.time + 1;
+            }
             networkUsersList = networkUsers.Values.ToList();
         }
 

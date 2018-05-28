@@ -44,9 +44,19 @@ namespace SNetwork.Client
             Socket sockets)
         {
             // Send Server Open
-            Logging.CreateLog("Sedning Server Opened");
+            Logging.CreateLog("Sending Server Opened");
             byte[] data = ByteParser.ConvertASCIIToBytes("a");
             SendFinal(data, 202, sendCode, fromCode, 0, sockets);
+        }
+
+        // Header: 203
+        public void SendUserLeave(string playfabId, int sendCode, int fromCode, int customCode,
+            Socket sockets)
+        {
+            // Send User Leave
+            Logging.CreateLog("Sending user leave: " + playfabId);
+            byte[] data = ByteParser.ConvertASCIIToBytes(playfabId);
+            SendFinal(data, 203, sendCode, fromCode, 0, sockets);
         }
 
         public void SendFinal(byte[] data, int header, int sendCode, int fromCode, int customCode, Socket socket)
