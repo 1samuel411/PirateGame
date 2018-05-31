@@ -3,6 +3,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using PirateGame.Entity;
 using PirateGame.Networking;
+using PirateGame.ScriptableObjects;
 using PirateGame.UI.Controllers;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -22,6 +23,7 @@ namespace PirateGame.Managers
 
         public PirateGame.Entity.EntityPlayer playerEntity;
         public PlayablePlayer playablePlayer;
+        public PlayerWeaponManager playerWeaponManager;
 
         public float refreshUserDataTime = 30f;
         private float _refreshUSerDataTimer;
@@ -47,6 +49,8 @@ namespace PirateGame.Managers
                 else return null;
             }
         }
+        
+        public WeaponsScriptableObject weaponsList;
 
         void Awake()
         {
@@ -57,8 +61,10 @@ namespace PirateGame.Managers
 
             user.username = "User" + Random.Range(0, 9999);
             instance = this;
+            
+            weaponsList = Resources.Load<WeaponsScriptableObject>(WeaponsScriptableObject.location);
         }
-        
+
         void Update()
         {
             // Ignore master server
@@ -111,6 +117,9 @@ namespace PirateGame.Managers
 
             if (playablePlayer == null && playerEntity != null)
                 playablePlayer = playerEntity.GetComponent<PlayablePlayer>();
+
+            if (playerWeaponManager == null && playerEntity != null)
+                playerWeaponManager = playerEntity.GetComponent<PlayerWeaponManager>();
         }
 
         private float lastRefresh;

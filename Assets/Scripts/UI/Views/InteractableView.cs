@@ -9,5 +9,7 @@ namespace PirateGame.UI.Views
         public Text stopInteractingText;
         public Text interactableText;
 
+        public Text pickupText;
+
     }
 }

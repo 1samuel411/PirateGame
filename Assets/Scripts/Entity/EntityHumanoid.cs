@@ -73,7 +73,9 @@ namespace PirateGame.Entity
         public float interactionRadius;
         public float interactionMaxDist;
         public LayerMask interactionLayerMask;
+        public LayerMask pickupableLayerMask;
         public List<Collider> interactionColliders = new List<Collider>();
+        public List<Collider> pickupableColliders = new List<Collider>();
         public Interactable currentInteractable;
 
         [Header("Debug Humanoid Variables")]
@@ -343,16 +345,23 @@ namespace PirateGame.Entity
             RaycastHit[] hit;
             hit = Physics.SphereCastAll(forwardTransform.position + interactionOffset, interactionRadius, forwardTransform.forward, interactionMaxDist, interactionLayerMask);
             interactionColliders.Clear();
-            for(int i = 0; i < hit.Length; i++)
+            for (int i = 0; i < hit.Length; i++)
             {
-                for(int x = 0 ; x < triggers.Count; x++)
+                for (int x = 0; x < triggers.Count; x++)
                 {
-                    if(triggers[x].gameObject == hit[i].collider.gameObject)
+                    if (triggers[x].gameObject == hit[i].collider.gameObject)
                     {
                         interactionColliders.Add(hit[i].collider);
                         break;
                     }
                 }
+            }
+
+            hit = Physics.SphereCastAll(forwardTransform.position + interactionOffset, interactionRadius, forwardTransform.forward, interactionMaxDist, pickupableLayerMask);
+            pickupableColliders.Clear();
+            for (int i = 0; i < hit.Length; i++)
+            {
+                pickupableColliders.Add(hit[i].collider);
             }
         }
 

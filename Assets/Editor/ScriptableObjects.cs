@@ -9,11 +9,11 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-public class CharacterSettings : EditorWindow
+public class ScriptableObjects : EditorWindow
 {
 
     [MenuItem("Tools/ScriptableObjects/Character Settings")]
-    public static void Init()
+    public static void CharacterSettings()
     {
         CharacterSettingsScriptableObject asset = null;
         asset = AssetDatabase.LoadAssetAtPath<CharacterSettingsScriptableObject>(CharacterSettingsScriptableObject.resourcesLocation);
@@ -22,6 +22,24 @@ public class CharacterSettings : EditorWindow
         {
             asset = ScriptableObject.CreateInstance<CharacterSettingsScriptableObject>();
             AssetDatabase.CreateAsset(asset, CharacterSettingsScriptableObject.resourcesLocation);
+            AssetDatabase.SaveAssets();
+        }
+
+        EditorUtility.FocusProjectWindow();
+
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("Tools/ScriptableObjects/Weapon Settings")]
+    public static void WeaponSettings()
+    {
+        WeaponsScriptableObject asset = null;
+        asset = AssetDatabase.LoadAssetAtPath<WeaponsScriptableObject>(WeaponsScriptableObject.resourcesLocation);
+
+        if (asset == null)
+        {
+            asset = ScriptableObject.CreateInstance<WeaponsScriptableObject>();
+            AssetDatabase.CreateAsset(asset, WeaponsScriptableObject.resourcesLocation);
             AssetDatabase.SaveAssets();
         }
 

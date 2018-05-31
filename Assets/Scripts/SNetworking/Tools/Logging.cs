@@ -24,7 +24,6 @@ namespace SNetwork
 		}
 
 		private List<string> messageList = new List<string>();
-		private List<string> _messageList = new List<string>();
 
         public void OnGUI()
 		{

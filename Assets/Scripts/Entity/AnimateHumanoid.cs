@@ -1,4 +1,5 @@
-﻿using PirateGame.Networking;
+﻿using PirateGame.Managers;
+using PirateGame.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,12 +28,8 @@ namespace PirateGame.Entity.Animations
 
         public RuntimeAnimatorController animatorToUse;
 
-        private NetworkedPlayer networkedPlayer;
-
         void Awake()
         {
-            networkedPlayer = GetComponentInParent<NetworkedPlayer>();
-
             humanoid = GetComponent<EntityHumanoid>();
 
             humanoid.UnGroundAction += UnGround;
@@ -143,9 +140,10 @@ namespace PirateGame.Entity.Animations
 
             if (jumping)
             {
-                if (new Vector2(velocityX, velocityY).magnitude >= 1f)
+                float magnitude = new Vector2(velocityX, velocityY).magnitude;
+                if (magnitude >= 1f)
                 {
-                    if (sprinting)
+                    if (magnitude >= 3f)
                         animator.CrossFadeInFixedTime("JumpSprint", 0.2f);
                     else
                         animator.CrossFadeInFixedTime("JumpWalk", 0.2f);
@@ -167,9 +165,10 @@ namespace PirateGame.Entity.Animations
             if (humanoid.interactingBegin)
                 return;
 
-            if (new Vector2(velocityX, velocityY).magnitude >= 1f)
+            float magnitude = new Vector2(velocityX, velocityY).magnitude;
+            if (magnitude >= 1f)
             {
-                if (sprinting)
+                if (magnitude >= 3f)
                     animator.CrossFadeInFixedTime("LandSprint", 0.2f);
                 else
                     animator.CrossFadeInFixedTime("LandWalk", 0.2f);

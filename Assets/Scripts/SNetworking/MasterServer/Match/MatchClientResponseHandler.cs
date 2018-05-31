@@ -8,6 +8,7 @@ namespace SNetwork.Client
 {
     public class MatchClientResponseHandler
     {
+
         private MatchClient _client;
 
         public MatchClientResponseHandler(MatchClient client)

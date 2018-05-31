@@ -37,7 +37,7 @@ public class LimbIKGrounderUMA2 : MonoBehaviour
             grounder.characterRoot = animator.transform;
             grounder.solver.layers = layers;
 
-            grounder.solver.heightOffset = -0.1f;
+            grounder.solver.heightOffset = -0.2f;
             grounder.solver.maxStep = 0.75f;
             grounder.solver.footRadius = 0.25f;
             grounder.solver.liftPelvisWeight = 0;

@@ -36,6 +36,8 @@ namespace PirateGame.Managers
         public bool loading;
         public LoadingController loadingController;
 
+        public Canvas canvas;
+
         void Awake()
         {
             if (instance != null)
@@ -51,6 +53,7 @@ namespace PirateGame.Managers
         }
 
         private bool lastLoading;
+        private string lastScene;
         void Update()
         {
             if (autoStopTimer > 0)
@@ -68,19 +71,32 @@ namespace PirateGame.Managers
                 UpdateLoading();
             }
 
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == menuScene)
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != lastScene)
             {
-                if(inGameCanvas)
-                    inGameCanvas.gameObject.SetActive(false);
-                if(mainMenuCanvas)
-                    mainMenuCanvas.gameObject.SetActive(true);
-            }
-            else
-            {
-                if(inGameCanvas)
-                    inGameCanvas.gameObject.SetActive(true);
-                if(mainMenuCanvas)
-                    mainMenuCanvas.gameObject.SetActive(false);
+                lastScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+                if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == menuScene)
+                {
+                    canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    canvas.worldCamera = CameraManager.instance.mainMenuCamera.GetComponent<Camera>();
+
+                    if (inGameCanvas)
+                        inGameCanvas.gameObject.SetActive(false);
+                    if (mainMenuCanvas)
+                    {
+                        mainMenuCanvas.gameObject.SetActive(true);
+                        if(PlayerManager.instance.user.playfabId != "")
+                            ScreenSwitch("Menu");
+                    }
+                }
+                else
+                {
+                    canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                    if (inGameCanvas)
+                        inGameCanvas.gameObject.SetActive(true);
+                    if (mainMenuCanvas)
+                        mainMenuCanvas.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -104,7 +120,7 @@ namespace PirateGame.Managers
             autoStopTimer = 0.1f;
         }
 
-        void Reload()
+        public void Reload()
         {
             for (int i = 0; i < menuScreens.Count; i++)
             {

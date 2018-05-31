@@ -37,6 +37,8 @@ MonoBehaviour:
   - AlternateHead
   - AlternateHands
   backwardsCompatibleWith: []
+  _crossCompatibilitySettings:
+    settingsData: []
   raceThumbnails:
     fullThumb: {fileID: 21300000, guid: 0960bf37021a1a7429ade3f60120b82c, type: 3}
     faceThumb: {fileID: 21300000, guid: ecadaada9dd71a946923ce1576e25862, type: 3}

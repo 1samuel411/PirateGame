@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114057455879047156}
   - component: {fileID: 114320203036428134}
   - component: {fileID: 114188576093399816}
+  - component: {fileID: 114438911259879036}
   - component: {fileID: 143269112444384306}
   - component: {fileID: 114190264794623220}
   - component: {fileID: 114246699916594794}
@@ -403,6 +404,7 @@ MonoBehaviour:
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 5632
+  rightHandWeaponHolder: {fileID: 0}
 --- !u!114 &114341755405286358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -493,7 +495,11 @@ MonoBehaviour:
   interactionLayerMask:
     serializedVersion: 2
     m_Bits: 2048
+  pickupableLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
   interactionColliders: []
+  pickupableColliders: []
   currentInteractable: {fileID: 0}
   clampYRotation: {x: -40, y: 40}
   clampXRotation: {x: -360, y: 360}
@@ -562,6 +568,67 @@ MonoBehaviour:
   rootRotationWeight: 0
   rootRotationSpeed: 5
   maxRootRotationAngle: 45
+--- !u!114 &114438911259879036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1771521826859226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 234a3ee43edcdf74c8ce44973051c4d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponsList: {fileID: 0}
+  defaultWeapon:
+    defaultWeapon: 0
+    name: 
+    skinName: 
+    icon: {fileID: 0}
+    weaponPrefab: {fileID: 0}
+    offsetHold: {x: 0, y: 0, z: 0}
+    hitRate: 0
+    gun: 0
+    ammoHeld: 0
+    reloadTime: 0
+  weaponOne:
+    defaultWeapon: 0
+    name: 
+    skinName: 
+    icon: {fileID: 0}
+    weaponPrefab: {fileID: 0}
+    offsetHold: {x: 0, y: 0, z: 0}
+    hitRate: 0
+    gun: 0
+    ammoHeld: 0
+    reloadTime: 0
+  weaponTwo:
+    defaultWeapon: 0
+    name: 
+    skinName: 
+    icon: {fileID: 0}
+    weaponPrefab: {fileID: 0}
+    offsetHold: {x: 0, y: 0, z: 0}
+    hitRate: 0
+    gun: 0
+    ammoHeld: 0
+    reloadTime: 0
+  weaponThree:
+    defaultWeapon: 0
+    name: 
+    skinName: 
+    icon: {fileID: 0}
+    weaponPrefab: {fileID: 0}
+    offsetHold: {x: 0, y: 0, z: 0}
+    hitRate: 0
+    gun: 0
+    ammoHeld: 0
+    reloadTime: 0
+  _equipedWeapon: 0
+  defaultWeaponGO: {fileID: 0}
+  weaponOneGO: {fileID: 0}
+  weaponTwoGO: {fileID: 0}
+  weaponThreeGO: {fileID: 0}
 --- !u!114 &114537867245405930
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -31,8 +31,6 @@ namespace PirateGame.Managers
             }
         }
 
-        private int myId = 0;
-
         void Awake()
         {
             if (instance != null)

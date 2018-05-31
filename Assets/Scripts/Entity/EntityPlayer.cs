@@ -170,19 +170,19 @@ namespace PirateGame.Entity
 
                 if (interactingFinal)
                 {
-                    if(InputManager.instance.player.GetButtonDown("Interact"))
+                    if(InputManager.instance.player.GetButtonDown("Interact") && pickupableColliders.Count == 0)
                     {
                         UnInteract();
                         return;
                     }
                 }
-                if(InputManager.instance.player.GetButtonDown("Interact"))
+                if(InputManager.instance.player.GetButtonDown("Interact") && pickupableColliders.Count == 0)
                 {
                         CancelInteract();
                 }
             }
 
-            if(InputManager.instance.player.GetButtonDown("Interact"))
+            if(InputManager.instance.player.GetButtonDown("Interact") && pickupableColliders.Count == 0)
             {
                 Interact();
             }
@@ -220,13 +220,12 @@ namespace PirateGame.Entity
 
         public override void OnDestroy()
         {
-            if (!networkPlayer.networkIdentity.isLocalPlayer)
-                return;
-
             base.OnDestroy();
 
-            Destroy(forwardTransform.gameObject);
-            Destroy(fakeCamera.gameObject);
+            if(forwardTransform)
+                Destroy(forwardTransform.gameObject);
+            if(fakeCamera)
+                Destroy(fakeCamera.gameObject);
             if(fakeCameraForward)
                 Destroy(fakeCameraForward.gameObject);
         }
@@ -251,7 +250,8 @@ namespace PirateGame.Entity
         void CmdUnGround(bool unGround)
         {
             RpcUnGround(unGround);
-            UnGroundAction.Invoke(unGround);
+            if(!isLocalPlayer)
+                UnGroundAction.Invoke(unGround);
         }
 
         [ClientRpc]
@@ -272,6 +272,7 @@ namespace PirateGame.Entity
         void CmdLand(bool land)
         {
             RpcLand(land);
+            if(!isLocalPlayer)
                 LandAction.Invoke(land);
         }
 
@@ -293,7 +294,8 @@ namespace PirateGame.Entity
         void CmdSprintStop()
         {
             RpcSprintStop();
-            SprintEndAction.Invoke();
+            if(!isLocalPlayer)
+                SprintEndAction.Invoke();
         }
 
         [ClientRpc]
@@ -314,7 +316,8 @@ namespace PirateGame.Entity
         void CmdStateChange(EntityEnums.HumanoidState state)
         {
             RpcStateChange(state);
-            StateChangeAction.Invoke(state);
+            if(!isLocalPlayer)
+                StateChangeAction.Invoke(state);
         }
 
         [ClientRpc]

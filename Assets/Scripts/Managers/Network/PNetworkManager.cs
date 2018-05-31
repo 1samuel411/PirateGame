@@ -30,8 +30,6 @@ namespace PirateGame.Managers
             }
 
 	        instance = this;
-            DontDestroyOnLoad(gameObject);
-
         }
 
         public void PStartHost()

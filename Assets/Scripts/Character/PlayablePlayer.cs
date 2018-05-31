@@ -20,6 +20,8 @@ namespace PirateGame.Networking
 
         private NetworkedPlayer networkedPlayer;
 
+        public Transform rightHandWeaponHolder;
+
         void OnEnable()
         {
             networkedPlayer = GetComponentInParent<NetworkedPlayer>();
@@ -66,6 +68,14 @@ namespace PirateGame.Networking
             rightArmLimb.solver.IKRotationWeight = 0;
             rightArmLimb.solver.maintainRotationWeight = 0;
             rightArmLimb.solver.target = entityPlayer.rightTarget;
+
+            GameObject rightHandWeaponBone = new GameObject();
+            rightHandWeaponBone.name = "RightHandBone";
+            rightHandWeaponBone.transform.SetParent(FindChildRecursive(character.transform, "RightHand"));
+            rightHandWeaponBone.transform.localPosition = new Vector3(-0.1225f, -0.008f, -0.028f);
+            rightHandWeaponBone.transform.localEulerAngles = new Vector3(3.7f, -1.503f, 2.008f);
+            rightHandWeaponBone.transform.localScale = new Vector3(2, 2, 2);
+            rightHandWeaponHolder = rightHandWeaponBone.transform;
 
             // Set IK
             entityPlayer.leftArmIk = leftArmLimb;

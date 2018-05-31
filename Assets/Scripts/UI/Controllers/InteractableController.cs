@@ -12,6 +12,7 @@ namespace PirateGame.UI.Controllers
         public bool interacting;
         public bool interactingFinal;
         public bool interactingStopping;
+        public bool pickupable;
 
         void Update()
         {
@@ -23,6 +24,8 @@ namespace PirateGame.UI.Controllers
 
         void CheckInteractable()
         {
+            pickupable = PlayerManager.instance.playerEntity.pickupableColliders.Count > 0;
+
             interactable = PlayerManager.instance.playerEntity.interactionColliders.Count > 0;
             interacting = PlayerManager.instance.playerEntity.interacting;
             interactingStopping = PlayerManager.instance.playerEntity.interactingStopping;
@@ -31,8 +34,10 @@ namespace PirateGame.UI.Controllers
 
         void UpdateUI()
         {
-            interactableView.interactableText.gameObject.SetActive(interactable && !interacting);
-            interactableView.stopInteractingText.gameObject.SetActive(interactingFinal && !interactingStopping);
+            interactableView.interactableText.gameObject.SetActive(interactable && !interacting && !pickupable);
+            interactableView.stopInteractingText.gameObject.SetActive(interactingFinal && !interactingStopping && !pickupable);
+
+            interactableView.pickupText.gameObject.SetActive(pickupable);
         }
 
     }

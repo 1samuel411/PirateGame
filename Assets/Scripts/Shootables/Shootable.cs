@@ -16,7 +16,7 @@ namespace PirateGame.Shootables
         public Effect muzzleEffect;
         public Projectile projectile;
 
-        public Animator animator;
+        public new Animator animator;
         public string animationName = "Fire";
 
         public bool canShoot = true;

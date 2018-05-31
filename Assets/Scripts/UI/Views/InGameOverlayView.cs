@@ -35,16 +35,22 @@ namespace PirateGame.UI.Views
         public Text resourceThreeText;
 
         [Title("Weapons")]
-        public Text buildText;
+        public Text defaultWeaponText;
         public Text weaponOneText;
         public Text weaponTwoText;
         public Text weaponThreeText;
 
+        public Text defaultWeaponAmmoText;
+        public Text weaponOneAmmoText;
+        public Text weaponTwoAmmoText;
+        public Text weaponThreeAmmoText;
+
+        public Image defaultWeaponImage;
         public Image weaponOneImage;
         public Image weaponTwoImage;
         public Image weaponThreeImage;
 
-        public GameObject buildHolder;
+        public GameObject defaultWeaponHolder;
         public GameObject weaponOneHolder;
         public GameObject weaponTwoHolder;
         public GameObject weaponThreeHolder;

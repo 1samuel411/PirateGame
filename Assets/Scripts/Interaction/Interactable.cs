@@ -27,7 +27,7 @@ namespace PirateGame.Interactables
 		public string playerEndInteractAnimation;
 		public string myEndInteractAnimation;
 
-		public Animator animator;
+		public new Animator animator;
 
 		[Header("IK")]
 	    public bool gripPointRight;
