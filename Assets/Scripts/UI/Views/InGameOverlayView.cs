@@ -50,6 +50,11 @@ namespace PirateGame.UI.Views
         public Image weaponTwoImage;
         public Image weaponThreeImage;
 
+        public Image defaultWeaponSelectedImage;
+        public Image weaponOneSelectedImage;
+        public Image weaponTwoSelectedImage;
+        public Image weaponThreeSelectedImage;
+
         public GameObject defaultWeaponHolder;
         public GameObject weaponOneHolder;
         public GameObject weaponTwoHolder;

@@ -20,6 +20,8 @@ namespace PirateGame
 
         public Vector2 clampYAmount = new Vector2(0, 360);
         public Vector2 clampXAmount = new Vector2(-70, 70);
+        public Vector2 clampXAmountAiming = new Vector2(-40, 20);
+        private Vector2 curClampXAmount;
         public float mouseMoveSpeed = 5f;
         private Vector2 mouseMovement;
 
@@ -40,6 +42,7 @@ namespace PirateGame
         void Start()
         {
             offsetTarget = offset;
+            curClampXAmount = clampXAmount;
         }
 
         void Update()
@@ -63,6 +66,7 @@ namespace PirateGame
                 lastAiming = aiming;
                 if (aiming)
                 {
+                    curClampXAmount = clampXAmountAiming;
                     preAimingOffset = offsetMovement;
                     preAimingOffsetAmount = offsetTarget;
                     offsetTarget = aimingOffsetAmount;
@@ -70,6 +74,7 @@ namespace PirateGame
                 }
                 else
                 {
+                    curClampXAmount = clampXAmount;
                     offsetTarget = preAimingOffsetAmount;
                     DOTween.To(() => offsetMovement, x => offsetMovement = x, preAimingOffset, 01f);
                 }
@@ -84,7 +89,7 @@ namespace PirateGame
             angle += (new Vector3(mouseMovement.x, mouseMovement.y) * mouseMoveSpeed);
 
             angle.x = WrapAngle(angle.x);
-            angle.x = ClampAngle(angle.x, clampXAmount.x, clampXAmount.y);
+            angle.x = ClampAngle(angle.x, curClampXAmount.x, curClampXAmount.y);
             angle.y = WrapAngle(angle.y);
             angle.y = ClampAngle(angle.y, clampYAmount.x, clampYAmount.y);
             transform.localRotation = Quaternion.Euler(angle);

@@ -22,6 +22,8 @@ namespace PirateGame.Networking
 
         public Transform rightHandWeaponHolder;
 
+        public Transform spine;
+
         void OnEnable()
         {
             networkedPlayer = GetComponentInParent<NetworkedPlayer>();
@@ -69,6 +71,8 @@ namespace PirateGame.Networking
             rightArmLimb.solver.maintainRotationWeight = 0;
             rightArmLimb.solver.target = entityPlayer.rightTarget;
 
+            spine = GetCharacterChild("Spine1");
+
             GameObject rightHandWeaponBone = new GameObject();
             rightHandWeaponBone.name = "RightHandBone";
             rightHandWeaponBone.transform.SetParent(FindChildRecursive(character.transform, "RightHand"));
@@ -99,6 +103,14 @@ namespace PirateGame.Networking
             for (int i = 0; i < localOnlyComponents.Length; i++)
             {
                 localOnlyComponents[i].enabled = ServerManager.instance.myNetworkPlayer.isLocalPlayer;
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (spine && CameraManager.instance.cameraObject.aiming)
+            {
+                spine.transform.localEulerAngles = new Vector3(0, CameraManager.instance.cameraObject.transform.localEulerAngles.x, 0);
             }
         }
 

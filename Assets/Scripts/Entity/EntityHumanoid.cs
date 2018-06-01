@@ -72,6 +72,7 @@ namespace PirateGame.Entity
         public Vector3 interactionOffset;
         public float interactionRadius;
         public float interactionMaxDist;
+        public float pickupableMaxDist = 2;
         public LayerMask interactionLayerMask;
         public LayerMask pickupableLayerMask;
         public List<Collider> interactionColliders = new List<Collider>();
@@ -357,7 +358,7 @@ namespace PirateGame.Entity
                 }
             }
 
-            hit = Physics.SphereCastAll(forwardTransform.position + interactionOffset, interactionRadius, forwardTransform.forward, interactionMaxDist, pickupableLayerMask);
+            hit = Physics.SphereCastAll(forwardTransform.position + interactionOffset, interactionRadius, forwardTransform.forward, pickupableMaxDist, pickupableLayerMask);
             pickupableColliders.Clear();
             for (int i = 0; i < hit.Length; i++)
             {

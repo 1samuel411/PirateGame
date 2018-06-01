@@ -1,5 +1,8 @@
-﻿using PirateGame.Managers;
+﻿using PirateGame.Character;
+using PirateGame.Interactables;
+using PirateGame.Managers;
 using PirateGame.Networking;
+using PirateGame.ScriptableObjects;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,12 +28,16 @@ namespace PirateGame.Entity.Animations
         public new Animator animator;
 
         private EntityHumanoid humanoid;
+        private AttackManager attackManager;
 
         public RuntimeAnimatorController animatorToUse;
+
+        public Animation anim;
 
         void Awake()
         {
             humanoid = GetComponent<EntityHumanoid>();
+            attackManager = GetComponent<AttackManager>();
 
             humanoid.UnGroundAction += UnGround;
             humanoid.LandAction += Land;
@@ -38,10 +45,20 @@ namespace PirateGame.Entity.Animations
             humanoid.StateChangeAction += StateChange;
             humanoid.InteractBeginSequenceAction += InteractBeginSequence;
             humanoid.InteractStopSequenceAction += InteractStopSequence;
+
+            if(attackManager != null)
+                attackManager.attackAction += Attack;
         }
 
+        private string lastWeaponName;
         void Update()
         {
+            if(attacking && Time.time >= attackTime)
+            {
+                attacking = false;
+                WeaponChanged();
+            }
+
             if (!animator)
                 return;
 
@@ -60,6 +77,13 @@ namespace PirateGame.Entity.Animations
                     velocitySyncTimer = Time.time + velocitySyncTime;
                     CmdSyncVelocity(velocityX, velocityY);
                 }
+            }
+
+            if(attackManager.curWeapon.name != lastWeaponName)
+            {
+                lastWeaponName = attackManager.curWeapon.name;
+
+                WeaponChanged();
             }
         }
         
@@ -103,6 +127,7 @@ namespace PirateGame.Entity.Animations
         }
 
         private bool sprinting;
+        private EntityEnums.HumanoidState lastState;
         private void StateChange(EntityEnums.HumanoidState state)
         {
             if (!animator)
@@ -111,10 +136,12 @@ namespace PirateGame.Entity.Animations
             if (humanoid.interactingBegin)
                 return;
 
+            lastState = state;
+
             if (state == EntityEnums.HumanoidState.Walking)
             {
                 sprinting = false;
-                animator.CrossFadeInFixedTime(humanoid.aiming ? "Walk" : "WalkStart", 0.2f);
+                animator.CrossFadeInFixedTime("Walk", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Sprinting)
             {
@@ -128,6 +155,8 @@ namespace PirateGame.Entity.Animations
                 else
                     animator.CrossFadeInFixedTime("WalkStop", 0.2f);
             }
+
+            WeaponChanged();
         }
 
         private void UnGround(bool jumping)
@@ -175,6 +204,76 @@ namespace PirateGame.Entity.Animations
             }
             else
                 animator.CrossFadeInFixedTime("LandIdle", 0.2f);
+        }
+
+        private bool attacking;
+        private float attackTime;
+        private void Attack()
+        {
+            attacking = true;
+            string attackAnim = attackManager.curWeapon.attackAnimations[Random.Range(0, attackManager.curWeapon.attackAnimations.Length)];
+            animator.CrossFadeInFixedTime(attackAnim, 0.2f, 1);
+
+            attackTime = 0;
+            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+            foreach (AnimationClip clip in clips)
+            {
+                Debug.Log(clip.name);
+                if(clip.name == attackAnim)
+                {
+                    attackTime = clip.length;
+                    break;
+                }
+            }
+
+            attackTime += Time.time;
+        }
+
+        private void WeaponChanged()
+        {
+            if (attacking)
+                return;
+
+            if (lastState == EntityEnums.HumanoidState.Walking)
+            {
+                animator.CrossFadeInFixedTime("Walk" + GetUpperbodyString(), 0.2f, 1);
+            }
+            if (lastState == EntityEnums.HumanoidState.Sprinting)
+            {
+                animator.CrossFadeInFixedTime("Sprint" + GetUpperbodyString(), 0.2f, 1);
+            }
+            if (lastState == EntityEnums.HumanoidState.Idle)
+            {
+                animator.CrossFadeInFixedTime("Idle" + GetUpperbodyString(), 0.2f, 1);
+            }
+        }
+
+        private string GetUpperbodyString()
+        {
+            string stringToReturn = "";
+            if (attackManager.curWeapon.name == "")
+            {
+                stringToReturn += "_Unarmed";
+            }
+            else
+            {
+                if (attackManager.curWeapon.gun)
+                {
+                    stringToReturn += "_Gun";
+                    if (attackManager.curWeapon.gunType == WeaponData.GunType.pistol)
+                        stringToReturn += "_pistol";
+                    if (attackManager.curWeapon.gunType == WeaponData.GunType.shotgun)
+                        stringToReturn += "_shotgun";
+                }
+                else
+                {
+                    stringToReturn += "_Weapon";
+                    if (attackManager.curWeapon.weaponType == WeaponData.WeaponType.oneHanded)
+                        stringToReturn += "_oneHanded";
+                }
+            }
+
+            return stringToReturn;
         }
     }
 }

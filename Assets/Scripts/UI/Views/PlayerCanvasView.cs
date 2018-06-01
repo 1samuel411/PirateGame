@@ -13,5 +13,7 @@ namespace PirateGame.UI.Views
 
         public Text nameText;
 
+        public Image playModeImage;
+
     }
 }

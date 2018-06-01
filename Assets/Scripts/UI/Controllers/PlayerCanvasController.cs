@@ -21,6 +21,9 @@ namespace PirateGame.UI.Controllers
 
         void Update()
         {
+            canvasView.playModeImage.gameObject.SetActive(false);
+            canvasView.nameText.gameObject.SetActive(false);
+
             if (!networkedPlayer)
                 return;
 
@@ -32,6 +35,11 @@ namespace PirateGame.UI.Controllers
 
             if (ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false)
                 return;
+
+            canvasView.playModeImage.gameObject.SetActive(true);
+            canvasView.nameText.gameObject.SetActive(true);
+
+            canvasView.playModeImage.sprite = IconManager.instance.playModeSprites[ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.playMode];
 
             canvasView.nameText.text =
                 ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.rank +

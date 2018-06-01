@@ -14,23 +14,53 @@ MonoBehaviour:
   weaponData:
   - defaultWeapon: 1
     name: Axe
-    skinName: 
     icon: {fileID: 21300000, guid: 581db39b73ef3436ea903f1a096f01e6, type: 3}
     weaponPrefab: {fileID: 1633280010961642, guid: b7c565cf6a31a63409717fad72dae2ee,
       type: 2}
     offsetHold: {x: 0, y: 0.15, z: 0}
     hitRate: 1
+    attackAnimations:
+    - Slash
+    - Slash2
+    blockAnimations: []
     gun: 0
+    weaponType: 0
+    reloadAnimation: 
     ammoHeld: 0
     reloadTime: 0
+    ammo: -27
+    skinName: 
   - defaultWeapon: 0
     name: Sword
-    skinName: 
     icon: {fileID: 21300000, guid: cd1667e9340ee4f0b9bd295d848f7b9f, type: 3}
-    weaponPrefab: {fileID: 1020506692817702, guid: 1404b3f8eec57e54785fa6cd215f7167,
+    weaponPrefab: {fileID: 1108345786905610, guid: 7bb4329d824c1b84c8d3fc1688c0a2e0,
       type: 2}
     offsetHold: {x: 0, y: 0.36, z: 0}
     hitRate: 1
+    attackAnimations:
+    - Slash
+    - Slash2
+    blockAnimations: []
     gun: 0
+    weaponType: 0
+    reloadAnimation: 
     ammoHeld: 0
     reloadTime: 0
+    ammo: 0
+    skinName: 
+  - defaultWeapon: 0
+    name: Blunderbuss
+    icon: {fileID: 21300000, guid: 203163c2213ce4ac0952d5bc995c60bc, type: 3}
+    weaponPrefab: {fileID: 1020506692817702, guid: 1404b3f8eec57e54785fa6cd215f7167,
+      type: 2}
+    offsetHold: {x: -0.0012, y: 0.0051, z: 0.1031}
+    hitRate: 0
+    attackAnimations: []
+    blockAnimations: []
+    gun: 0
+    weaponType: 0
+    reloadAnimation: 
+    ammoHeld: 0
+    reloadTime: 0
+    ammo: 0
+    skinName: 
