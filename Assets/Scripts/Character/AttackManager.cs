@@ -29,12 +29,12 @@ namespace PirateGame.Character
 
             curWeapon = PlayerManager.instance.playerWeaponManager.curWeapon;
 
-            if (InputManager.instance.player.GetButtonDown("Shoot"))
+            if (InputManager.instance.player.GetButton("Shoot"))
             {
                 Attack();
             }
 
-            if (InputManager.instance.player.GetButtonDown("Block"))
+            if (InputManager.instance.player.GetButton("Block"))
             {
                 Block();
             }

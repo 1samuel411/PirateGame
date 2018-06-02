@@ -34,6 +34,7 @@ namespace PirateGame.UI.Controllers
             character.SetCharacter(PlayerManager.instance.user.character);
 
             Refresh();
+            Debug.Log("Setting Character");
         }
 
         private void Update()
@@ -88,6 +89,13 @@ namespace PirateGame.UI.Controllers
                 SpawnEditCharacterController(null, characterSettings.bodyHolders[i].descriptionName);
                 for(int x = 0; x < characterSettings.bodyHolders[i].bodyComponents.Length; x++)
                 {
+                    if(characterSettings.bodyHolders[i].bodyComponents[x].genderRestriction != BodyComponent.GenderRestriction.none)
+                    {
+                        if(characterSettings.bodyHolders[i].bodyComponents[x].genderRestriction == BodyComponent.GenderRestriction.maleOnly && character.gender != 0)
+                           continue;
+                        if (characterSettings.bodyHolders[i].bodyComponents[x].genderRestriction == BodyComponent.GenderRestriction.femaleOnly && character.gender != 1)
+                            continue;
+                    }
                     EditCharacterController controller = SpawnEditCharacterController(characterSettings.bodyHolders[i].bodyComponents[x]);
                     controller.value = PlayerManager.instance.user.GetCharacterSetting(characterSettings.bodyHolders[i].bodyComponents[x].description);
                     controller.maxValue = characterSettings.bodyHolders[i].bodyComponents[x].maxValue;

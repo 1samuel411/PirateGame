@@ -75,9 +75,9 @@ namespace PirateGame.Networking
             GetComponent<Entity.Animations.AnimateHumanoid>().animator = character.GetComponent<Animator>();
 
             // Add char IK
-            //LimbIKGrounderUMA2 grounder = gameObject.AddComponent<LimbIKGrounderUMA2>();
-            //grounder.animator = character.GetComponent<Animator>();
-            //grounder.layers = groundedLayerMask;
+            LimbIKGrounderUMA2 grounder = gameObject.AddComponent<LimbIKGrounderUMA2>();
+            grounder.animator = character.GetComponent<Animator>();
+            grounder.layers = groundedLayerMask;
         }
 
         IEnumerator SetUpUMA()

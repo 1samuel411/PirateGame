@@ -82,7 +82,7 @@ MonoBehaviour:
     offsetHold: {x: 0.0004, y: 0.0366, z: 0.0039}
     hitRate: 1
     attackAnimations:
-    - Pistol-Attack-R3
+    - ShootPistol
     blockAnimations: []
     gun: 1
     canBlock: 0
@@ -92,5 +92,5 @@ MonoBehaviour:
     reloadAnimation: 
     ammoHeld: 4
     reloadTime: 2
-    ammo: -19
+    ammo: -24
     skinName: 

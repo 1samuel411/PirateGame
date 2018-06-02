@@ -88,9 +88,31 @@ namespace PirateGame.Character
 
             characterSet = newSettings;
 
+            bool foundGender = false;
+            for (int i = 0; i < characterSettings.bodyHolders.Length; i++)
+            {
+                for (int x = 0; x < characterSettings.bodyHolders[i].bodyComponents.Length; x++)
+                {
+                    for (int y = 0; y < newSettings.bodySelections.Length; y++)
+                    {
+                        // Found
+                        if (newSettings.bodySelections[y].name == "Gender")
+                        {
+                            foundGender = true;
+                            gender = (int)newSettings.bodySelections[y].value;
+                            break;
+                        }
+                    }
+                    if (foundGender)
+                        break;
+                }
+                if (foundGender)
+                    break;
+            }
+
             yield return null;
 
-            bool foundGender = false;
+            foundGender = false;
             for (int i = 0; i < characterSettings.bodyHolders.Length; i++)
             {
                 for (int x = 0; x < characterSettings.bodyHolders[i].bodyComponents.Length; x++)

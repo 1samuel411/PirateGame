@@ -145,18 +145,19 @@ namespace PirateGame.Entity.Animations
             if (state == EntityEnums.HumanoidState.Walking)
             {
                 sprinting = false;
-                animator.CrossFadeInFixedTime("Walk", 0.2f);
+                if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                    animator.CrossFadeInFixedTime("Walk", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Sprinting)
             {
                 sprinting = true;
                 //animator.CrossFadeInFixedTime("SprintStart", 0.3f);
-                animator.CrossFadeInFixedTime("Sprint", 0.3f);
+                if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Sprint"))
+                    animator.CrossFadeInFixedTime("Sprint", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Idle)
             {
                 animator.CrossFadeInFixedTime("Idle", 0.2f);
-                return;
                 if (Time.time < timeSinceSprinting + 0.8f)
                     animator.CrossFadeInFixedTime("SprintStop", 0.2f);
                 else
@@ -206,12 +207,12 @@ namespace PirateGame.Entity.Animations
             if (magnitude >= 1f)
             {
                 if (magnitude >= 3f)
-                    animator.CrossFadeInFixedTime("Sprint", 0.2f);
+                    animator.CrossFadeInFixedTime("Sprint", 0.1f);
                 else
-                    animator.CrossFadeInFixedTime("Walk", 0.2f);
+                    animator.CrossFadeInFixedTime("Walk", 0.1f);
             }
             else
-                animator.CrossFadeInFixedTime("Idle", 0.2f);
+                animator.CrossFadeInFixedTime("Idle", 0.1f);
         }
 
         private bool attacking;

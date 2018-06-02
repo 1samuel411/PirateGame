@@ -34,14 +34,6 @@ namespace PirateGame.Entity
 
 	    public new void Start()
         {
-            if (!networkPlayer.networkIdentity.isLocalPlayer)
-                return;
-
-            // Initialize Actions
-            InitializeActions();
-
-            base.Start();
-
             fakeCamera = new GameObject().transform;
             fakeCamera.name = "Fake Camera: " + gameObject.name;
             fakeCamera.SetParent(null);
@@ -51,6 +43,14 @@ namespace PirateGame.Entity
             fakeCameraForward.name = "Fake Camera Child: " + gameObject.name;
             fakeCameraForward.SetParent(fakeCamera);
             fakeCameraForward.position = Vector3.forward * 100;
+
+            if (!networkPlayer.networkIdentity.isLocalPlayer)
+                return;
+
+            // Initialize Actions
+            InitializeActions();
+
+            base.Start();
 
             forwardTransform = fakeCamera;
         }
@@ -68,6 +68,8 @@ namespace PirateGame.Entity
             base.Update();
 
 	        CheckInput();
+
+            CheckSprinting();
 
             Sync();
             
@@ -105,6 +107,7 @@ namespace PirateGame.Entity
                 synctimer = Time.time + syncTime;
                 CmdSyncTargetPos(leftTarget.position, true, leftWeight);
                 CmdSyncTargetPos(rightTarget.position, false, rightWeight);
+                CmdSyncFakeCamera(fakeCamera.transform.position, fakeCamera.transform.eulerAngles);
 
             }
             if (leftTarget.position != lastLeftTargetPos)
@@ -117,6 +120,19 @@ namespace PirateGame.Entity
                 lastRightTargetPos = rightTarget.position;
                 CmdSyncTargetPos(lastRightTargetPos, false, rightWeight);
             }
+        }
+        [Command]
+        void CmdSyncFakeCamera(Vector3 position, Vector3 rotation)
+        {
+            fakeCamera.transform.position = position;
+            fakeCamera.transform.eulerAngles = rotation;
+            RpcSyncFakeCamera(position, rotation);
+        }
+        [ClientRpc]
+        void RpcSyncFakeCamera(Vector3 position, Vector3 rotation)
+        {
+            fakeCamera.transform.position = position;
+            fakeCamera.transform.eulerAngles = rotation;
         }
         [Command]
         void CmdSyncTargetPos(Vector3 position, bool left, float weight)
@@ -187,6 +203,11 @@ namespace PirateGame.Entity
                 inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
                 inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
             }
+            else
+            {
+                inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
+                inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
+            }
 
             if (InputManager.instance.player.GetButtonDown("Jump"))
             {
@@ -199,29 +220,15 @@ namespace PirateGame.Entity
 
 	    public override void SetForwardRotation()
 	    {
-	        if (aiming)
-	        {
-	            forwardMovementOnly = false;
-	            //LookAtMovement(forwardTransform.forward);
-                lookAtWeight = Mathf.Lerp(lookAtWeight, 1f, 5 * Time.deltaTime);
-	        }
-	        else
-	        {
-	            forwardMovementOnly = true;
-	            //LookAtMovement(forwardTransform.TransformDirection(new Vector3(inputVelocity.x, 0, inputVelocity.z)));
-	            lookAtWeight = Mathf.Lerp(lookAtWeight, 0f, 5 * Time.deltaTime);
-	        }
+            forwardMovementOnly = false;
+        }
 
-            if(sprinting)
-	            forwardMovementOnly = true;
-            else
-	            forwardMovementOnly = false;
-
-            Vector3 currentRotation = transform.localEulerAngles;
-
-            transform.rotation = Quaternion.LookRotation(CameraManager.instance.cameraObject.transform.forward);
-
-            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+        public void CheckSprinting()
+        {
+            if (!sprinting)
+                return;
+            if (inputVelocity.z < 0 || inputVelocity.z < 0.75f)
+                sprinting = false;
         }
 
         public override void OnDestroy()
