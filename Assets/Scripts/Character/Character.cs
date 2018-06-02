@@ -131,6 +131,8 @@ namespace PirateGame.Character
                     }
                 }
             }
+
+            yield return null;
         }
 
         public void ApplySetting(BodyComponent bodyComponent, float value)

@@ -79,6 +79,22 @@ namespace PirateGame.UI.Controllers
                 overlayView.equipedWeaponImage.color = new Color(1, 1, 1, 1);
             }
 
+            overlayView.defaultWeaponSelectedImage.gameObject.SetActive(false);
+            if (PlayerManager.instance.playerWeaponManager.defaultWeapon.name != "" && PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.defaultWeapon.name)
+                overlayView.defaultWeaponSelectedImage.gameObject.SetActive(true);
+
+            overlayView.weaponOneSelectedImage.gameObject.SetActive(false);
+            if (PlayerManager.instance.playerWeaponManager.weaponOne.name != "" && PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.weaponOne.name)
+                overlayView.weaponOneSelectedImage.gameObject.SetActive(true);
+
+            overlayView.weaponTwoSelectedImage.gameObject.SetActive(false);
+            if (PlayerManager.instance.playerWeaponManager.weaponTwo.name != "" && PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.weaponTwo.name)
+                overlayView.weaponTwoSelectedImage.gameObject.SetActive(true);
+
+            overlayView.weaponThreeSelectedImage.gameObject.SetActive(false);
+            if (PlayerManager.instance.playerWeaponManager.weaponThree.name != "" && PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.weaponThree.name)
+                overlayView.weaponThreeSelectedImage.gameObject.SetActive(true);
+
             if (PlayerManager.instance.playerWeaponManager.defaultWeapon.name == "")
             {
                 //overlayView.defaultWeaponHolder.gameObject.SetActive(false);
@@ -86,11 +102,6 @@ namespace PirateGame.UI.Controllers
             }
             else
             {
-                overlayView.defaultWeaponSelectedImage.gameObject.SetActive(false);
-                if(PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.defaultWeapon.name)
-                {
-                    overlayView.defaultWeaponSelectedImage.gameObject.SetActive(true);
-                }
                 overlayView.defaultWeaponHolder.gameObject.SetActive(true);
                 overlayView.defaultWeaponAmmoText.text = "";
                 overlayView.defaultWeaponImage.sprite = PlayerManager.instance.playerWeaponManager.defaultWeapon.icon;
@@ -105,11 +116,6 @@ namespace PirateGame.UI.Controllers
             }
             else
             {
-                overlayView.weaponOneSelectedImage.gameObject.SetActive(false);
-                if (PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.weaponOne.name)
-                {
-                    overlayView.weaponOneSelectedImage.gameObject.SetActive(true);
-                }
                 overlayView.weaponOneHolder.gameObject.SetActive(true);
                 overlayView.weaponOneAmmoText.text = "";
                 overlayView.weaponOneImage.sprite = PlayerManager.instance.playerWeaponManager.weaponOne.icon;
@@ -124,14 +130,9 @@ namespace PirateGame.UI.Controllers
             }
             else
             {
-                overlayView.weaponTwoSelectedImage.gameObject.SetActive(false);
-                if (PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.weaponTwo.name)
-                {
-                    overlayView.weaponTwoSelectedImage.gameObject.SetActive(true);
-                }
                 overlayView.weaponTwoHolder.gameObject.SetActive(true);
                 overlayView.weaponTwoAmmoText.text = "";
-                overlayView.weaponTwoImage.sprite = PlayerManager.instance.playerWeaponManager.weaponOne.icon;
+                overlayView.weaponTwoImage.sprite = PlayerManager.instance.playerWeaponManager.weaponTwo.icon;
                 overlayView.weaponTwoImage.color = new Color(1, 1, 1, 1);
                 overlayView.weaponTwoText.text = "2";
             }
@@ -143,14 +144,9 @@ namespace PirateGame.UI.Controllers
             }
             else
             {
-                overlayView.weaponThreeSelectedImage.gameObject.SetActive(false);
-                if (PlayerManager.instance.playerWeaponManager.curWeapon.name == PlayerManager.instance.playerWeaponManager.weaponThree.name)
-                {
-                    overlayView.weaponThreeSelectedImage.gameObject.SetActive(true);
-                }
                 overlayView.weaponThreeHolder.gameObject.SetActive(true);
                 overlayView.weaponThreeAmmoText.text = "";
-                overlayView.weaponThreeImage.sprite = PlayerManager.instance.playerWeaponManager.weaponOne.icon;
+                overlayView.weaponThreeImage.sprite = PlayerManager.instance.playerWeaponManager.weaponThree.icon;
                 overlayView.weaponThreeImage.color = new Color(1, 1, 1, 1);
                 overlayView.weaponThreeText.text = "3";
             }

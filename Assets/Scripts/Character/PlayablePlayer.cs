@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using PirateGame.Entity;
 using PirateGame.Entity.Animations;
+using UMA;
 
 namespace PirateGame.Networking
 {
@@ -22,41 +23,21 @@ namespace PirateGame.Networking
 
         public Transform rightHandWeaponHolder;
 
-        public Transform spine;
+        public Transform head;
+        public Transform armLeft;
+        public Transform armRight;
+
+        private Entity.EntityPlayer entityPlayer;
 
         void OnEnable()
         {
             networkedPlayer = GetComponentInParent<NetworkedPlayer>();
-            StartCoroutine(WaitFrame());
-        }
-
-        IEnumerator WaitFrame()
-        {
-            yield return null;
-            yield return null;
-            // Set up UMA Character
+            entityPlayer = GetComponent<Entity.EntityPlayer>();
             StartCoroutine(SetUpUMA());
         }
 
-        IEnumerator SetUpUMA()
+        public void SetUpUMACC(UMAData umaData)
         {
-            Entity.EntityPlayer entityPlayer = GetComponent<Entity.EntityPlayer>();
-
-            // Apply char settings
-            while(ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false || ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character == null)
-            {
-                yield return null;
-            }
-            yield return null;
-            Debug.Log("Setting up UMA");
-
-            character.SetCharacter(ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character);
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
-            
             // Add Left arm IK
             LimbIK leftArmLimb = AddLimbIK("LeftArm", "LeftForeArm", "LeftHand");
             leftArmLimb.solver.goal = AvatarIKGoal.LeftHand;
@@ -71,7 +52,9 @@ namespace PirateGame.Networking
             rightArmLimb.solver.maintainRotationWeight = 0;
             rightArmLimb.solver.target = entityPlayer.rightTarget;
 
-            spine = GetCharacterChild("Spine1");
+            head = GetCharacterChild("Head");
+            armLeft = GetCharacterChild("LeftArm");
+            armRight = GetCharacterChild("RightArm");
 
             GameObject rightHandWeaponBone = new GameObject();
             rightHandWeaponBone.name = "RightHandBone";
@@ -82,20 +65,32 @@ namespace PirateGame.Networking
             rightHandWeaponHolder = rightHandWeaponBone.transform;
 
             // Set IK
+            Transform[] spine = new Transform[] { GetCharacterChild("LowerBack"), GetCharacterChild("Spine"), GetCharacterChild("Spine1") };
+            LookAtIK lookatIk = gameObject.AddComponent<LookAtIK>();
+            lookatIk.solver.SetChain(spine, head, null, GetCharacterChild("Position"));
+            lookatIk.solver.target = entityPlayer.fakeCameraForward;
             entityPlayer.leftArmIk = leftArmLimb;
             entityPlayer.rightArmIk = rightArmLimb;
 
             GetComponent<Entity.Animations.AnimateHumanoid>().animator = character.GetComponent<Animator>();
 
             // Add char IK
-            LimbIKGrounderUMA2 grounder = gameObject.AddComponent<LimbIKGrounderUMA2>();
-            grounder.animator = character.GetComponent<Animator>();
-            grounder.layers = groundedLayerMask;
-            yield return null;
-            GrounderIK grounderIk = GetComponentInChildren<GrounderIK>();
+            //LimbIKGrounderUMA2 grounder = gameObject.AddComponent<LimbIKGrounderUMA2>();
+            //grounder.animator = character.GetComponent<Animator>();
+            //grounder.layers = groundedLayerMask;
+        }
 
-            if(!isLocalPlayer)
-                grounderIk.solver.quality = Grounding.Quality.Fastest;
+        IEnumerator SetUpUMA()
+        {
+            // Apply char settings
+            while(ServerManager.instance.networkUsers.ContainsKey(networkedPlayer.networkId) == false || ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character == null)
+            {
+                yield return null;
+            }
+            yield return null;
+            Debug.Log("Setting up UMA");
+            
+            character.SetCharacter(ServerManager.instance.networkUsers[networkedPlayer.networkId].userData.character);
         }
 
         void Update()
@@ -108,9 +103,11 @@ namespace PirateGame.Networking
 
         private void LateUpdate()
         {
-            if (spine && CameraManager.instance.cameraObject.aiming)
+            if (head)
             {
-                spine.transform.localEulerAngles = new Vector3(0, CameraManager.instance.cameraObject.transform.localEulerAngles.x, 0);
+                //head.transform.eulerAngles = new Vector3(CameraManager.instance.cameraObject.transform.localEulerAngles.x, 0, 0);
+                //armLeft.transform.eulerAngles = new Vector3(CameraManager.instance.cameraObject.transform.localEulerAngles.x, armLeft.transform.eulerAngles.y, armLeft.transform.eulerAngles.z);
+                //armRight.transform.eulerAngles = new Vector3(CameraManager.instance.cameraObject.transform.localEulerAngles.x, armRight.transform.eulerAngles.y, armRight.transform.eulerAngles.z);
             }
         }
 

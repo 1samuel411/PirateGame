@@ -141,6 +141,8 @@ namespace PirateGame.Entity
             // Do weapon equip
             WeaponData weaponData = GetWeapon(equipedWeapon);
 
+            CameraManager.instance.cameraObject.canAim = !weaponData.canBlock;
+
             if(defaultWeaponGO)
                 defaultWeaponGO.SetActive(false);
             if(weaponOneGO)
@@ -216,12 +218,12 @@ namespace PirateGame.Entity
         public void SetWeapon(int i, WeaponData weaponData)
         {
             GameObject weaponGO = GameObject.Instantiate(weaponData.weaponPrefab);
+            weaponGO.transform.localScale = Vector3.one;
             weaponGO.transform.SetParent(PlayerManager.instance.playablePlayer.rightHandWeaponHolder);
             Destroy(weaponGO.GetComponent<Rigidbody>());
             Destroy(weaponGO.GetComponent<Collider>());
             weaponGO.transform.localPosition = weaponData.offsetHold;
             weaponGO.transform.localRotation = Quaternion.identity;
-            weaponGO.transform.localScale = Vector3.one;
             
             if (i == 0)
             {

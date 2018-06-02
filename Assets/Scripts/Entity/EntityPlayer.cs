@@ -16,9 +16,9 @@ namespace PirateGame.Entity
 	{
         [Header("Player")]
         public float inputSpeed;
-    	
-		private Transform fakeCamera;
-		private Transform fakeCameraForward;
+
+        public Transform fakeCamera;
+		public Transform fakeCameraForward;
 
         private NetworkedPlayer networkPlayer;
 
@@ -47,15 +47,10 @@ namespace PirateGame.Entity
             fakeCamera.SetParent(null);
             DontDestroyOnLoad(fakeCamera);
 
-            if (lookAtIk)
-            {
-                fakeCameraForward = new GameObject().transform;
-                fakeCameraForward.name = "Fake Camera Child: " + gameObject.name;
-                fakeCameraForward.SetParent(fakeCamera);
-                fakeCameraForward.position = Vector3.forward * 100;
-                fakeCameraForward.position += Vector3.up * 120;
-                lookAtIk.solver.target = fakeCameraForward;
-            }
+            fakeCameraForward = new GameObject().transform;
+            fakeCameraForward.name = "Fake Camera Child: " + gameObject.name;
+            fakeCameraForward.SetParent(fakeCamera);
+            fakeCameraForward.position = Vector3.forward * 100;
 
             forwardTransform = fakeCamera;
         }
@@ -154,9 +149,6 @@ namespace PirateGame.Entity
 
         void SetFakeCamera()
 		{
-			if(!grounded)
-				return;
-				
 			fakeCamera.position = CameraManager.instance.cameraObject.transform.position;	
 			fakeCamera.rotation = CameraManager.instance.cameraObject.transform.rotation;
 		}
@@ -190,8 +182,11 @@ namespace PirateGame.Entity
             if(interacting && !interactingFinal)
                 return;
 
-	        inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
-	        inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
+            if (grounded)
+            {
+                inputVelocity.x = Mathf.Lerp(inputVelocity.x, InputManager.instance.player.GetAxis("Horizontal"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
+                inputVelocity.z = Mathf.Lerp(inputVelocity.z, InputManager.instance.player.GetAxis("Vertical"), (inputSpeed + velocityMagnitude) * Time.deltaTime);
+            }
 
             if (InputManager.instance.player.GetButtonDown("Jump"))
             {
@@ -207,16 +202,27 @@ namespace PirateGame.Entity
 	        if (aiming)
 	        {
 	            forwardMovementOnly = false;
-	            LookAtMovement(forwardTransform.forward);
+	            //LookAtMovement(forwardTransform.forward);
                 lookAtWeight = Mathf.Lerp(lookAtWeight, 1f, 5 * Time.deltaTime);
 	        }
 	        else
 	        {
 	            forwardMovementOnly = true;
-	            LookAtMovement(forwardTransform.TransformDirection(new Vector3(inputVelocity.x, 0, inputVelocity.z)));
+	            //LookAtMovement(forwardTransform.TransformDirection(new Vector3(inputVelocity.x, 0, inputVelocity.z)));
 	            lookAtWeight = Mathf.Lerp(lookAtWeight, 0f, 5 * Time.deltaTime);
 	        }
-	    }
+
+            if(sprinting)
+	            forwardMovementOnly = true;
+            else
+	            forwardMovementOnly = false;
+
+            Vector3 currentRotation = transform.localEulerAngles;
+
+            transform.rotation = Quaternion.LookRotation(CameraManager.instance.cameraObject.transform.forward);
+
+            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+        }
 
         public override void OnDestroy()
         {

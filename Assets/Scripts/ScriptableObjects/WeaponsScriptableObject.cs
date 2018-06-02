@@ -18,6 +18,7 @@ namespace PirateGame.ScriptableObjects
     [System.Serializable]
     public class WeaponData
     {
+        [Space(30)]
         public bool defaultWeapon;
         public string name;
         public Sprite icon;
@@ -28,9 +29,14 @@ namespace PirateGame.ScriptableObjects
         public float hitRate;
 
         public string[] attackAnimations;
+        [ShowIf("canBlock", true)]
         public string[] blockAnimations;
 
         public bool gun;
+
+        public bool canBlock;
+        [ShowIf("canBlock", true)]
+        public float blockTime;
 
         [ShowIf("gun", false)]
         public WeaponType weaponType;

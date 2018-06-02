@@ -46,16 +46,20 @@ namespace PirateGame.Entity.Animations
             humanoid.InteractBeginSequenceAction += InteractBeginSequence;
             humanoid.InteractStopSequenceAction += InteractStopSequence;
 
-            if(attackManager != null)
+            if (attackManager != null)
+            {
                 attackManager.attackAction += Attack;
+                attackManager.blockAction += Block;
+            }
         }
 
         private string lastWeaponName;
         void Update()
         {
-            if(attacking && Time.time >= attackTime)
+            if ((attacking && Time.time >= attackTime) || (blocking && Time.time >= blockTime))
             {
                 attacking = false;
+                blocking = false;
                 WeaponChanged();
             }
 
@@ -146,10 +150,13 @@ namespace PirateGame.Entity.Animations
             if (state == EntityEnums.HumanoidState.Sprinting)
             {
                 sprinting = true;
-                animator.CrossFadeInFixedTime("SprintStart", 0.3f);
+                //animator.CrossFadeInFixedTime("SprintStart", 0.3f);
+                animator.CrossFadeInFixedTime("Sprint", 0.3f);
             }
             if (state == EntityEnums.HumanoidState.Idle)
             {
+                animator.CrossFadeInFixedTime("Idle", 0.2f);
+                return;
                 if (Time.time < timeSinceSprinting + 0.8f)
                     animator.CrossFadeInFixedTime("SprintStop", 0.2f);
                 else
@@ -167,6 +174,7 @@ namespace PirateGame.Entity.Animations
             if (humanoid.interactingBegin)
                 return;
 
+            /*
             if (jumping)
             {
                 float magnitude = new Vector2(velocityX, velocityY).magnitude;
@@ -181,9 +189,9 @@ namespace PirateGame.Entity.Animations
                     animator.CrossFadeInFixedTime("JumpIdle", 0.2f);
             }
             else
-            {
+            {*/
                 animator.CrossFadeInFixedTime("Falling", 0.2f);
-            }
+            //}
         }
 
         private void Land(bool jumping)
@@ -198,12 +206,12 @@ namespace PirateGame.Entity.Animations
             if (magnitude >= 1f)
             {
                 if (magnitude >= 3f)
-                    animator.CrossFadeInFixedTime("LandSprint", 0.2f);
+                    animator.CrossFadeInFixedTime("Sprint", 0.2f);
                 else
-                    animator.CrossFadeInFixedTime("LandWalk", 0.2f);
+                    animator.CrossFadeInFixedTime("Walk", 0.2f);
             }
             else
-                animator.CrossFadeInFixedTime("LandIdle", 0.2f);
+                animator.CrossFadeInFixedTime("Idle", 0.2f);
         }
 
         private bool attacking;
@@ -218,8 +226,7 @@ namespace PirateGame.Entity.Animations
             AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip clip in clips)
             {
-                Debug.Log(clip.name);
-                if(clip.name == attackAnim)
+                if (clip.name == attackAnim)
                 {
                     attackTime = clip.length;
                     break;
@@ -229,9 +236,31 @@ namespace PirateGame.Entity.Animations
             attackTime += Time.time;
         }
 
+        private bool blocking;
+        private float blockTime;
+        private void Block()
+        {
+            blocking = true;
+            string blockAnim = attackManager.curWeapon.blockAnimations[Random.Range(0, attackManager.curWeapon.blockAnimations.Length)];
+            animator.CrossFadeInFixedTime(blockAnim, 0.2f, 1);
+
+            blockTime = 0;
+            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+            foreach (AnimationClip clip in clips)
+            {
+                if (clip.name == blockAnim)
+                {
+                    blockTime = clip.length;
+                    break;
+                }
+            }
+
+            blockTime += Time.time;
+        }
+
         private void WeaponChanged()
         {
-            if (attacking)
+            if (attacking || blocking)
                 return;
 
             if (lastState == EntityEnums.HumanoidState.Walking)

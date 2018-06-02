@@ -115,7 +115,6 @@ GameObject:
   - component: {fileID: 114142798975147092}
   - component: {fileID: 114830154396131052}
   - component: {fileID: 114341755405286358}
-  - component: {fileID: 114417997427646740}
   - component: {fileID: 95730048149293814}
   m_Layer: 0
   m_Name: Char
@@ -183,7 +182,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1884051546060724}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0.006000042}
+  m_LocalPosition: {x: 0, y: -0.75, z: 0.006000042}
   m_LocalScale: {x: 1.5508099, y: 1.5508101, z: 1.5508101}
   m_Children: []
   m_Father: {fileID: 4554004863040730}
@@ -284,6 +283,7 @@ MonoBehaviour:
   velocitySyncTime: 0.2
   animator: {fileID: 95730048149293814}
   animatorToUse: {fileID: 9100000, guid: 1f1894533496b174ebb6e3c89664e3e6, type: 2}
+  anim: {fileID: 0}
 --- !u!114 &114100185856784866
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -479,6 +479,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2432904f1e344846880a45cab992ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curWeapon:
+    defaultWeapon: 0
+    name: 
+    icon: {fileID: 0}
+    weaponPrefab: {fileID: 0}
+    offsetHold: {x: 0, y: 0, z: 0}
+    hitRate: 0
+    attackAnimations: []
+    blockAnimations: []
+    gun: 0
+    canBlock: 0
+    blockTime: 0
+    weaponType: 0
+    gunType: 0
+    reloadAnimation: 
+    ammoHeld: 0
+    reloadTime: 0
+    ammo: 0
+    skinName: 
 --- !u!114 &114246699916594794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -539,7 +558,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 5632
   rightHandWeaponHolder: {fileID: 0}
-  spine: {fileID: 0}
+  head: {fileID: 0}
+  armLeft: {fileID: 0}
+  armRight: {fileID: 0}
 --- !u!114 &114341755405286358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -627,6 +648,7 @@ MonoBehaviour:
   interactionOffset: {x: 0, y: 0, z: 0}
   interactionRadius: 0.25
   interactionMaxDist: 20
+  pickupableMaxDist: 12
   interactionLayerMask:
     serializedVersion: 2
     m_Bits: 2048
@@ -664,45 +686,6 @@ MonoBehaviour:
   jumping: 0
   forwardRotation: 0
   inputSpeed: 5
---- !u!114 &114417997427646740
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1884051546060724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65ace204533ef4c24ac80f11ef8ee8ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weight: 1
-  solver:
-    layers:
-      serializedVersion: 2
-      m_Bits: 5632
-    maxStep: 0.5
-    heightOffset: -0.08
-    footSpeed: 2.5
-    footRadius: 0.15
-    prediction: 0.05
-    footRotationWeight: 1
-    footRotationSpeed: 7
-    maxFootRotationAngle: 45
-    rotateSolver: 0
-    pelvisSpeed: 5
-    pelvisDamper: 0
-    lowerPelvisWeight: 1
-    liftPelvisWeight: 0
-    rootSphereCastRadius: 0.1
-    quality: 2
-  legs:
-  - {fileID: 0}
-  - {fileID: 0}
-  pelvis: {fileID: 0}
-  characterRoot: {fileID: 0}
-  rootRotationWeight: 0
-  rootRotationSpeed: 5
-  maxRootRotationAngle: 45
 --- !u!114 &114438911259879036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -718,7 +701,6 @@ MonoBehaviour:
   defaultWeapon:
     defaultWeapon: 0
     name: 
-    skinName: 
     icon: {fileID: 0}
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
@@ -726,14 +708,18 @@ MonoBehaviour:
     attackAnimations: []
     blockAnimations: []
     gun: 0
-    ammo: 0
+    canBlock: 0
+    blockTime: 0
+    weaponType: 0
+    gunType: 0
     reloadAnimation: 
     ammoHeld: 0
     reloadTime: 0
+    ammo: 0
+    skinName: 
   weaponOne:
     defaultWeapon: 0
     name: 
-    skinName: 
     icon: {fileID: 0}
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
@@ -741,14 +727,18 @@ MonoBehaviour:
     attackAnimations: []
     blockAnimations: []
     gun: 0
-    ammo: 0
+    canBlock: 0
+    blockTime: 0
+    weaponType: 0
+    gunType: 0
     reloadAnimation: 
     ammoHeld: 0
     reloadTime: 0
+    ammo: 0
+    skinName: 
   weaponTwo:
     defaultWeapon: 0
     name: 
-    skinName: 
     icon: {fileID: 0}
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
@@ -756,14 +746,18 @@ MonoBehaviour:
     attackAnimations: []
     blockAnimations: []
     gun: 0
-    ammo: 0
+    canBlock: 0
+    blockTime: 0
+    weaponType: 0
+    gunType: 0
     reloadAnimation: 
     ammoHeld: 0
     reloadTime: 0
+    ammo: 0
+    skinName: 
   weaponThree:
     defaultWeapon: 0
     name: 
-    skinName: 
     icon: {fileID: 0}
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
@@ -771,10 +765,15 @@ MonoBehaviour:
     attackAnimations: []
     blockAnimations: []
     gun: 0
-    ammo: 0
+    canBlock: 0
+    blockTime: 0
+    weaponType: 0
+    gunType: 0
     reloadAnimation: 
     ammoHeld: 0
     reloadTime: 0
+    ammo: 0
+    skinName: 
   _equipedWeapon: 0
   defaultWeaponGO: {fileID: 0}
   weaponOneGO: {fileID: 0}
@@ -837,7 +836,18 @@ MonoBehaviour:
       PublicKeyToken=null
   CharacterBegun:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114320203036428134}
+        m_MethodName: SetUpUMACC
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UMA.UMADataEvent, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   CharacterDestroyed:
@@ -1086,13 +1096,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2.68
-  m_Radius: 0.35
+  m_Height: 2.6090708
+  m_Radius: 0.39963925
   m_SlopeLimit: 65
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.64, z: 0}
+  m_Center: {x: 0, y: 1.3045354, z: 0}
 --- !u!222 &222190960754773308
 CanvasRenderer:
   m_ObjectHideFlags: 1
