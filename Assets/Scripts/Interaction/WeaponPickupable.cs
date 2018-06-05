@@ -10,6 +10,10 @@ namespace PirateGame.Interactables
 
         public string weaponName;
 
+        public int ammo = -1;
+
+        public Transform muzzle;
+
         void Start()
         {
 

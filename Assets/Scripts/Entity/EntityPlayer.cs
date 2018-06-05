@@ -163,7 +163,7 @@ namespace PirateGame.Entity
             }
         }
 
-        void SetFakeCamera()
+        public void SetFakeCamera()
 		{
 			fakeCamera.position = CameraManager.instance.cameraObject.transform.position;	
 			fakeCamera.rotation = CameraManager.instance.cameraObject.transform.rotation;

@@ -18,6 +18,10 @@ namespace PirateGame.Entity
         public WeaponData weaponTwo;
         public WeaponData weaponThree;
 
+        public int cannonBalls;
+        public int miniCannonBalls;
+        public int grapeShots;
+
         public int _equipedWeapon = 0;
         public int equipedWeapon
         {
@@ -106,7 +110,14 @@ namespace PirateGame.Entity
             if(PlayerManager.instance.playerEntity.pickupableColliders.Count > 0)
             {
                 WeaponPickupable weaponPickupable = PlayerManager.instance.playerEntity.pickupableColliders[0].GetComponent<WeaponPickupable>();
-                EquipWeapon(weaponPickupable.weaponName, weaponPickupable.gameObject);
+                if(weaponPickupable)
+                    EquipWeapon(weaponPickupable.weaponName, weaponPickupable.gameObject, weaponPickupable.muzzle, weaponPickupable.ammo);
+                else
+                {
+                    AmmoPickupable ammoPickupable = PlayerManager.instance.playerEntity.pickupableColliders[0].GetComponent<AmmoPickupable>();
+                    if (ammoPickupable)
+                        EquipAmmo(ammoPickupable.ammoType, ammoPickupable.gameObject, ammoPickupable.ammo);
+                }
             }
         }
 
@@ -121,6 +132,31 @@ namespace PirateGame.Entity
             }
 
             return null;
+        }
+
+        public AmmoData GetAmmoData(AmmoData.Type ammoType)
+        {
+            for(int i = 0; i < PlayerManager.instance.weaponsList.ammoType.Length; i++)
+            {
+                if(PlayerManager.instance.weaponsList.ammoType[i].ammoType == ammoType)
+                {
+                    return PlayerManager.instance.weaponsList.ammoType[i];
+                }
+            }
+
+            return null;
+        }
+
+        public int GetCurrentAmmo()
+        {
+            if (curWeapon.ammoType == AmmoData.Type.cannonBalls)
+                return cannonBalls;
+            if (curWeapon.ammoType == AmmoData.Type.miniCannonBalls)
+                return miniCannonBalls;
+            if (curWeapon.ammoType == AmmoData.Type.grapeShots)
+                return grapeShots;
+
+            return 0;
         }
 
         public WeaponData GetDefaultWeapon()
@@ -168,15 +204,22 @@ namespace PirateGame.Entity
                 weaponThreeGO.SetActive(true);
         }
 
-        public void EquipWeapon(string weaponToEquip, GameObject go)
+        public void EquipWeapon(string weaponToEquip, GameObject go, Transform muzzle = null, int ammo = -1)
         {
             WeaponData weapon = GetWeaponData(weaponToEquip);
 
-            if(weaponOne.name != "")
+            weapon.muzzleTransform = muzzle;
+
+            if (ammo == -1)
+                weapon.ammo = weapon.ammoHeld;
+            else
+                weapon.ammo = ammo;
+
+            if (weaponOne.name != "")
             {
-                if(weaponTwo.name != "")
+                if (weaponTwo.name != "")
                 {
-                    if(weaponThree.name != "")
+                    if (weaponThree.name != "")
                     {
                         // All weapons equiped, replace current weapon
                         if (equipedWeapon == 0)
@@ -201,6 +244,28 @@ namespace PirateGame.Entity
             Destroy(go);
         }
 
+        public void EquipAmmo(AmmoData.Type ammoToEquip, GameObject go, int ammo = -1)
+        {
+            AmmoData ammunitionData = GetAmmoData(ammoToEquip);
+            if (ammo == -1)
+                ammo = ammunitionData.defaultCount;
+
+            switch(ammoToEquip)
+            {
+                case (AmmoData.Type.cannonBalls):
+                    cannonBalls += ammo;
+                    break;
+                case (AmmoData.Type.miniCannonBalls):
+                    miniCannonBalls += ammo;
+                    break;
+                case (AmmoData.Type.grapeShots):
+                    grapeShots += ammo;
+                    break;
+            }
+
+            Destroy(go);
+        }
+
         public WeaponData GetWeapon(int i)
         {
             if (i == 0)
@@ -220,6 +285,8 @@ namespace PirateGame.Entity
             GameObject weaponGO = GameObject.Instantiate(weaponData.weaponPrefab);
             weaponGO.transform.localScale = Vector3.one;
             weaponGO.transform.SetParent(PlayerManager.instance.playablePlayer.rightHandWeaponHolder);
+            if(weaponData.muzzleTransform != null)
+                weaponData.muzzleTransform = weaponGO.transform.FindChildByRecursive(weaponData.muzzleTransform.name);
             Destroy(weaponGO.GetComponent<Rigidbody>());
             Destroy(weaponGO.GetComponent<Collider>());
             weaponGO.transform.localPosition = weaponData.offsetHold;

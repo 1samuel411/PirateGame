@@ -77,6 +77,8 @@ namespace PirateGame.UI.Controllers
 
                 overlayView.equipedWeaponImage.sprite = PlayerManager.instance.playerWeaponManager.curWeapon.icon;
                 overlayView.equipedWeaponImage.color = new Color(1, 1, 1, 1);
+
+                overlayView.equipedWeaponText.text = PlayerManager.instance.playerWeaponManager.curWeapon.ammo + " | " + PlayerManager.instance.playerWeaponManager.GetCurrentAmmo();
             }
 
             overlayView.defaultWeaponSelectedImage.gameObject.SetActive(false);

@@ -7,6 +7,7 @@ using PirateGame.ScriptableObjects;
 using PirateGame.UI.Controllers;
 using PlayFab;
 using PlayFab.ClientModels;
+using PlayFab.Internal;
 using Sirenix.Utilities;
 using SNetwork;
 using SNetwork.Client;
@@ -198,6 +199,7 @@ namespace PirateGame.Managers
             }
 
             // Update XP
+            Debug.Log("Got User!");
             user.xp = int.Parse(GetValue("XP", "0", response.Data));
             user.coins = int.Parse(GetValue("Coins", "0", response.Data));
             user.SetCharacterSettings(GetValue("Character", Character.Character.GetDefaultCharacter(), response.Data));

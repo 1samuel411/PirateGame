@@ -91,6 +91,7 @@ namespace PirateGame
             angle.y = ClampAngle(angle.y, clampYAmount.x, clampYAmount.y);
             transform.localRotation = Quaternion.Euler(angle);
             PlayerManager.instance.playerEntity.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+            PlayerManager.instance.playerEntity.SetFakeCamera();
         }
 
         void GetScrollInput()

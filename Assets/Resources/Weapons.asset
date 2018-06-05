@@ -27,11 +27,17 @@ MonoBehaviour:
     canBlock: 1
     blockTime: 1
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: -27
+    muzzleTransform: {fileID: 0}
     skinName: 
   - defaultWeapon: 0
     name: Sword
@@ -48,11 +54,43 @@ MonoBehaviour:
     canBlock: 1
     blockTime: 1
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: 0
+    muzzleTransform: {fileID: 0}
+    skinName: 
+  - defaultWeapon: 0
+    name: Pistol
+    icon: {fileID: 21300000, guid: 5e829d1d9e2aa41b89ae641bd24931a1, type: 3}
+    weaponPrefab: {fileID: 1020506692817702, guid: 0569024a9a9a3ec469003ab5ebdfaab9,
+      type: 2}
+    offsetHold: {x: -0.035, y: -0.0002, z: -0.0046}
+    hitRate: 1
+    attackAnimations:
+    - MIL2_M3_W1_Stand_Fire_Single
+    blockAnimations: []
+    gun: 1
+    canBlock: 0
+    blockTime: 0
+    weaponType: 0
+    muzzleFlashes: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+    gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
+    reloadAnimation: 
+    reloadEndAnimation: 
+    ammoHeld: 900
+    reloadTime: 2
+    ammo: 885
+    muzzleTransform: {fileID: 0}
     skinName: 
   - defaultWeapon: 0
     name: Blunderbuss
@@ -62,35 +100,37 @@ MonoBehaviour:
     offsetHold: {x: -0.0012, y: 0.0051, z: 0.1031}
     hitRate: 0
     attackAnimations:
-    - Pistol-Attack-R3
+    - Rifle_ShootOnce
     blockAnimations: []
     gun: 1
     canBlock: 0
     blockTime: 0
     weaponType: 0
+    muzzleFlashes: 01000000
     gunType: 1
+    reloadType: 1
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
-    ammoHeld: 0
+    reloadEndAnimation: 
+    ammoHeld: 2
     reloadTime: 0
-    ammo: 0
+    ammo: 2
+    muzzleTransform: {fileID: 0}
     skinName: 
-  - defaultWeapon: 0
-    name: Pistol
-    icon: {fileID: 21300000, guid: 5e829d1d9e2aa41b89ae641bd24931a1, type: 3}
-    weaponPrefab: {fileID: 1020506692817702, guid: 0569024a9a9a3ec469003ab5ebdfaab9,
+  ammoType:
+  - ammoType: 0
+    bullets: -1
+    defaultCount: 3
+    ammoPrefab: {fileID: 1102339523451950, guid: d60aa3c3c70b23548a2b2fac1338c496,
       type: 2}
-    offsetHold: {x: 0.0004, y: 0.0366, z: 0.0039}
-    hitRate: 1
-    attackAnimations:
-    - ShootPistol
-    blockAnimations: []
-    gun: 1
-    canBlock: 0
-    blockTime: 0
-    weaponType: 0
-    gunType: 0
-    reloadAnimation: 
-    ammoHeld: 4
-    reloadTime: 2
-    ammo: -24
-    skinName: 
+  - ammoType: 1
+    bullets: -1
+    defaultCount: 5
+    ammoPrefab: {fileID: 1534836062780554, guid: bcd60c34b567d8447be8b0701ba8402b,
+      type: 2}
+  - ammoType: 2
+    bullets: -1
+    defaultCount: 6
+    ammoPrefab: {fileID: 1071247308118100, guid: 6995277f1147fc14887789b12e1ba790,
+      type: 2}

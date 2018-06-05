@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PirateGame.Managers;
 using PlayFab;
+using PlayFab.Internal;
 using SNetwork.Client;
 using UnityEngine;
 
@@ -101,6 +102,8 @@ namespace PirateGame.UI.Controllers
         public void Logout()
         {
             UIManager.instance.ScreenSwitch("Account");
+            PlayFabHttp.SetAuthKey("");
+            PlayerManager.instance.user = new User();
             MasterClientManager.instance.Disconnect();
         }
 

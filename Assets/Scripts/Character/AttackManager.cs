@@ -47,12 +47,24 @@ namespace PirateGame.Character
                 return;
             if (curWeapon.name == "")
                 return;
-            if(curWeapon.gun)
+            if (curWeapon.gun)
             {
-                //if (curWeapon.ammo <= 0)
-                //    return;
-
+                if (curWeapon.ammo <= 0)
+                {
+                    Reload();
+                    return;
+                }
                 curWeapon.ammo--;
+
+                // Spawn muzzle
+                if (curWeapon.muzzleFlashes.Length > 0 && curWeapon.muzzleTransform != null)
+                {
+                    SpawnableObjectInfo muzzleFlash = ObjectManager.instance.Instantiate("MuzzleFlash" + UnityEngine.Random.Range(1, curWeapon.muzzleFlashes.Length), curWeapon.muzzleTransform.position);
+                    muzzleFlash.transform.SetParent(curWeapon.muzzleTransform);
+                    muzzleFlash.transform.rotation = curWeapon.muzzleTransform.rotation;
+                    muzzleFlash.transform.localEulerAngles += new Vector3(0, 180, 0);
+                    muzzleFlash.transform.SetParent(null);
+                }
             }
 
             lastAttackTime = Time.time + curWeapon.hitRate;
@@ -77,6 +89,11 @@ namespace PirateGame.Character
 
             if (blockAction != null)
                 blockAction.Invoke();
+        }
+
+        public void Reload()
+        {
+
         }
     }
 }

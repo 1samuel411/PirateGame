@@ -619,7 +619,7 @@ namespace PirateGame.Entity
         {
             if (grounded && (state == EntityEnums.HumanoidState.Jumping || state == EntityEnums.HumanoidState.Falling))
             {
-                landTime = Time.time + 0.6f;
+                landTime = Time.time + 0.05f;
                 state = EntityEnums.HumanoidState.Landing;
             }
 

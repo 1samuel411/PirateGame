@@ -145,23 +145,25 @@ namespace PirateGame.Entity.Animations
             if (state == EntityEnums.HumanoidState.Walking)
             {
                 sprinting = false;
-                if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                //if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
                     animator.CrossFadeInFixedTime("Walk", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Sprinting)
             {
                 sprinting = true;
                 //animator.CrossFadeInFixedTime("SprintStart", 0.3f);
-                if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Sprint"))
+                //if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Sprint"))
                     animator.CrossFadeInFixedTime("Sprint", 0.2f);
             }
             if (state == EntityEnums.HumanoidState.Idle)
             {
                 animator.CrossFadeInFixedTime("Idle", 0.2f);
+                /*
                 if (Time.time < timeSinceSprinting + 0.8f)
                     animator.CrossFadeInFixedTime("SprintStop", 0.2f);
                 else
                     animator.CrossFadeInFixedTime("WalkStop", 0.2f);
+                */
             }
 
             WeaponChanged();
@@ -207,12 +209,18 @@ namespace PirateGame.Entity.Animations
             if (magnitude >= 1f)
             {
                 if (magnitude >= 3f)
+                {
                     animator.CrossFadeInFixedTime("Sprint", 0.1f);
+                }
                 else
+                {
                     animator.CrossFadeInFixedTime("Walk", 0.1f);
+                }
             }
             else
+            {
                 animator.CrossFadeInFixedTime("Idle", 0.1f);
+            }
         }
 
         private bool attacking;
@@ -251,7 +259,7 @@ namespace PirateGame.Entity.Animations
             {
                 if (clip.name == blockAnim)
                 {
-                    blockTime = clip.length;
+                    blockTime = clip.length - 0.4f;
                     break;
                 }
             }
@@ -275,6 +283,10 @@ namespace PirateGame.Entity.Animations
             if (lastState == EntityEnums.HumanoidState.Idle)
             {
                 animator.CrossFadeInFixedTime("Idle" + GetUpperbodyString(), 0.2f, 1);
+            }
+            if (lastState == EntityEnums.HumanoidState.Falling || lastState == EntityEnums.HumanoidState.Jumping)
+            {
+                animator.CrossFadeInFixedTime("Falling" + GetUpperbodyString(), 0.2f, 1);
             }
         }
 

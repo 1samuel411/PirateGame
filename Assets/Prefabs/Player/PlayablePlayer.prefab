@@ -658,7 +658,7 @@ MonoBehaviour:
   interactionColliders: []
   pickupableColliders: []
   currentInteractable: {fileID: 0}
-  clampYRotation: {x: -40, y: 40}
+  clampYRotation: {x: -70, y: 70}
   clampXRotation: {x: -360, y: 360}
   forwardMovementOnly: 1
   overrideForward: 0
@@ -686,6 +686,8 @@ MonoBehaviour:
   jumping: 0
   forwardRotation: 0
   inputSpeed: 5
+  fakeCamera: {fileID: 0}
+  fakeCameraForward: {fileID: 0}
 --- !u!114 &114438911259879036
 MonoBehaviour:
   m_ObjectHideFlags: 1
