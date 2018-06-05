@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using PirateGame.Entity;
 using PirateGame.Entity.Animations;
 using UMA;
+using PirateGame.Character;
 
 namespace PirateGame.Networking
 {
@@ -26,6 +27,8 @@ namespace PirateGame.Networking
         public Transform head;
         public Transform armLeft;
         public Transform armRight;
+
+        public SpineRotator spineRotator;
 
         private Entity.EntityPlayer entityPlayer;
 
@@ -63,14 +66,24 @@ namespace PirateGame.Networking
             rightHandWeaponBone.transform.localEulerAngles = new Vector3(3.7f, -1.503f, 2.008f);
             rightHandWeaponBone.transform.localScale = new Vector3(2, 2, 2);
             rightHandWeaponHolder = rightHandWeaponBone.transform;
+            GameObject rightHandWeaponBonePole = new GameObject();
+            rightHandWeaponBonePole.name = "RightHandBonePole";
+            rightHandWeaponBonePole.transform.SetParent(GetCharacterChild("Spine1"));
+            rightHandWeaponBonePole.transform.localEulerAngles = new Vector3(0, 0, 0);
+            rightHandWeaponBonePole.transform.localPosition = new Vector3(0, 0, 0);
 
             // Set IK
             Transform[] spine = new Transform[] { GetCharacterChild("LowerBack"), GetCharacterChild("Spine"), GetCharacterChild("Spine1") };
-            LookAtIK lookatIk = gameObject.AddComponent<LookAtIK>();
-            lookatIk.solver.SetChain(spine, head, null, GetCharacterChild("Position"));
+            AimIK lookatIk = gameObject.AddComponent<AimIK>();
+            lookatIk.solver.SetChain(spine, lookatIk.transform);
+            lookatIk.solver.transform = rightHandWeaponBonePole.transform;
             lookatIk.solver.target = entityPlayer.fakeCameraForward;
             entityPlayer.leftArmIk = leftArmLimb;
             entityPlayer.rightArmIk = rightArmLimb;
+
+            // Set spine rotator
+            spineRotator = GetCharacterChild("Spine1").gameObject.AddComponent<SpineRotator>();
+            
 
             GetComponent<Entity.Animations.AnimateHumanoid>().animator = character.GetComponent<Animator>();
 

@@ -19,6 +19,7 @@ MonoBehaviour:
       type: 2}
     offsetHold: {x: 0, y: 0.012, z: -0.006}
     hitRate: 0.7
+    spineOffset: 0
     attackAnimations:
     - SwingDown
     blockAnimations:
@@ -46,6 +47,7 @@ MonoBehaviour:
       type: 2}
     offsetHold: {x: 0, y: 0.147, z: 0}
     hitRate: 1
+    spineOffset: 0
     attackAnimations:
     - RM_1H_walk_left_swing
     blockAnimations:
@@ -73,6 +75,7 @@ MonoBehaviour:
       type: 2}
     offsetHold: {x: -0.035, y: -0.0002, z: -0.0046}
     hitRate: 1
+    spineOffset: 0
     attackAnimations:
     - MIL2_M3_W1_Stand_Fire_Single
     blockAnimations: []
@@ -83,13 +86,13 @@ MonoBehaviour:
     muzzleFlashes: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
     gunType: 0
     reloadType: 0
-    ammoType: 0
+    ammoType: 1
     reloadBeginAnimation: 
     reloadAnimation: 
     reloadEndAnimation: 
     ammoHeld: 900
     reloadTime: 2
-    ammo: 885
+    ammo: 887
     muzzleTransform: {fileID: 0}
     skinName: 
   - defaultWeapon: 0
@@ -99,6 +102,7 @@ MonoBehaviour:
       type: 2}
     offsetHold: {x: -0.0012, y: 0.0051, z: 0.1031}
     hitRate: 0
+    spineOffset: 0
     attackAnimations:
     - Rifle_ShootOnce
     blockAnimations: []
@@ -109,7 +113,7 @@ MonoBehaviour:
     muzzleFlashes: 01000000
     gunType: 1
     reloadType: 1
-    ammoType: 0
+    ammoType: 2
     reloadBeginAnimation: 
     reloadAnimation: 
     reloadEndAnimation: 

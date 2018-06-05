@@ -207,7 +207,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1771521826859226}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0.75876004, z: -0, w: -0.65137035}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -217,7 +217,7 @@ Transform:
   - {fileID: 4013846128858720}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 261.29, z: 0}
 --- !u!4 &4663629773467364
 Transform:
   m_ObjectHideFlags: 1
@@ -486,17 +486,24 @@ MonoBehaviour:
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
     hitRate: 0
+    spineOffset: 0
     attackAnimations: []
     blockAnimations: []
     gun: 0
     canBlock: 0
     blockTime: 0
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: 0
+    muzzleTransform: {fileID: 0}
     skinName: 
 --- !u!114 &114246699916594794
 MonoBehaviour:
@@ -561,6 +568,7 @@ MonoBehaviour:
   head: {fileID: 0}
   armLeft: {fileID: 0}
   armRight: {fileID: 0}
+  spineRotator: {fileID: 0}
 --- !u!114 &114341755405286358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -658,7 +666,7 @@ MonoBehaviour:
   interactionColliders: []
   pickupableColliders: []
   currentInteractable: {fileID: 0}
-  clampYRotation: {x: -70, y: 70}
+  clampYRotation: {x: -80, y: 80}
   clampXRotation: {x: -360, y: 360}
   forwardMovementOnly: 1
   overrideForward: 0
@@ -707,17 +715,24 @@ MonoBehaviour:
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
     hitRate: 0
+    spineOffset: 0
     attackAnimations: []
     blockAnimations: []
     gun: 0
     canBlock: 0
     blockTime: 0
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: 0
+    muzzleTransform: {fileID: 0}
     skinName: 
   weaponOne:
     defaultWeapon: 0
@@ -726,17 +741,24 @@ MonoBehaviour:
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
     hitRate: 0
+    spineOffset: 0
     attackAnimations: []
     blockAnimations: []
     gun: 0
     canBlock: 0
     blockTime: 0
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: 0
+    muzzleTransform: {fileID: 0}
     skinName: 
   weaponTwo:
     defaultWeapon: 0
@@ -745,17 +767,24 @@ MonoBehaviour:
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
     hitRate: 0
+    spineOffset: 0
     attackAnimations: []
     blockAnimations: []
     gun: 0
     canBlock: 0
     blockTime: 0
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: 0
+    muzzleTransform: {fileID: 0}
     skinName: 
   weaponThree:
     defaultWeapon: 0
@@ -764,18 +793,28 @@ MonoBehaviour:
     weaponPrefab: {fileID: 0}
     offsetHold: {x: 0, y: 0, z: 0}
     hitRate: 0
+    spineOffset: 0
     attackAnimations: []
     blockAnimations: []
     gun: 0
     canBlock: 0
     blockTime: 0
     weaponType: 0
+    muzzleFlashes: 
     gunType: 0
+    reloadType: 0
+    ammoType: 0
+    reloadBeginAnimation: 
     reloadAnimation: 
+    reloadEndAnimation: 
     ammoHeld: 0
     reloadTime: 0
     ammo: 0
+    muzzleTransform: {fileID: 0}
     skinName: 
+  cannonBalls: 0
+  miniCannonBalls: 0
+  grapeShots: 0
   _equipedWeapon: 0
   defaultWeaponGO: {fileID: 0}
   weaponOneGO: {fileID: 0}

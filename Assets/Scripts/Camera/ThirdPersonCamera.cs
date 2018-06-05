@@ -38,6 +38,8 @@ namespace PirateGame
         public bool forceAim;
         public bool aiming;
 
+        public float playerOffset = -15;
+
         void Start()
         {
             offsetTarget = offset;
@@ -90,8 +92,8 @@ namespace PirateGame
             angle.y = WrapAngle(angle.y);
             angle.y = ClampAngle(angle.y, clampYAmount.x, clampYAmount.y);
             transform.localRotation = Quaternion.Euler(angle);
-            PlayerManager.instance.playerEntity.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-            PlayerManager.instance.playerEntity.SetFakeCamera();
+            PlayerManager.instance.playerEntity.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + playerOffset, 0);
+            PlayerManager.instance.playerEntity.SetFakeCamera(playerOffset);
         }
 
         void GetScrollInput()

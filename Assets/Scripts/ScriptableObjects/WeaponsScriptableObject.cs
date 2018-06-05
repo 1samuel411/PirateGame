@@ -47,6 +47,8 @@ namespace PirateGame.ScriptableObjects
 
         public float hitRate;
 
+        public float spineOffset;
+
         public string[] attackAnimations;
         [ShowIf("canBlock", true)]
         public string[] blockAnimations;

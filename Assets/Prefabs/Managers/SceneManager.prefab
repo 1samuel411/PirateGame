@@ -9809,8 +9809,8 @@ Transform:
   - {fileID: 4643885582367742}
   - {fileID: 4391161170379440}
   - {fileID: 4149572597670382}
-  - {fileID: 4568800121407518}
   - {fileID: 4386346992876590}
+  - {fileID: 4568800121407518}
   - {fileID: 4823725407827544}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -10260,7 +10260,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4095403747723528}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4391161170379440
 Transform:
@@ -10555,7 +10555,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4095403747723528}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4575205513278664
 Transform:
@@ -23245,6 +23245,7 @@ MonoBehaviour:
   canAim: 1
   forceAim: 0
   aiming: 0
+  playerOffset: -15
 --- !u!114 &114386012471065252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -31181,7 +31182,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1357535391182280}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -149000,7 +149001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 5}
+  m_AnchoredPosition: {x: -46.34, y: 9.7}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224306151898813542

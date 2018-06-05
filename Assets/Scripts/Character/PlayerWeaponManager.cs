@@ -103,6 +103,14 @@ namespace PirateGame.Entity
             {
                 PickupWeapon();
             }
+
+            if(curWeapon != null && PlayerManager.instance.playablePlayer.spineRotator != null)
+            {
+                if(curWeapon.name == "")
+                    PlayerManager.instance.playablePlayer.spineRotator.SetOffset(0);
+                else
+                    PlayerManager.instance.playablePlayer.spineRotator.SetOffset(curWeapon.spineOffset);
+            }
         }
 
         void PickupWeapon()
@@ -187,7 +195,7 @@ namespace PirateGame.Entity
                 weaponTwoGO.SetActive(false);
             if(weaponThreeGO)
                 weaponThreeGO.SetActive(false);
-
+            
             if (weaponData == null)
                 return;
 

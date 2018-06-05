@@ -42,7 +42,7 @@ namespace PirateGame.Entity
             fakeCameraForward = new GameObject().transform;
             fakeCameraForward.name = "Fake Camera Child: " + gameObject.name;
             fakeCameraForward.SetParent(fakeCamera);
-            fakeCameraForward.position = Vector3.forward * 100;
+            fakeCameraForward.position = (Vector3.forward * 100) + (Vector3.right * 35);
 
             if (!networkPlayer.networkIdentity.isLocalPlayer)
                 return;
@@ -73,8 +73,6 @@ namespace PirateGame.Entity
 
             Sync();
             
-	        SetFakeCamera();
-
             aiming = CameraManager.instance.cameraObject.aiming;
             CameraManager.instance.cameraObject.forceAim = forceAiming;
 
@@ -163,11 +161,12 @@ namespace PirateGame.Entity
             }
         }
 
-        public void SetFakeCamera()
+        public void SetFakeCamera(float offset)
 		{
 			fakeCamera.position = CameraManager.instance.cameraObject.transform.position;	
 			fakeCamera.rotation = CameraManager.instance.cameraObject.transform.rotation;
-		}
+            fakeCamera.localEulerAngles = new Vector3(fakeCamera.localEulerAngles.x, fakeCamera.localEulerAngles.y + offset, fakeCamera.localEulerAngles.z);
+        }
 
         void CheckInput()
         {
