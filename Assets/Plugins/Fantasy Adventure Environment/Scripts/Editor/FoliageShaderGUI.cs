@@ -1,0 +1,216 @@
+﻿// Fantasy Adventure Environment
+// Copyright Staggart Creations
+// staggart.xyz
+
+using UnityEngine;
+using UnityEditor;
+using System.Collections;
+
+namespace FAE
+{
+    public class FoliageShaderGUI : ShaderGUI
+    {
+
+        MaterialProperty _MaskClipValue;
+
+        //Main maps
+        MaterialProperty _MainTex;
+        MaterialProperty _BumpMap;
+
+        //Color
+        MaterialProperty _ColorVariation;
+        MaterialProperty _AmbientOcclusion;
+        MaterialProperty _TransmissionSize;
+        MaterialProperty _TransmissionAmount;
+
+        //Animation
+        MaterialProperty _WindWeight;
+        MaterialProperty _WindSwinging;
+        MaterialProperty _WindAmplitudeMultiplier;
+        MaterialProperty _BendingInfluence;
+
+
+        MaterialEditor m_MaterialEditor;
+
+        //Meta
+        bool showHelp;
+        bool showHelpColor;
+        bool showHelpAnimation;
+
+        bool hasWindController;
+        WindController windController;
+
+        GUIContent mainTexName = new GUIContent("Diffuse", "Diffuse (RGB) and Transparency (A)");
+        GUIContent normalMapName = new GUIContent("Normal Map");
+        private bool visualizeVectors;
+
+        public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
+        {
+            if (windController == null) LocateWindController();
+            this.FindProperties(props);
+
+            //Receive
+            visualizeVectors = WindController._visualizeVectors;
+
+            this.m_MaterialEditor = materialEditor;
+
+            //Style similar to Standard shader
+            m_MaterialEditor.SetDefaultGUIWidths();
+            m_MaterialEditor.UseDefaultMargins();
+            EditorGUIUtility.labelWidth = 0f;
+
+            EditorGUI.BeginChangeCheck();
+
+            //Draw fields
+            DoHeader();
+
+            DoMapsArea();
+            DoColorArea();
+            DoAnimationArea();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                //Send
+                WindController.VisualizeVectors(visualizeVectors);
+            }
+
+#if UNITY_5_5_OR_NEWER
+        m_MaterialEditor.RenderQueueField();
+#endif
+
+#if UNITY_5_6_OR_NEWER
+            m_MaterialEditor.EnableInstancingField();
+#endif
+
+            DoFooter();
+        }
+
+        void DoHeader()
+        {
+            EditorGUILayout.BeginHorizontal();
+            showHelp = GUILayout.Toggle(showHelp, "Toggle help", "Button");
+            GUILayout.Label("FAE Foliage Shader", new GUIStyle(EditorStyles.centeredGreyMiniLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                wordWrap = true,
+                fontSize = 12
+            });
+            EditorGUILayout.EndHorizontal();
+            if (showHelp) EditorGUILayout.HelpBox("Please bear in mind, when using custom meshes, that most shader feature require the tips of the mesh to be vertex colored.\n\nBaking Ambient Occlusion into the vertex colors will yield correct results.", MessageType.Warning);
+        }
+
+        void DoMapsArea()
+        {
+            GUILayout.Label("Main maps", EditorStyles.boldLabel);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel(_MaskClipValue.displayName);
+            _MaskClipValue.floatValue = EditorGUILayout.Slider(_MaskClipValue.floatValue, 0f, 1f);
+            EditorGUILayout.EndHorizontal();
+            this.m_MaterialEditor.TexturePropertySingleLine(mainTexName, this._MainTex);
+            this.m_MaterialEditor.TexturePropertySingleLine(normalMapName, this._BumpMap);
+
+            EditorGUILayout.Space();
+        }
+
+        void DoColorArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            showHelpColor = GUILayout.Toggle(showHelpColor, "?", "Button", GUILayout.Width(25f)); GUILayout.Label("Color", EditorStyles.boldLabel);
+            EditorGUILayout.EndHorizontal();
+
+            m_MaterialEditor.ShaderProperty(_ColorVariation, _ColorVariation.displayName);
+            if (showHelpColor) EditorGUILayout.HelpBox("Vizualises the wind by adding a slight tint, either dark (<0) or light (>0)", MessageType.None);
+            m_MaterialEditor.ShaderProperty(_AmbientOcclusion, _AmbientOcclusion.displayName);
+            if (showHelpColor) EditorGUILayout.HelpBox("Darkens the areas of the mesh where vertex colors are applied", MessageType.None);
+            m_MaterialEditor.ShaderProperty(_TransmissionAmount, _TransmissionAmount.displayName);
+            if (showHelpColor) EditorGUILayout.HelpBox("Simulates light passing through the material. This will have no effect on short grass.", MessageType.None);
+            m_MaterialEditor.ShaderProperty(_TransmissionSize, _TransmissionSize.displayName);
+
+            EditorGUILayout.Space();
+        }
+
+
+
+        void DoAnimationArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            showHelpAnimation = GUILayout.Toggle(showHelpAnimation, "?", "Button", GUILayout.Width(25f)); GUILayout.Label("Wind animation", EditorStyles.boldLabel);
+            EditorGUILayout.EndHorizontal();
+
+            visualizeVectors = EditorGUILayout.Toggle("Visualize wind", visualizeVectors);
+
+            if (!hasWindController)
+            {
+                EditorGUILayout.HelpBox("No \"WindController\" component was found in your scene. Please add this script to an empty GameObject\n\nA prefab can be found in the Prefabs/Effects folder.", MessageType.Warning);
+                EditorGUI.BeginDisabledGroup(true);
+            }
+
+            if (showHelpAnimation) EditorGUILayout.HelpBox("Toggle a visualisation of the wind vectors on all the objects that use FAE shaders featuring wind.\n\nThis allows you to more clearly see the effects of the settings.", MessageType.None);
+
+            m_MaterialEditor.ShaderProperty(_WindWeight, _WindWeight.displayName);
+            if (showHelpAnimation) EditorGUILayout.HelpBox("Determines how much influence the wind has on the object", MessageType.None);
+            m_MaterialEditor.ShaderProperty(_WindSwinging, _WindSwinging.displayName);
+            if (showHelpAnimation) EditorGUILayout.HelpBox("Higher values mean the object always sways back against the wind direction", MessageType.None);
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(_WindAmplitudeMultiplier.displayName);
+            _WindAmplitudeMultiplier.floatValue = EditorGUILayout.FloatField(_WindAmplitudeMultiplier.floatValue, GUILayout.Width(65f));
+            EditorGUILayout.EndHorizontal();
+
+            if (showHelpAnimation) EditorGUILayout.HelpBox("Multiply the wind amplitude for this material. Essentally this is the size of the wind waves.", MessageType.None);
+            if (!hasWindController)
+            {
+                EditorGUI.EndDisabledGroup();
+            }
+            m_MaterialEditor.ShaderProperty(_BendingInfluence, _BendingInfluence.displayName);
+            if (showHelpAnimation) EditorGUILayout.HelpBox("Determines how much influence the FoliageBender script has on the object", MessageType.None);
+
+            EditorGUILayout.Space();
+        }
+
+        void DoFooter()
+        {
+            GUILayout.Label("- Staggart Creations -", new GUIStyle(EditorStyles.centeredGreyMiniLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                wordWrap = true,
+                fontSize = 12
+            });
+        }
+
+        void LocateWindController()
+        {
+            //Debug.Log("Searching scene for WindController script");
+            windController = GameObject.FindObjectOfType<WindController>();
+            hasWindController = (windController) ? true : false;
+        }
+
+        public void FindProperties(MaterialProperty[] props)
+        {
+            //Rendering
+#if UNITY_2017_1_OR_NEWER
+            _MaskClipValue = FindProperty("_Cutoff", props);
+#else
+            _MaskClipValue = FindProperty("_Cutoff", props);
+#endif
+
+            //Main maps
+            _MainTex = FindProperty("_MainTex", props);
+            _BumpMap = FindProperty("_BumpMap", props);
+
+            //Color
+            _ColorVariation = FindProperty("_ColorVariation", props);
+            _AmbientOcclusion = FindProperty("_AmbientOcclusion", props);
+            _TransmissionSize = FindProperty("_TransmissionSize", props);
+            _TransmissionAmount = FindProperty("_TransmissionAmount", props);
+
+            //Animation
+            _WindWeight = FindProperty("_WindWeight", props);
+            _WindSwinging = FindProperty("_WindSwinging", props);
+            _WindAmplitudeMultiplier = FindProperty("_WindAmplitudeMultiplier", props);
+            _BendingInfluence = FindProperty("_BendingInfluence", props);
+
+        }
+
+    }
+}
