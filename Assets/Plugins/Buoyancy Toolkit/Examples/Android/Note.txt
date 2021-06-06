@@ -1,3 +1,0 @@
-This scene uses the Ocean.cs script located in the Examples/Ocean folder.
-
-The Quality of all BuoyancyForce instances in this scene has been set to Custom and Samples has been set to a low value in order to trade quality for performance on Android mobile devices.
